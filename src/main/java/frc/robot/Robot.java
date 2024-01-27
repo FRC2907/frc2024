@@ -4,7 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.constants.Ports;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,8 +21,21 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
 
+  private PS4Controller driver, operator;
+  private Drivetrain drivetrain;
+  private Arm arm;
+  private Intake intake;
+  private Shooter shooter;
+
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    driver = new PS4Controller(Ports.HID.DRIVER);
+    operator = new PS4Controller(Ports.HID.OPERATOR);
+    drivetrain = Drivetrain.getInstance();
+    arm = Arm.getInstance();
+    intake = Intake.getInstance();
+    shooter = Shooter.getInstance();
+  }
 
   @Override
   public void robotPeriodic() {}
@@ -31,7 +50,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    drivetrain.curvatureDrive(driver.getLeftY(), driver.getLeftX(), false);
+  }
 
   @Override
   public void disabledInit() {}
