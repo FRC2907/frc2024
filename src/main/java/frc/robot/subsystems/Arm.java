@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
@@ -27,10 +28,10 @@ public class Arm {
     }
 
     public void onLoop(){
-        //read angle
-        //update variables
-        //calculate output
-        //update the motors
+        this.motor
+            .getPIDController()
+            .setReference(
+                this.setPoint * Control.arm.TICK_PER_DEGREE, CANSparkMax.ControlType.kPosition);
     }
 
     public void setSetPoint(double _setPoint){
