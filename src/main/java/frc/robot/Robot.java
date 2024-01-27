@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -40,13 +39,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {}
 
   @Override
-  public void robotPeriodic() {
-    Timer timer = new Timer();
-    matchTime = (double)Timer.getMatchTime();
-    currentTimeStamp = (double)Timer.getFPGATimestamp();
-    dt = currentTimeStamp - lastTimestamp;
-    lastTimestamp = currentTimeStamp;
-    
+  public void robotPeriodic() {  
     System.gc();
   }
 
@@ -57,6 +50,7 @@ public class Robot extends TimedRobot {
   // This Might Not Work 
   @Override
   public void autonomousPeriodic() {
+    /* 
     if (testinit) {
       // drive->zero_gyro();
       testinit = false;
@@ -76,7 +70,8 @@ public class Robot extends TimedRobot {
     else {
       //this->basic->run();
       this.basic.run();
-    }
+    } W
+    */
   }
 
   @Override
