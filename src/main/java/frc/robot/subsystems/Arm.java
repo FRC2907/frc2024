@@ -8,13 +8,11 @@ import frc.robot.util.Util;
 
 public class Arm {
     private double setPoint;
-    private double angle;
-    private double error;
-    private double lastError;
     private CANSparkMax motor;
 
     private Arm(CANSparkMax _motor){  
         this.motor = _motor;
+        this.setPDGains(Control.arm.kP, Control.arm.kD);
     }
     private static Arm instance;
     public static Arm getInstance(){
@@ -36,5 +34,14 @@ public class Arm {
 
     public void setSetPoint(double _setPoint){
         this.setPoint = _setPoint;
+    }
+
+    public void setPDGains(double P, double D){
+        this.motor
+            .getPIDController()
+            .setP(P);
+        this.motor
+            .getPIDController()
+            .setD(D);
     }
 }
