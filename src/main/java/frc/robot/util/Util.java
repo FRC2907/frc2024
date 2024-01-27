@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-public class util {
+public class Util {
 	public static boolean wait(double step_start,double duration){
 		return new Timer().get() < step_start + duration;
 	}
