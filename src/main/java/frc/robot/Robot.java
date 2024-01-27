@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -52,6 +53,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drivetrain.curvatureDrive(driver.getLeftY(), driver.getLeftX(), false);
+    if (operator.getCircleButtonPressed())
+    arm.setSetPoint(Control.arm.kFloorPosition);
   }
 
   @Override
