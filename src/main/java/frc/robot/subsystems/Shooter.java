@@ -1,18 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-
+import frc.robot.subsystems.Shooter;
+import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
-public class Shooter {
-    private double setPoint;
-    private double speed;
-    private double error;
-    private double lastError;
+public class Shooter extends Subsystem{
+    private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
-
     private Shooter(CANSparkMax _motor){
         this.motor = _motor;
     }
@@ -25,15 +22,26 @@ public class Shooter {
         return instance;
     }
 
-    public void onLoop(){
-        //detect speed
-        //update variables
-        //calculate output
-        //update the motors
+    /** Return intake speed in wheel RPM */
+    public double getSpeed(){
+        return motor.getEncoder().getVelocity() / Control.Shooter.ENCODER_RPM_PER_WHEEL_RPM
     }
 
+    /** Set the desired speed of shooter into wheel RPM */
     public void setSetPoint(double _setPoint){
         this.setPoint = _setPoint;
+    }
+
+    /** Update motor speed every cycle. */
+    public void onLoop(){
+        this.onLoopTasks();
+        this.motor
+            .getPIDController()
+            .setReference(
+                this.setPoint * Control.Shooter.ENCODER_RPM_PER_WHEEL_RPM
+                , CANSparkMax.ControlType.kVelocity
+            );
+        
     }
 
 }

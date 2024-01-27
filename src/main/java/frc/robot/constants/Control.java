@@ -9,6 +9,7 @@ public class Control {
     public static final double kIntakeTicksToRotations = 0; //TODO calculate
     public static final double kHatTicksToDiameter = 0; //TODO calculate
     public static final double kHatTicksToDepth = 0; //TODO calculate
+    public static final String Shooter = null;
 
     public static class intake {
         public static final double ENCODER_RPM_PER_WHEEL_RPM = 0; // TODO calculate
