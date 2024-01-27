@@ -17,7 +17,7 @@ public static Drivetrain getInstance() {
         left = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS);
         left.setInverted(true);
 
-        right = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS);
+        right = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS);
         right.setInverted(false);
 
         instance = new Drivetrain(left, right);
