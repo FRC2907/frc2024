@@ -28,6 +28,8 @@ public class Control {
 
     public static class shooter {
 
+        public static final double ENCODER_RPM_PER_WHEEL_RPM = 0;
+
         
     }
 }
