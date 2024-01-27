@@ -6,25 +6,25 @@ public class Intake {
     private double error;
     private double lastError;
 
-private Intake(){
+    private Intake(){
 
-}
-private static Intake instance;
-public static Intake getInstance(){
+    }
+    private static Intake instance;
+    public static Intake getInstance(){
     if (instance == null)
     instance = new Intake();
     return instance;
-}
+    }
 
-public void onLoop(){
+    public void onLoop(){
     //detect speed
     //update variables
     //calculate output
     //update the motors
-}
+    }
 
-public void setSetPoint(double _setPoint){
+    public void setSetPoint(double _setPoint){
     this.setPoint = _setPoint;
-}
+    }
 
 }
