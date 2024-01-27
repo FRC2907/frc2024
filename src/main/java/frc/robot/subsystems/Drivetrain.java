@@ -14,12 +14,8 @@ public class Drivetrain extends DifferentialDrive{
 public static Drivetrain getInstance() {
      CANSparkMax left, right;
     if (instance == null) {
-        left = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS);
-        left.setInverted(true);
-
-        right = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS);
-        right.setInverted(false);
-
+        left = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
+        right = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
         instance = new Drivetrain(left, right);
 
     }
