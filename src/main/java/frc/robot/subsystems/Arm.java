@@ -26,6 +26,8 @@ public class Arm {
     }
 
     public void onLoop(){
+        // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
+        // maybe improve system step response
         this.motor
             .getPIDController()
             .setReference(
