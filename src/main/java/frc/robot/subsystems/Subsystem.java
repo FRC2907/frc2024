@@ -6,8 +6,13 @@ public abstract class Subsystem {
     private Timer timer = new Timer();
     private double lastTime, lastDt;
 
-    protected double getTime() { return this.lastTime; }
-    protected double getDt() { return this.lastDt; }
+    protected double getTime() {
+        return this.lastTime;
+    }
+
+    protected double getDt() {
+        return this.lastDt;
+    }
 
     protected void onInit() {
         this.timer.reset();

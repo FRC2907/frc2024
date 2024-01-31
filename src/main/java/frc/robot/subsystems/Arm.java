@@ -10,13 +10,15 @@ public class Arm {
     private double setPoint;
     private CANSparkMax motor;
 
-    private Arm(CANSparkMax _motor){  
+    private Arm(CANSparkMax _motor) {
         this.motor = _motor;
         this.setPDGains(Control.arm.kP, Control.arm.kD);
     }
+
     private static Arm instance;
-    public static Arm getInstance(){
-        if (instance == null){
+
+    public static Arm getInstance() {
+        if (instance == null) {
             CANSparkMax leftMotor = Util.createSparkGroup(Ports.can.arm.LEFTS);
             CANSparkMax rightMotor = Util.createSparkGroup(Ports.can.arm.RIGHTS);
             rightMotor.follow(leftMotor, true);
@@ -27,36 +29,36 @@ public class Arm {
 
     public enum ArmState {
         START // inside the frame perimeter
-        , MOVING_TO_FLOOR
-        , FLOOR
-        , MOVING_TO_AMP
-        , AMP
-        , MOVING_TO_SPEAKER
-        , SPEAKER
-        , MOVING_TO_STAGE
-        , STAGE
+
+        , MOVING_TO_FLOOR, FLOOR
+
+        , MOVING_TO_AMP, AMP
+
+        , MOVING_TO_SPEAKER, SPEAKER
+
+        , MOVING_TO_CLIMB, CLIMBING, HUNG
     }
 
-    public void onLoop(){
+    public void onLoop() {
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
         this.motor
-            .getPIDController()
-            .setReference(
-                this.setPoint * Control.arm.TICK_PER_DEGREE, CANSparkMax.ControlType.kPosition);
+                .getPIDController()
+                .setReference(
+                        this.setPoint * Control.arm.TICK_PER_DEGREE, CANSparkMax.ControlType.kPosition);
     }
 
-    public void setSetPoint(double _setPoint){
+    public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
-    public void setPDGains(double P, double D){
+    public void setPDGains(double P, double D) {
         this.motor
-            .getPIDController()
-            .setP(P);
+                .getPIDController()
+                .setP(P);
         this.motor
-            .getPIDController()
-            .setD(D);
+                .getPIDController()
+                .setD(D);
     }
 }
-//test 2
+// test 2
