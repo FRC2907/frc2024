@@ -27,13 +27,13 @@ public class Arm {
 
     public enum ArmState {
         START // inside the frame perimeter
-        , APPROACHING_FLOOR
+        , MOVING_TO_FLOOR
         , FLOOR
-        , APPROACHING_AMP
+        , MOVING_TO_AMP
         , AMP
-        , APPROACHING_SPEAKER
+        , MOVING_TO_SPEAKER
         , SPEAKER
-        , APPROACHING_STAGE
+        , MOVING_TO_STAGE
         , STAGE
     }
 
