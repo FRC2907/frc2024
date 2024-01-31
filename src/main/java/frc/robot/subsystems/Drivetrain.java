@@ -29,8 +29,7 @@ public class Drivetrain extends DifferentialDrive {
 
     public void onLoop(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
-        {
-
-        }
     }
+
+    // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
 }
