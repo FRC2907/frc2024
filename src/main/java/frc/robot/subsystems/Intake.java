@@ -22,6 +22,13 @@ public class Intake extends Subsystem {
         return instance;
     }
 
+    public enum IntakeState {
+        EMPTY_OFF
+        , EMPTY_RUNNING
+        , FULL_RUNNING
+        , FULL_OFF
+    }
+
     /** Return intake speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity() / Control.intake.ENCODER_RPM_PER_WHEEL_RPM;

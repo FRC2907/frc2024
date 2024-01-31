@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.util.Util;
 
@@ -22,6 +23,9 @@ public static Drivetrain getInstance() {
     return instance;
   
 }
+
+public Pose2d pose;
+
 public void onLoop(double xSpeed, double zRotation) {
     this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);{
 

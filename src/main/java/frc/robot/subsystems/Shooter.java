@@ -22,6 +22,11 @@ public class Shooter extends Subsystem{
         return instance;
     }
 
+    public enum ShooterState {
+        OFF
+        , RUNNING
+    }
+
     /** Return intake speed in wheel RPM */
     public double getSpeed(){
         return motor.getEncoder().getVelocity() / Control.shooter.ENCODER_RPM_PER_WHEEL_RPM;

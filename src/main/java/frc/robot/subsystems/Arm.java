@@ -25,6 +25,18 @@ public class Arm {
         return instance;
     }
 
+    public enum ArmState {
+        START // inside the frame perimeter
+        , APPROACHING_FLOOR
+        , FLOOR
+        , APPROACHING_AMP
+        , AMP
+        , APPROACHING_SPEAKER
+        , SPEAKER
+        , APPROACHING_STAGE
+        , STAGE
+    }
+
     public void onLoop(){
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
