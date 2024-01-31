@@ -13,11 +13,10 @@ public class Control {
         public static final double TICK_PER_DEGREE = 0; //TODO calculate
         public static final double kP = 1; // TODO
         public static final double kD = 1; // TODO
-        public static final double kStartPosition = 90; // TODOO
-        public static final double kFloorPosition = 0; // TODOO
-        public static final double kAmpPosition = 0; // TODOO
-        public static final double kSpeakerPosition = 0; // TODOO
-
+        public static final double kStartPosition = 90; // TODO
+        public static final double kFloorPosition = 0; // TODO
+        public static final double kAmpPosition = 91; // TODO
+        public static final double kSpeakerPosition = 30; // TODO
     }
 
     public static class drivetrain {
