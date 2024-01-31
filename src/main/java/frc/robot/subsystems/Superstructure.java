@@ -10,7 +10,7 @@ public class Superstructure {
 
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
-        , START
+        , START, NEUTRAL
 
         , MOVING_TO_INTAKING, INTAKING
 
