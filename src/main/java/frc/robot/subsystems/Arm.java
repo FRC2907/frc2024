@@ -50,7 +50,15 @@ public class Arm {
     }
 
     public void setSetPoint(double _setPoint) {
-        this.setPoint = _setPoint;
+        this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
+    }
+
+    public void up() {
+        this.setSetPoint(setPoint + Control.arm.kManualControlDiff);
+    }
+
+    public void down() {
+        this.setSetPoint(setPoint - Control.arm.kManualControlDiff);
     }
 
     public boolean reachedSetPoint() {
