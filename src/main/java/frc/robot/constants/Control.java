@@ -38,5 +38,6 @@ public class Control {
         public static final double ENCODER_RPM_PER_WHEEL_RPM = 0;
         public static final double kAmpRPM = 0; //TODO calculate
         public static final double kSpeakerRPM = 0; //TODO calculate
+        public static final double kOff = 0;
     }
 }
