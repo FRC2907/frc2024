@@ -69,6 +69,9 @@ public class Superstructure {
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
+            arm.setSetPoint(Control.arm.kStartPosition);
+            intake.setSetPoint(Control.intake.kOff);
+            shooter.setSetPoint(Control.shooter.kOff);
                 break;
             case START:
                 break;
