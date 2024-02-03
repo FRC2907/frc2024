@@ -21,6 +21,8 @@ public class Superstructure {
         , MOVING_TO_SPEAKER, READY_TO_SCORE_SPEAKER, SCORING_SPEAKER
 
         , PREPARING_FOR_CLIMB, CLIMBING, HUNG
+
+        //TODO self-righting
     }
 
     private Superstructure(RobotState _state) {
@@ -87,24 +89,39 @@ public class Superstructure {
                 intake.setSetPoint(Control.intake.kOff);
 
             case MOVING_TO_AMP:
+                arm.setSetPoint(Control.arm.kAmpPosition);
+                // TODO automatically drive up to the Amp
                 ;
             case READY_TO_SCORE_AMP:
+                
                 ;
             case SCORING_AMP:
+                shooter.setSetPoint(Control.shooter.kAmpRPM);
+                if (false/*scoring is done */)
+                    //move to neutral position
                 ;
 
             case MOVING_TO_SPEAKER:
+                arm.setSetPoint(Control.arm.kSpeakerPosition);
+                // TODO automatically drive up to the Speaker
                 ;
             case READY_TO_SCORE_SPEAKER:
                 ;
             case SCORING_SPEAKER:
+                shooter.setSetPoint(Control.shooter.kSpeakerRPM);
+                if (false/*scoring is done */)
+                    //move to neutral position
                 ;
 
             case PREPARING_FOR_CLIMB:
+                arm.setSetPoint(Control.arm.kClimbReadyPosition);
+                // TODO automatically drive up to the Stage
                 ;
             case CLIMBING:
+                arm.setSetPoint(Control.arm.kClimbClumbPosition);
                 ;
             case HUNG:
+                arm.setSetPoint(Control.arm.kClimbClumbPosition);
                 ;
             default:
                 ; // do nothing i guess
