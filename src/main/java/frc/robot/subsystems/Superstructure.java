@@ -79,9 +79,8 @@ public class Superstructure {
                 // TODO automatically drive up to the Note
                 ;
             case INTAKING:
-                if ( false /* TODO we have a note */) {
+                if (false /* TODO we have a note */) 
                     this.state = RobotState.HOLDING_NOTE;
-                }
                 ;
 
             case HOLDING_NOTE:
