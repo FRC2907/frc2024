@@ -43,28 +43,38 @@ public class Superstructure {
 
     // TODO
     public void moveToIntaking() {
+        this.state = RobotState.MOVING_TO_INTAKING;
     }
 
     public void intakeNote() {
+        this.state = RobotState.INTAKING;
     }
 
     public void moveToAmp() {
+        this.state = RobotState.MOVING_TO_AMP;
     }
 
     public void scoreInAmp() {
+        this.state = RobotState.SCORING_AMP;
     }
 
     public void moveToSpeaker() {
+        this.state = RobotState.MOVING_TO_SPEAKER;
     }
 
     public void scoreInSpeaker() {
+        this.state = RobotState.SCORING_SPEAKER;
     }
 
     public void prepareForClimb() {
+        this.state = RobotState.PREPARING_FOR_CLIMB;
     }
 
     public void startClimb() {
+        this.state = RobotState.CLIMBING;
     }
+
+
 
     public void onLoop() {
         switch (this.state) {
