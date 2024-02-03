@@ -73,6 +73,9 @@ public class Superstructure {
     public void startClimb() {
         this.state = RobotState.CLIMBING;
     }
+    public void neutralPosition(){
+        this.state = RobotState.NEUTRAL;
+    }
 
 
 

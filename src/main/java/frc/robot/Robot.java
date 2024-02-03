@@ -12,6 +12,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Superstructure;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
   private Arm arm;
   private Intake intake;
   private Shooter shooter;
+  private Superstructure superstructure;
 
   @Override
   public void robotInit() {
@@ -39,6 +41,7 @@ public class Robot extends TimedRobot {
     arm = Arm.getInstance();
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
+    superstructure = Superstructure.getInstance();
   }
 
   @Override
@@ -55,11 +58,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    superstructure.neutralPosition();
   }
 
   @Override
   public void teleopPeriodic() {
-    drivetrain.curvatureDrive(driver.getLeftY(), driver.getLeftX(), false);
+    drivetrain.onLoop(driver.getLeftY(), driver.getLeftX());
     if (operator.getCircleButtonPressed())
       arm.setSetPoint(Control.arm.kFloorPosition);
   }
