@@ -18,6 +18,7 @@ public class Control {
         public static final double kHoldingPosition = 0; // TODO
         public static final double kClimbReadyPosition = 0; // TODO
         public static final double kClimbClumbPosition = 0; // TODO
+        public static final double kPositionHysteresis = 2; // TODO
     }
 
     public static class drivetrain {

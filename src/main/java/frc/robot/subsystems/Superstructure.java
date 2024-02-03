@@ -77,6 +77,8 @@ public class Superstructure {
                 arm.setSetPoint(Control.arm.kFloorPosition);
                 intake.setSetPoint(Control.intake.kIntakingRpm);
                 // TODO automatically drive up to the Note
+                if (arm.reachedSetPoint())
+                    this.state = RobotState.INTAKING;
                 ;
             case INTAKING:
                 if (false /* TODO we have a note */) 

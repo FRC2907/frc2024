@@ -12,6 +12,7 @@ public class Arm {
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
+        this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.TICK_PER_DEGREE);
         this.setPDGains(Control.arm.kP, Control.arm.kD);
     }
 
@@ -45,12 +46,15 @@ public class Arm {
         // TODO investigate whether it's helpful at all to cache the reference to reduce CAN traffic
         this.motor
                 .getPIDController()
-                .setReference(
-                        this.setPoint * Control.arm.TICK_PER_DEGREE, CANSparkMax.ControlType.kPosition);
+                .setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
     }
 
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
+    }
+
+    public boolean reachedSetPoint() {
+        return Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis;
     }
 
     public void setPDGains(double P, double D) {
