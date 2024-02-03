@@ -42,6 +42,7 @@ public class Arm {
     public void onLoop() {
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
+        // TODO investigate whether it's helpful at all to cache the reference to reduce CAN traffic
         this.motor
                 .getPIDController()
                 .setReference(

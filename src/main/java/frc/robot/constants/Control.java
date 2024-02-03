@@ -15,6 +15,7 @@ public class Control {
         public static final double kFloorPosition = 0; // TODO
         public static final double kAmpPosition = 91; // TODO
         public static final double kSpeakerPosition = 30; // TODO
+        public static final double kHoldingPosition = 0; // TODO
     }
 
     public static class drivetrain {
@@ -25,6 +26,8 @@ public class Control {
         public static final double ENCODER_RPM_PER_WHEEL_RPM = 0; // TODO calculate
         public static final double kP = 1; // TODO
         public static final double kD = 1; // TODO
+        public static final double kIntakingRpm = 0; // TODO guess
+        public static final double kOff = 0; // TODO be sure
     }
 
     public static class shooter {
