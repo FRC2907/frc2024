@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import frc.robot.subsystems.Shooter;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
@@ -9,7 +8,7 @@ import frc.robot.util.Util;
 // TODO consider converging the Shooter and Intake classes into a single Flywheel class
 // TODO further consider generalizing flywheels, arms, and elevators into generic classes
 // and then extending them for whatever
-public class Shooter extends Subsystem {
+public class Shooter implements ISubsystem {
     private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
@@ -29,22 +28,19 @@ public class Shooter extends Subsystem {
         return instance;
     }
 
-    /** Return intake speed in wheel RPM */
+    /** Return shooter speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity();
     }
 
-    /** Set the desired speed of shooter into wheel RPM */
+    /** Set the desired speed of the shooter in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
     /** Update motor speed every cycle. */
     public void onLoop() {
-        this.onLoopTasks();
-        this.motor
-                .getPIDController()
-                .setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
+        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
 
     }
 

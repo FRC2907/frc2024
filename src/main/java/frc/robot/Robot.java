@@ -6,12 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Superstructure;
 
 /**
@@ -28,9 +24,6 @@ public class Robot extends TimedRobot {
 
   private PS4Controller driver, operator;
   private Drivetrain drivetrain;
-  private Arm arm;
-  private Intake intake;
-  private Shooter shooter;
   private Superstructure superstructure;
 
   @Override
@@ -38,9 +31,6 @@ public class Robot extends TimedRobot {
     driver = new PS4Controller(Ports.HID.DRIVER);
     operator = new PS4Controller(Ports.HID.OPERATOR);
     drivetrain = Drivetrain.getInstance();
-    arm = Arm.getInstance();
-    intake = Intake.getInstance();
-    shooter = Shooter.getInstance();
     superstructure = Superstructure.getInstance();
   }
 
@@ -63,7 +53,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drivetrain.onLoop(driver.getLeftY(), driver.getRightX());
+    drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
     if (operator.getCircleButtonPressed()) {
       superstructure.moveToIntaking(); // TODO change to cancel
     }
