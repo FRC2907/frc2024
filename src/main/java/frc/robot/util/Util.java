@@ -15,6 +15,10 @@ public class Util {
 	}
 
 	public static CANSparkMax createSparkGroup(int[] ids, boolean invert) {
+		if (ids.length == 0) {
+			System.err.println("[EE] Attempted to create empty group of CANSparkMax");
+			new Exception().printStackTrace();
+		}
 		CANSparkMax[] mcs = new CANSparkMax[ids.length];
 		for (int i = 0; i < ids.length; i++) {
 			mcs[i] = new CANSparkMax(ids[i], MotorType.kBrushless);
@@ -26,8 +30,10 @@ public class Util {
 	}
 
 	public static double clamp(double min, double value, double max) {
-		if (max < min) // FIXME we really oughta like, catch this or something
+		if (max < min) { // FIXME we really oughta like, catch this or something
 			System.err.println("[EE] I was asked to clamp value " + value + " between min " + min + " and max " + max);
+			new Exception().printStackTrace();
+		}
 		if (value < min)
 			return min;
 		if (max < value)
