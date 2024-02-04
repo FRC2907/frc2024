@@ -13,6 +13,7 @@ public class Shooter extends Subsystem {
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_RPM_PER_WHEEL_RPM);
     }
 
     private static Shooter instance;
@@ -31,7 +32,7 @@ public class Shooter extends Subsystem {
 
     /** Return intake speed in wheel RPM */
     public double getSpeed() {
-        return motor.getEncoder().getVelocity() / Control.shooter.ENCODER_RPM_PER_WHEEL_RPM;
+        return motor.getEncoder().getVelocity();
     }
 
     /** Set the desired speed of shooter into wheel RPM */
@@ -44,8 +45,7 @@ public class Shooter extends Subsystem {
         this.onLoopTasks();
         this.motor
                 .getPIDController()
-                .setReference(
-                        this.setPoint * Control.shooter.ENCODER_RPM_PER_WHEEL_RPM, CANSparkMax.ControlType.kVelocity);
+                .setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
 
     }
 

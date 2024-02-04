@@ -13,6 +13,7 @@ public class Intake implements ISubsystem {
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_RPM_PER_WHEEL_RPM);
     }
 
     private static Intake instance;
@@ -31,7 +32,7 @@ public class Intake implements ISubsystem {
 
     /** Return intake speed in wheel RPM. */
     public double getSpeed() {
-        return motor.getEncoder().getVelocity() / Control.intake.ENCODER_RPM_PER_WHEEL_RPM;
+        return motor.getEncoder().getVelocity();
     }
 
     /** Set the desired speed of the intake in wheel RPM. */
@@ -41,11 +42,7 @@ public class Intake implements ISubsystem {
 
     /** Update motor speed every cycle. */
     public void onLoop() {
-        this.onLoopTasks();
-        this.motor
-                .getPIDController()
-                .setReference(
-                        this.setPoint * Control.intake.ENCODER_RPM_PER_WHEEL_RPM, CANSparkMax.ControlType.kVelocity);
+        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
 }
