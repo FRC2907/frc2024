@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
+import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superstructure;
 
 /**
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
   private Superstructure superstructure;
   private Routine auto;
+  private Thread noteTargetingThread;
 
   @Override
   public void robotInit() {
@@ -35,6 +38,12 @@ public class Robot extends TimedRobot {
     operator = new PS4Controller(Ports.HID.OPERATOR);
     drivetrain = Drivetrain.getInstance();
     superstructure = Superstructure.getInstance();
+
+    noteTargetingThread = new Thread(
+      new NoteTargetingPipeline(Control.camera.WIDTH, Control.camera.HEIGHT)
+    );
+    noteTargetingThread.setDaemon(true);
+    noteTargetingThread.start();
   }
 
   @Override

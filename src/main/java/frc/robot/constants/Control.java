@@ -1,11 +1,6 @@
 package frc.robot.constants;
 
 public class Control {
-    public static final double kDrivetrainTickPerMeter = 0; // TODO calculate
-    public static final double kShooterTickPerRotation = 0; // TODO calculate
-    public static final double kIntakeTicksToRotations = 0; // TODO calculate
-    public static final double kHatTicksToDiameter = 0; // TODO calculate
-    public static final double kHatTicksToDepth = 0; // TODO calculate
 
     public static class arm {
         public static final double TICK_PER_DEGREE = 0; // TODO calculate
@@ -45,5 +40,10 @@ public class Control {
         public static final double kAmpRPM = 0; // TODO calculate
         public static final double kSpeakerRPM = 0; // TODO calculate
         public static final double kOff = 0;
+    }
+
+    public static class camera {
+        public static final int WIDTH = 640;
+        public static final int HEIGHT = 480;
     }
 }
