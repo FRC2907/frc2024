@@ -31,7 +31,18 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
 
+    @Override
     public void onLoop() {
+    }
+
+    @Override
+    public void submitTelemetry() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void receiveOptions() {
+        // TODO Auto-generated method stub
     }
 
     // TODO(justincredible2508,josephreed2600) implement field-relative control

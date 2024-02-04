@@ -39,9 +39,20 @@ public class Shooter implements ISubsystem {
     }
 
     /** Update motor speed every cycle. */
+    @Override
     public void onLoop() {
         this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
 
+    }
+
+    @Override
+    public void submitTelemetry() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void receiveOptions() {
+        // TODO Auto-generated method stub
     }
 
 }

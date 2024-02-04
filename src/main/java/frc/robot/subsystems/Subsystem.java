@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 
 /** DEPRECATED; not for new designs */
+@Deprecated
 public abstract class Subsystem {
     private Timer timer = new Timer();
     private double lastTime, lastDt;

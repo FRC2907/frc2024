@@ -92,6 +92,7 @@ public class Superstructure {
         return this.automation;
     }
 
+    @Override
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
@@ -187,5 +188,15 @@ public class Superstructure {
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)
             s.onLoop();
+    }
+
+    @Override
+    public void submitTelemetry() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void receiveOptions() {
+        // TODO Auto-generated method stub
     }
 }

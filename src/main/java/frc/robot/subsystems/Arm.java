@@ -28,6 +28,7 @@ public class Arm implements ISubsystem {
         return instance;
     }
 
+    @Override
     public void onLoop() {
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
@@ -58,5 +59,15 @@ public class Arm implements ISubsystem {
     public void setPDGains(double P, double D) {
         this.motor.getPIDController().setP(P);
         this.motor.getPIDController().setD(D);
+    }
+
+    @Override
+    public void submitTelemetry() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void receiveOptions() {
+        // TODO Auto-generated method stub
     }
 }
