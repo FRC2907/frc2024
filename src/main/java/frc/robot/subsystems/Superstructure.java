@@ -6,6 +6,7 @@ public class Superstructure {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
+    private ISubsystem[] subsystems;
     private Arm arm;
 
     private RobotState state;
@@ -29,6 +30,10 @@ public class Superstructure {
     private Superstructure(RobotState _state, boolean _automation) {
         this.state = _state;
         this.automateScoring(_automation);
+        this.drivetrain = Drivetrain.getInstance();
+        this.intake = Intake.getInstance();
+        this.shooter = Shooter.getInstance();
+        this.subsystems = new ISubsystem[]{drivetrain, intake, shooter};
     }
 
     private Superstructure() {
@@ -178,5 +183,9 @@ public class Superstructure {
             default:
                 break;
         }
+
+        // Tell all the subsystems to do their thing for this cycle
+        for (ISubsystem s : this.subsystems)
+            s.onLoop();
     }
 }
