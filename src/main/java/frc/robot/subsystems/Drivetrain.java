@@ -9,9 +9,11 @@ import frc.robot.util.Util;
 public class Drivetrain extends DifferentialDrive implements ISubsystem {
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
         super(left, right);
+        this.manualControl = true;
     }
 
     private static Drivetrain instance;
+    private boolean manualControl;
 
     public static Drivetrain getInstance() {
         CANSparkMax left, right;
@@ -22,8 +24,13 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
         }
         return instance;
-
     }
+
+    public void setManualControl(boolean _mC) {
+        this.manualControl = _mC;
+    }
+    public void setManualControl() { this.setManualControl(true); }
+    public void setAutomaticControl() { this.setManualControl(false); }
 
     private Pose2d pose;
     public Pose2d getPose() { return this.pose; }
