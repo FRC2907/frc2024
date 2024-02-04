@@ -30,7 +30,7 @@ public class NoteTargetingPipeline implements Runnable {
 
     private Scalar orangeLow, orangeHigh;
 
-    public NoteTargetingPipeline(int w, int h) {
+    public NoteTargetingPipeline(int w, int h, Scalar orangeLow, Scalar orangeHigh) {
         this.w = w; this.h = h;
         CameraServer
             .startAutomaticCapture()
@@ -50,8 +50,8 @@ public class NoteTargetingPipeline implements Runnable {
             return 1;
         };
 
-        this.orangeLow = new Scalar(4, 127, 127);
-        this.orangeHigh = new Scalar(16, 255, 255);
+        this.orangeLow = orangeLow;
+        this.orangeHigh = orangeHigh;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import org.opencv.core.Scalar;
+
 public class Control {
 
     public static class arm {
@@ -45,5 +47,7 @@ public class Control {
     public static class camera {
         public static final int WIDTH = 320;
         public static final int HEIGHT = 240;
+        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
+        public static final Scalar kOrangeHigh = new Scalar(16, 255, 255);
     }
 }

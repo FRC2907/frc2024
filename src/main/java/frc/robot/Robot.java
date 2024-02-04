@@ -40,7 +40,12 @@ public class Robot extends TimedRobot {
     superstructure = Superstructure.getInstance();
 
     noteTargetingThread = new Thread(
-      new NoteTargetingPipeline(Control.camera.WIDTH, Control.camera.HEIGHT)
+      new NoteTargetingPipeline(
+        Control.camera.WIDTH
+        , Control.camera.HEIGHT
+        , Control.camera.kOrangeLow
+        , Control.camera.kOrangeHigh
+        )
     );
     noteTargetingThread.setDaemon(true);
     noteTargetingThread.start();
