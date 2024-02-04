@@ -6,7 +6,7 @@ import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
-public class Arm {
+public class Arm implements ISubsystem {
     private double setPoint;
     private CANSparkMax motor;
 

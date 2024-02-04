@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
 
-public class Hat {
-
+public class Hat implements ISubsystem {
+    public void onLoop() {}
 }

@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.util.Util;
 
-public class Drivetrain extends DifferentialDrive {
+public class Drivetrain extends DifferentialDrive implements ISubsystem {
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
         super(left, right);
     }
@@ -30,6 +30,8 @@ public class Drivetrain extends DifferentialDrive {
     public void onLoop(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
+
+    public void onLoop() {}
 
     // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
 }

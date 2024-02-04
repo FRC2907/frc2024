@@ -6,7 +6,7 @@ import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
-public class Intake extends Subsystem {
+public class Intake implements ISubsystem {
     private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
