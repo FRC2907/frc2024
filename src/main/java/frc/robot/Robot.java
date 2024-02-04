@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.auto.routines.SampleRoutine;
+import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Superstructure;
@@ -25,6 +27,7 @@ public class Robot extends TimedRobot {
   private PS4Controller driver, operator;
   private Drivetrain drivetrain;
   private Superstructure superstructure;
+  private Routine auto;
 
   @Override
   public void robotInit() {
@@ -41,10 +44,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    auto = new SampleRoutine();
   }
 
   @Override
   public void autonomousPeriodic() {
+    auto.onLoop();
   }
 
   @Override

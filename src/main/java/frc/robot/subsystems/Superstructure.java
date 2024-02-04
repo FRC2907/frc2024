@@ -49,6 +49,8 @@ public class Superstructure implements ISubsystem {
         return instance;
     }
 
+    public RobotState getState() { return this.state; }
+
     public void moveToIntaking() {
         this.state = RobotState.MOVING_TO_INTAKING;
     }
