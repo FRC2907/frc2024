@@ -26,10 +26,6 @@ public class Intake implements ISubsystem {
         return instance;
     }
 
-    public enum IntakeState {
-        EMPTY_OFF, EMPTY_RUNNING, FULL_RUNNING, FULL_OFF
-    }
-
     /** Return intake speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity();
@@ -38,6 +34,12 @@ public class Intake implements ISubsystem {
     /** Set the desired speed of the intake in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
+    }
+
+    /** Return whether the intake has a Note in it. */
+    public boolean hasNote() {
+        // TODO read sensor to determine whether there's a Note in the intake
+        return false;
     }
 
     /** Update motor speed every cycle. */

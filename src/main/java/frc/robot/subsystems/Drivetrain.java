@@ -34,4 +34,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     public void onLoop() {}
 
     // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
+
+    public void reverse() {} // TODO
 }

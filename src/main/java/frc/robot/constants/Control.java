@@ -29,6 +29,8 @@ public class Control {
 
     }
 
+    // TODO consider defining intake speed as a linear unit (m/s)
+    // and then translating that to RPM for the motors
     public static class intake {
         public static final double ENCODER_RPM_PER_WHEEL_RPM = 0; // TODO calculate
         public static final double kP = 1; // TODO

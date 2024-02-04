@@ -28,25 +28,12 @@ public class Arm implements ISubsystem {
         return instance;
     }
 
-    public enum ArmState {
-        START // inside the frame perimeter
-
-        , MOVING_TO_FLOOR, FLOOR
-
-        , MOVING_TO_AMP, AMP
-
-        , MOVING_TO_SPEAKER, SPEAKER
-
-        , MOVING_TO_CLIMB, CLIMBING, HUNG
-    }
-
     public void onLoop() {
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
         // TODO investigate whether it's helpful at all to cache the reference to reduce CAN traffic
-        this.motor
-                .getPIDController()
-                .setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
+        // ^ actually if we were to generalize these classes, we could incorporate ref caching there
+        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
     }
 
     public void setSetPoint(double _setPoint) {
@@ -69,11 +56,7 @@ public class Arm implements ISubsystem {
     }
 
     public void setPDGains(double P, double D) {
-        this.motor
-                .getPIDController()
-                .setP(P);
-        this.motor
-                .getPIDController()
-                .setD(D);
+        this.motor.getPIDController().setP(P);
+        this.motor.getPIDController().setD(D);
     }
 }

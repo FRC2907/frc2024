@@ -41,7 +41,6 @@ public class Superstructure {
         return instance;
     }
 
-    // TODO
     public void moveToIntaking() {
         this.state = RobotState.MOVING_TO_INTAKING;
     }
@@ -85,6 +84,8 @@ public class Superstructure {
             arm.setSetPoint(Control.arm.kStartPosition);
             intake.setSetPoint(Control.intake.kOff);
             shooter.setSetPoint(Control.shooter.kOff);
+            if (arm.reachedSetPoint())
+                this.state = RobotState.START;
                 break;
             case START:
                 break;
@@ -128,6 +129,7 @@ public class Superstructure {
                 arm.setSetPoint(Control.arm.kSpeakerPosition);
                 // TODO automatically drive up to the Speaker
                 if (arm.reachedSetPoint()){ //TODO add drivetrain reached set point
+                    // TODO do we also want to get the shooter wheels up to speed first? or no?
                     this.state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
                 break;
