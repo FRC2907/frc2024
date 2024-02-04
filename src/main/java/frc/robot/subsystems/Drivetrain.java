@@ -25,7 +25,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     }
 
-    public Pose2d pose;
+    private Pose2d pose;
+    public Pose2d getPose() { return this.pose; }
+    private void setPose(Pose2d _pose) { this.pose = _pose; }
 
     public void curvatureDrive(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);

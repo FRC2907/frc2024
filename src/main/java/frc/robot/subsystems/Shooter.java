@@ -22,8 +22,10 @@ public class Shooter implements ISubsystem {
 
     public static Shooter getInstance() {
         if (instance == null) {
-            CANSparkMax motor = Util.createSparkGroup(Ports.can.intake.MOTORS);
-            instance = new Shooter(motor);
+            CANSparkMax leftMotor = Util.createSparkGroup(Ports.can.shooter.LEFTS);
+            CANSparkMax rightMotor = Util.createSparkGroup(Ports.can.shooter.RIGHTS);
+            rightMotor.follow(leftMotor, true);
+            instance = new Shooter(leftMotor);
         }
         return instance;
     }

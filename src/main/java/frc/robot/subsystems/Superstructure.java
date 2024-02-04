@@ -2,12 +2,12 @@ package frc.robot.subsystems;
 
 import frc.robot.constants.Control;
 
-public class Superstructure {
+public class Superstructure implements ISubsystem {
     private Drivetrain drivetrain;
+    private Arm arm;
     private Intake intake;
     private Shooter shooter;
     private ISubsystem[] subsystems;
-    private Arm arm;
 
     private RobotState state;
     private boolean automation;
@@ -31,9 +31,10 @@ public class Superstructure {
         this.state = _state;
         this.automateScoring(_automation);
         this.drivetrain = Drivetrain.getInstance();
+        this.arm = Arm.getInstance();
         this.intake = Intake.getInstance();
         this.shooter = Shooter.getInstance();
-        this.subsystems = new ISubsystem[]{drivetrain, intake, shooter};
+        this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter};
     }
 
     private Superstructure() {
