@@ -19,9 +19,9 @@ public class Control {
         public static final double kClimbReadyPosition = 0; // TODO
         public static final double kClimbClumbPosition = 0; // TODO
         public static final double kPositionHysteresis = 2; // TODO
-        public static final double kManualControlDiff = 0; // TODO 
-        public static final double kMinPosition = 0; // TODO 
-        public static final double kMaxPosition = 0; // TODO 
+        public static final double kManualControlDiff = 0; // TODO
+        public static final double kMinPosition = 0; // TODO
+        public static final double kMaxPosition = 0; // TODO
         public static final double kVelocityHysteresis = 0;
     }
 
@@ -42,8 +42,8 @@ public class Control {
     public static class shooter {
 
         public static final double ENCODER_RPM_PER_WHEEL_RPM = 0;
-        public static final double kAmpRPM = 0; //TODO calculate
-        public static final double kSpeakerRPM = 0; //TODO calculate
+        public static final double kAmpRPM = 0; // TODO calculate
+        public static final double kSpeakerRPM = 0; // TODO calculate
         public static final double kOff = 0;
     }
 }

@@ -23,7 +23,7 @@ public class Superstructure {
 
         , PREPARING_FOR_CLIMB, CLIMBING, HUNG
 
-        //TODO self-righting
+        // TODO self-righting
     }
 
     private Superstructure(RobotState _state, boolean _automation) {
@@ -74,23 +74,27 @@ public class Superstructure {
     public void startClimb() {
         this.state = RobotState.CLIMBING;
     }
-    public void neutralPosition(){
+
+    public void neutralPosition() {
         this.state = RobotState.NEUTRAL;
     }
 
+    public void automateScoring(boolean _automation) {
+        this.automation = _automation;
+    }
 
-    public void automateScoring(boolean _automation) { this.automation = _automation; }
-    public boolean isScoringAutomated() { return this.automation; }
-
+    public boolean isScoringAutomated() {
+        return this.automation;
+    }
 
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
-            arm.setSetPoint(Control.arm.kStartPosition);
-            intake.setSetPoint(Control.intake.kOff);
-            shooter.setSetPoint(Control.shooter.kOff);
-            if (arm.reachedSetPoint())
-                this.state = RobotState.START;
+                arm.setSetPoint(Control.arm.kStartPosition);
+                intake.setSetPoint(Control.intake.kOff);
+                shooter.setSetPoint(Control.shooter.kOff);
+                if (arm.reachedSetPoint())
+                    this.state = RobotState.START;
                 break;
             case START:
                 break;
@@ -105,7 +109,7 @@ public class Superstructure {
             case INTAKING:
                 arm.setSetPoint(Control.arm.kFloorPosition);
                 intake.setSetPoint(Control.intake.kIntakingRpm);
-                if (false /* TODO we have a note */) 
+                if (false /* TODO we have a note */)
                     this.state = RobotState.HOLDING_NOTE;
                 break;
 
@@ -117,7 +121,7 @@ public class Superstructure {
             case MOVING_TO_AMP:
                 arm.setSetPoint(Control.arm.kAmpPosition);
                 // TODO automatically drive up to the Amp
-                if (arm.reachedSetPoint()){ //TODO add drivetrain reached set point
+                if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     this.state = RobotState.READY_TO_SCORE_AMP;
                 }
                 break;
@@ -127,14 +131,14 @@ public class Superstructure {
                 break;
             case SCORING_AMP:
                 shooter.setSetPoint(Control.shooter.kAmpRPM);
-                if (false/*scoring is done */)
+                if (false/* scoring is done */)
                     this.state = RobotState.NEUTRAL;
                 break;
 
             case MOVING_TO_SPEAKER:
                 arm.setSetPoint(Control.arm.kSpeakerPosition);
                 // TODO automatically drive up to the Speaker
-                if (arm.reachedSetPoint()){ //TODO add drivetrain reached set point
+                if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
                     this.state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
@@ -145,7 +149,7 @@ public class Superstructure {
                 break;
             case SCORING_SPEAKER:
                 shooter.setSetPoint(Control.shooter.kSpeakerRPM);
-                if (false/*scoring is done */){
+                if (false/* scoring is done */) {
                     this.state = RobotState.NEUTRAL;
                 }
                 break;
@@ -153,13 +157,13 @@ public class Superstructure {
             case PREPARING_FOR_CLIMB:
                 arm.setSetPoint(Control.arm.kClimbReadyPosition);
                 // TODO automatically drive up to the Stage
-                if (this.isScoringAutomated() && arm.reachedSetPoint()){
+                if (this.isScoringAutomated() && arm.reachedSetPoint()) {
                     this.state = RobotState.CLIMBING;
                 }
                 break;
             case CLIMBING:
                 arm.setSetPoint(Control.arm.kClimbClumbPosition);
-                if (arm.reachedSetPoint()){
+                if (arm.reachedSetPoint()) {
                     this.state = RobotState.HUNG;
                 }
                 break;
@@ -172,7 +176,7 @@ public class Superstructure {
                 shooter.setSetPoint(Control.shooter.kOff);
                 break;
             default:
-                break; 
+                break;
         }
     }
 }

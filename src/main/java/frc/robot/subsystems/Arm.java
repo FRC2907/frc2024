@@ -31,8 +31,10 @@ public class Arm implements ISubsystem {
     public void onLoop() {
         // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
         // maybe improve system step response
-        // TODO investigate whether it's helpful at all to cache the reference to reduce CAN traffic
-        // ^ actually if we were to generalize these classes, we could incorporate ref caching there
+        // TODO investigate whether it's helpful at all to cache the reference to reduce
+        // CAN traffic
+        // ^ actually if we were to generalize these classes, we could incorporate ref
+        // caching there
         this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
     }
 
@@ -49,10 +51,8 @@ public class Arm implements ISubsystem {
     }
 
     public boolean reachedSetPoint() {
-        return
-            Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis
-            && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis
-            ;
+        return Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis
+                && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis;
     }
 
     public void setPDGains(double P, double D) {

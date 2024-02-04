@@ -64,29 +64,29 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drivetrain.onLoop(driver.getLeftY(), driver.getRightX());
-    if (operator.getCircleButtonPressed()){
-      superstructure.moveToIntaking(); //TODO change to cancel
+    if (operator.getCircleButtonPressed()) {
+      superstructure.moveToIntaking(); // TODO change to cancel
     }
-    if (operator.getCrossButtonPressed()){
+    if (operator.getCrossButtonPressed()) {
       superstructure.prepareForClimb();
     }
-    if (operator.getSquareButtonPressed()){
-      superstructure.moveToSpeaker(); //TODO change to both speaker and amp
+    if (operator.getSquareButtonPressed()) {
+      superstructure.moveToSpeaker(); // TODO change to both speaker and amp
     }
-    if (operator.getTriangleButtonPressed()){
+    if (operator.getTriangleButtonPressed()) {
       superstructure.neutralPosition();
     }
-    if (operator.getR2Button()){
-      superstructure.moveToSpeaker(); //TODO confirm speaker shot
+    if (operator.getR2Button()) {
+      superstructure.moveToSpeaker(); // TODO confirm speaker shot
     }
-    if (operator.getR1Button()){
-      superstructure.moveToAmp(); //TODO confirm amp shot
+    if (operator.getR1Button()) {
+      superstructure.moveToAmp(); // TODO confirm amp shot
     }
-    if (operator.getL2Button()){
-      superstructure.moveToSpeaker(); //TODO gavin rawr
+    if (operator.getL2Button()) {
+      superstructure.moveToSpeaker(); // TODO gavin rawr
     }
-    if (operator.getL1Button()){
-      superstructure.moveToIntaking(); 
+    if (operator.getL1Button()) {
+      superstructure.moveToIntaking();
     }
   }
 
