@@ -62,7 +62,10 @@ public class Arm implements ISubsystem {
     }
 
     public boolean reachedSetPoint() {
-        return Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis;
+        return
+            Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis
+            && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis
+            ;
     }
 
     public void setPDGains(double P, double D) {
