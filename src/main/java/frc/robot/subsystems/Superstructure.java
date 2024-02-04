@@ -9,6 +9,7 @@ public class Superstructure {
     private Arm arm;
 
     private RobotState state;
+    private boolean automation;
 
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
@@ -25,12 +26,13 @@ public class Superstructure {
         //TODO self-righting
     }
 
-    private Superstructure(RobotState _state) {
+    private Superstructure(RobotState _state, boolean _automation) {
         this.state = _state;
+        this.automateScoring(_automation);
     }
 
     private Superstructure() {
-        this(RobotState.START);
+        this(RobotState.START, true);
     }
 
     private static Superstructure instance;
@@ -77,6 +79,9 @@ public class Superstructure {
     }
 
 
+    public void automateScoring(boolean _automation) { this.automation = _automation; }
+    public boolean isScoringAutomated() { return this.automation; }
+
 
     public void onLoop() {
         switch (this.state) {
@@ -117,7 +122,8 @@ public class Superstructure {
                 }
                 break;
             case READY_TO_SCORE_AMP:
-                this.state = RobotState.SCORING_AMP;
+                if (this.isScoringAutomated())
+                    this.state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
                 shooter.setSetPoint(Control.shooter.kAmpRPM);
@@ -134,7 +140,8 @@ public class Superstructure {
                 }
                 break;
             case READY_TO_SCORE_SPEAKER:
-                this.state = RobotState.SCORING_SPEAKER;
+                if (this.isScoringAutomated())
+                    this.state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
                 shooter.setSetPoint(Control.shooter.kSpeakerRPM);
@@ -146,7 +153,7 @@ public class Superstructure {
             case PREPARING_FOR_CLIMB:
                 arm.setSetPoint(Control.arm.kClimbReadyPosition);
                 // TODO automatically drive up to the Stage
-                if (arm.reachedSetPoint()){
+                if (this.isScoringAutomated() && arm.reachedSetPoint()){
                     this.state = RobotState.CLIMBING;
                 }
                 break;
