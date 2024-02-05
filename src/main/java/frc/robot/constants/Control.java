@@ -22,7 +22,7 @@ public class Control {
         public static final double kManualControlDiff = 0; // TODO
         public static final double kMinPosition = 0; // TODO
         public static final double kMaxPosition = 0; // TODO
-        public static final double kVelocityHysteresis = 0;
+        public static final double kVelocityHysteresis = 2;
     }
 
     public static class drivetrain {
