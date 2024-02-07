@@ -13,7 +13,7 @@ public class Arm implements ISubsystem {
     private double setPoint;
     private CANSparkMax motor;
     private NetworkTable NT;
-    DoublePublisher p_position, p_velocity;
+    private DoublePublisher p_position, p_velocity;
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
