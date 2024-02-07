@@ -47,7 +47,8 @@ public class Control {
     public static class camera {
         public static final int WIDTH = 320;
         public static final int HEIGHT = 240;
-        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
-        public static final Scalar kOrangeHigh = new Scalar(16, 255, 255);
+        public static final Scalar kOrangeLow = new Scalar(4, 64, 64);
+        public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
+        public static final double kAreaFilterFactor = 0.075;
     }
 }
