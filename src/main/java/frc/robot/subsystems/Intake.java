@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
@@ -10,10 +13,15 @@ public class Intake implements ISubsystem {
     private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
+    private NetworkTable NT;
+    private DoublePublisher p_velocity;
+
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
         this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_RPM_PER_WHEEL_RPM);
+        this.NT = NetworkTableInstance.getDefault().getTable("intake");
+        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
     }
 
     private static Intake instance;
@@ -42,6 +50,10 @@ public class Intake implements ISubsystem {
         return false;
     }
 
+    public double getVelocity(){ 
+        return this.motor.getEncoder().getVelocity();
+    }
+
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
@@ -50,7 +62,7 @@ public class Intake implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        // TODO Auto-generated method stub
+        p_velocity.set(getVelocity());
     }
 
     @Override
