@@ -97,7 +97,12 @@ public class Superstructure implements ISubsystem {
     }
 
     public void neutralPosition() {
-        this.state = RobotState.NEUTRAL;
+        if (intake.hasNote()){
+            this.state = RobotState.HOLDING_NOTE;
+            operator.setRumble(RumbleType.kBothRumble, 0.3);
+        } else {
+            this.state = RobotState.NEUTRAL;
+        }
     }
 
     public void automateScoring(boolean _automation) {
@@ -138,6 +143,10 @@ public class Superstructure implements ISubsystem {
     public BestTarget chooseBestTarget(){
         //TODO implement limelight sensor stuff
         return BestTarget.NONE;
+    }
+
+    public void handleManualDriving(){
+        //TODO add
     }
 
     @Override

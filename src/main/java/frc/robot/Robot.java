@@ -59,30 +59,40 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    superstructure.handleManualDriving();
+
+
     drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
     if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
       superstructure.cancelAction(); 
     }
-    if (operator.getCrossButtonPressed()) {
-      superstructure.prepareForClimb();
-    }
+
+
     if (operator.getSquareButtonPressed()) {
-      superstructure.moveToSpeaker(); // TODO change to both speaker and amp
+      superstructure.autoScore();
     }
     if (operator.getTriangleButtonPressed()) {
       superstructure.neutralPosition();
-    }
-    if (operator.getR2Button()) {
-      superstructure.moveToSpeaker(); // TODO confirm speaker shot
-    }
-    if (operator.getR1Button()) {
-      superstructure.moveToAmp(); // TODO confirm amp shot
     }
     if (operator.getL2Button()) {
       superstructure.moveToSpeaker(); // TODO gavin rawr
     }
     if (operator.getL1Button()) {
       superstructure.moveToIntaking();
+    }
+    if (operator.getR1ButtonPressed()){
+
+    }
+
+
+    if (driver.getR2Button()) {
+      superstructure.moveToSpeaker(); 
+    }
+    if (driver.getR1Button()) {
+      superstructure.moveToAmp(); 
+    }
+    if (driver.getCrossButtonPressed()) {
+      superstructure.prepareForClimb();
     }
   }
 
