@@ -68,6 +68,9 @@ public class Robot extends TimedRobot {
     }
 
 
+    if (operator.getCrossButtonPressed()){ //TODO automatic intake
+        superstructure.outakeNote();
+    }
     if (operator.getSquareButtonPressed()) {
       superstructure.autoScore();
     }
@@ -81,7 +84,10 @@ public class Robot extends TimedRobot {
       superstructure.moveToIntaking();
     }
     if (operator.getR1ButtonPressed()){
-
+        superstructure.outakeNote();
+    }
+    if (operator.getR2ButtonPressed()){ //TODO manual intaking
+        superstructure.intakeNote();
     }
 
 
@@ -93,6 +99,9 @@ public class Robot extends TimedRobot {
     }
     if (driver.getCrossButtonPressed()) {
       superstructure.prepareForClimb();
+    }
+    if (driver.getR3ButtonPressed()){
+      //TODO reverse
     }
   }
 
