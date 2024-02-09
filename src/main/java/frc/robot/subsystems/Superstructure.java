@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -164,8 +163,7 @@ public class Superstructure implements ISubsystem {
             case INTAKING:
                 arm.floorPosition();
                 intake.getSpeed();
-                if (false /* TODO we have a note */){
-
+                if (intake.hasNote()){
                     this.state = RobotState.HOLDING_NOTE;
                 }
                 break;
