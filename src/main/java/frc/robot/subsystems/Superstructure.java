@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.Ports;
+import frc.robot.util.Util;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
@@ -17,9 +18,11 @@ public class Superstructure implements ISubsystem {
     private RobotState state;
     private boolean automation;
 
+
+
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
-        , START, NEUTRAL
+        , START, NEUTRAL , REVERSE
 
         , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE, OUTAKING
 
@@ -34,6 +37,10 @@ public class Superstructure implements ISubsystem {
 
     public enum BestTarget {
         AMP, SPEAKER , NONE , TIED
+    }
+
+    public enum RobotReversed {
+        NORMAL , REVERSED
     }
 
     private Superstructure(RobotState _state, boolean _automation) {
@@ -113,7 +120,7 @@ public class Superstructure implements ISubsystem {
         return this.automation;
     }
 
-    public void autoScore(){
+    public void autoScore() {
         switch (this.chooseBestTarget()) {
             case AMP:
                 this.moveToAmp();
@@ -132,7 +139,7 @@ public class Superstructure implements ISubsystem {
         }
     }
 
-    public void cancelAction(){
+    public void cancelAction() {
         if (intake.hasNote()){
             this.state = RobotState.HOLDING_NOTE;
         } else {
@@ -140,14 +147,25 @@ public class Superstructure implements ISubsystem {
         }
     }
 
-    public BestTarget chooseBestTarget(){
+    public BestTarget chooseBestTarget() {
         //TODO implement limelight sensor stuff
         return BestTarget.NONE;
     }
 
-    public void handleManualDriving(){
+    public void handleManualDriving() {
         //TODO add
     }
+
+    public void normal() {
+        //TODO add normal code
+        //TODO add normal case
+    }
+
+    public void reversed() {
+        //TODO add reverse code
+        //TODO add reverse case
+    }
+
 
     @Override
     public void onLoop() {
