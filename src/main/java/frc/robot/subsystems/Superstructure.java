@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.Control;
+import frc.robot.constants.Ports;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Superstructure implements ISubsystem {
     private Drivetrain drivetrain;
@@ -8,6 +11,9 @@ public class Superstructure implements ISubsystem {
     private Intake intake;
     private Shooter shooter;
     private ISubsystem[] subsystems;
+
+    PS4Controller driver = new PS4Controller(Ports.HID.DRIVER);
+    PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
 
     private RobotState state;
     private boolean automation;
@@ -106,16 +112,16 @@ public class Superstructure implements ISubsystem {
     public void autoScore(){
         switch (this.chooseBestTarget()) {
             case AMP:
-                
+                this.moveToAmp();
                 break;
             case SPEAKER:
-
+                this.moveToSpeaker();
                 break;
             case NONE:
-
+                operator.setRumble(RumbleType.kBothRumble, 1);
                 break;
             case TIED:
-
+                operator.setRumble(RumbleType.kBothRumble, 0.5);
                 break;
             default:
                 break;
