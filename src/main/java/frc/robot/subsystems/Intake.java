@@ -44,6 +44,18 @@ public class Intake implements ISubsystem {
         this.setPoint = _setPoint;
     }
 
+    public void intake(){
+        this.setSetPoint(Control.intake.kIntakingRpm);
+    }
+
+    public void outake(){
+        this.setSetPoint(Control.intake.kIntakingRpm);
+    }
+
+    public void off(){
+        this.setSetPoint(Control.intake.kOff);
+    }
+
     /** Return whether the intake has a Note in it. */
     public boolean hasNote() {
         // TODO read sensor to determine whether there's a Note in the intake

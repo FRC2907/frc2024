@@ -36,6 +36,7 @@ public class Control {
         public static final double kP = 1; // TODO
         public static final double kD = 1; // TODO
         public static final double kIntakingRpm = 0; // TODO guess
+        public static final double kOutakingRpm = 0; //TODO 
         public static final double kOff = 0; // TODO be sure
     }
 

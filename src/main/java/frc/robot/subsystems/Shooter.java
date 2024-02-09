@@ -48,6 +48,11 @@ public class Shooter implements ISubsystem {
         this.setPoint = _setPoint;
     }
 
+    public boolean noteScored(){
+        return false;
+        //TODO add code to see if note has scored
+    }
+
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }
