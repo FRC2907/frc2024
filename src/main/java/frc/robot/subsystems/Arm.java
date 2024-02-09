@@ -73,6 +73,34 @@ public class Arm implements ISubsystem {
         this.motor.getPIDController().setD(D);
     }
 
+    public void floorPosition(){
+        this.setSetPoint(Control.arm.kFloorPosition);
+    }
+
+    public void holdingPosition(){
+        this.setSetPoint(Control.arm.kHoldingPosition);
+    }
+
+    public void ampPosition(){
+        this.setSetPoint(Control.arm.kAmpPosition);
+    }
+
+    public void speakerPosition(){
+        this.setSetPoint(Control.arm.kSpeakerPosition);
+    }
+
+    public void climbReadyPosition(){
+        this.setSetPoint(Control.arm.kClimbReadyPosition);
+    }
+
+    public void clumbPosition(){
+        this.setSetPoint(Control.arm.kClimbClumbPosition);
+    }
+
+    public void climbClumbPosition(){
+        this.setSetPoint(Control.arm.kClimbClumbPosition);
+    }
+
     public double getPosition(){
         return this.motor.getEncoder().getPosition();
     }

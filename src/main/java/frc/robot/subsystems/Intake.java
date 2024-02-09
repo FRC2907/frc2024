@@ -33,6 +33,7 @@ public class Intake implements ISubsystem {
         }
         return instance;
     }
+    
 
     /** Return intake speed in wheel RPM. */
     public double getSpeed() {

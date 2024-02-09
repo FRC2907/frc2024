@@ -149,16 +149,17 @@ public class Superstructure implements ISubsystem {
                 break;
 
             case MOVING_TO_INTAKING:
-                arm.setSetPoint(Control.arm.kFloorPosition);
-                intake.setSetPoint(Control.intake.kIntakingRpm);
+                arm.floorPosition();
+                intake.getSpeed();
                 // TODO automatically drive up to the Note
                 if (arm.reachedSetPoint())
                     this.state = RobotState.INTAKING;
                 break;
             case INTAKING:
-                arm.setSetPoint(Control.arm.kFloorPosition);
-                intake.setSetPoint(Control.intake.kIntakingRpm);
-                if (intake.hasNote()){
+                arm.floorPosition();
+                intake.getSpeed();
+                if (false /* TODO we have a note */){
+
                     this.state = RobotState.HOLDING_NOTE;
                 }
                 break;
@@ -167,12 +168,12 @@ public class Superstructure implements ISubsystem {
                 intake.outake();
 
             case HOLDING_NOTE:
-                arm.setSetPoint(Control.arm.kHoldingPosition);
-                intake.setSetPoint(Control.intake.kOff);
+                arm.holdingPosition();
+                intake.off();
                 break;
 
             case MOVING_TO_AMP:
-                arm.setSetPoint(Control.arm.kAmpPosition);
+                arm.ampPosition();
                 // TODO automatically drive up to the Amp
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     this.state = RobotState.READY_TO_SCORE_AMP;
@@ -183,14 +184,14 @@ public class Superstructure implements ISubsystem {
                     this.state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                shooter.setSetPoint(Control.shooter.kAmpRPM);
+                shooter.ampRPM();
                 if (shooter.noteScored()){
                     this.state = RobotState.NEUTRAL;
                 }
                 break;
 
             case MOVING_TO_SPEAKER:
-                arm.setSetPoint(Control.arm.kSpeakerPosition);
+                arm.speakerPosition();
                 // TODO automatically drive up to the Speaker
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
@@ -202,32 +203,32 @@ public class Superstructure implements ISubsystem {
                     this.state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                shooter.setSetPoint(Control.shooter.kSpeakerRPM);
+                shooter.shooterRPM();
                 if (shooter.noteScored()) {
                     this.state = RobotState.NEUTRAL;
                 }
                 break;
 
             case PREPARING_FOR_CLIMB:
-                arm.setSetPoint(Control.arm.kClimbReadyPosition);
+                arm.climbReadyPosition();
                 // TODO automatically drive up to the Stage
                 if (this.isScoringAutomated() && arm.reachedSetPoint()) {
                     this.state = RobotState.CLIMBING;
                 }
                 break;
             case CLIMBING:
-                arm.setSetPoint(Control.arm.kClimbClumbPosition);
+                arm.clumbPosition();
                 if (arm.reachedSetPoint()) {
                     this.state = RobotState.HUNG;
                 }
                 break;
             case HUNG:
-                arm.setSetPoint(Control.arm.kClimbClumbPosition);
+                arm.climbClumbPosition();
                 break;
             case NEUTRAL:
-                arm.setSetPoint(Control.arm.kHoldingPosition);
-                intake.setSetPoint(Control.intake.kOff);
-                shooter.setSetPoint(Control.shooter.kOff);
+                arm.holdingPosition();
+                intake.off();
+                shooter.off();
                 break;
             default:
                 break;
