@@ -56,6 +56,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.setManualControl(false);
     }
 
+
+    
     private Pose2d pose;
 
     public Pose2d getPose() {
@@ -66,9 +68,13 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.pose = _pose;
     }
 
+
+
     public void curvatureDrive(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
+
+
 
     @Override
     public void onLoop() {

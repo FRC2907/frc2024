@@ -164,14 +164,14 @@ public class Superstructure implements ISubsystem {
 
             case MOVING_TO_INTAKING:
                 arm.floorPosition();
-                intake.getSpeed();
+                intake.intake();
                 // TODO automatically drive up to the Note
                 if (arm.reachedSetPoint())
                     this.state = RobotState.INTAKING;
                 break;
             case INTAKING:
                 arm.floorPosition();
-                intake.getSpeed();
+                intake.intake();
                 if (intake.hasNote()){
                     this.state = RobotState.HOLDING_NOTE;
                 }

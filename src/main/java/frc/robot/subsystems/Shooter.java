@@ -38,37 +38,40 @@ public class Shooter implements ISubsystem {
         return instance;
     }
 
+
+
     public void off (){
         this.setSetPoint(Control.shooter.kOff);
     }
-
     public void ampRPM (){
         this.setSetPoint(Control.shooter.kAmpRPM);
     }
-
     public void shooterRPM (){
         this.setSetPoint(Control.shooter.kSpeakerRPM);
     }
-
-    /** Return shooter speed in wheel RPM. */
-    public double getSpeed() {
-        return motor.getEncoder().getVelocity();
+    public boolean noteScored(){
+        return false;
+        //TODO add code to see if note has scored
     }
+
 
     /** Set the desired speed of the shooter in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
-    public boolean noteScored(){
-        return false;
-        //TODO add code to see if note has scored
+
+    /** Return shooter speed in wheel RPM. */
+    public double getSpeed() {
+        return motor.getEncoder().getVelocity();
     }
 
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }
 
+
+    
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
