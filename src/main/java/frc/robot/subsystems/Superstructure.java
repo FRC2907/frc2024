@@ -107,7 +107,7 @@ public class Superstructure implements ISubsystem {
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
-                arm.setSetPoint(Control.arm.kStartPosition);
+                arm.startPosition();
                 intake.setSetPoint(Control.intake.kOff);
                 shooter.setSetPoint(Control.shooter.kOff);
                 if (arm.reachedSetPoint())

@@ -64,6 +64,10 @@ public class Arm implements ISubsystem {
                 && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis;
     }
 
+    public void startPosition(){
+        this.setSetPoint(Control.arm.kStartPosition);
+    }
+
     public void setPDGains(double P, double D) {
         this.motor.getPIDController().setP(P);
         this.motor.getPIDController().setD(D);
