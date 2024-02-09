@@ -60,8 +60,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
-    if (operator.getCircleButtonPressed()) {
-      superstructure.moveToIntaking(); // TODO change to cancel
+    if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
+      superstructure.cancelAction(); 
     }
     if (operator.getCrossButtonPressed()) {
       superstructure.prepareForClimb();

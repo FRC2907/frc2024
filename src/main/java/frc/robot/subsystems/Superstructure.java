@@ -27,6 +27,10 @@ public class Superstructure implements ISubsystem {
         // TODO self-righting
     }
 
+    public enum BestTarget {
+        AMP, SPEAKER , NONE , TIED
+    }
+
     private Superstructure(RobotState _state, boolean _automation) {
         this.state = _state;
         this.automateScoring(_automation);
@@ -99,12 +103,36 @@ public class Superstructure implements ISubsystem {
         return this.automation;
     }
 
+    public void autoScore(){
+        switch (this.chooseBestTarget()) {
+            case AMP:
+                
+                break;
+            case SPEAKER:
+
+                break;
+            case NONE:
+
+                break;
+            case TIED:
+
+                break;
+            default:
+                break;
+        }
+    }
+
     public void cancelAction(){
         if (intake.hasNote()){
             this.state = RobotState.HOLDING_NOTE;
         } else {
             this.state = RobotState.NEUTRAL;
         }
+    }
+
+    public BestTarget chooseBestTarget(){
+        //TODO implement limelight sensor stuff
+        return BestTarget.NONE;
     }
 
     @Override
