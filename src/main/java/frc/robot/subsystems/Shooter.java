@@ -38,6 +38,10 @@ public class Shooter implements ISubsystem {
         return instance;
     }
 
+    public void off (){
+        this.setSetPoint(Control.shooter.kOff);
+    }
+
     /** Return shooter speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity();

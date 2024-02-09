@@ -16,7 +16,7 @@ public class Superstructure implements ISubsystem {
         MOVING_TO_START // could use in testing scenarios
         , START, NEUTRAL
 
-        , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE, OUTAKING
+        , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE
 
         , MOVING_TO_AMP, READY_TO_SCORE_AMP, SCORING_AMP
 
@@ -95,21 +95,13 @@ public class Superstructure implements ISubsystem {
         return this.automation;
     }
 
-    public void cancelAction(){
-        if (intake.hasNote()){
-            this.state = RobotState.HOLDING_NOTE;
-        } else {
-            this.state = RobotState.NEUTRAL;
-        }
-    }
-
     @Override
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
                 arm.startPosition();
-                intake.setSetPoint(Control.intake.kOff);
-                shooter.setSetPoint(Control.shooter.kOff);
+                intake.off();
+                shooter.off();
                 if (arm.reachedSetPoint())
                     this.state = RobotState.START;
                 break;
@@ -125,14 +117,9 @@ public class Superstructure implements ISubsystem {
                 break;
             case INTAKING:
                 arm.setSetPoint(Control.arm.kFloorPosition);
-                intake.intake();
-                if (intake.hasNote()){
+                intake.setSetPoint(Control.intake.kIntakingRpm);
+                if (false /* TODO we have a note */)
                     this.state = RobotState.HOLDING_NOTE;
-                }
-                break;
-
-            case OUTAKING:
-                intake.outake();
                 break;
 
             case HOLDING_NOTE:
@@ -153,9 +140,8 @@ public class Superstructure implements ISubsystem {
                 break;
             case SCORING_AMP:
                 shooter.setSetPoint(Control.shooter.kAmpRPM);
-                if (shooter.noteScored()){
+                if (false/* scoring is done */)
                     this.state = RobotState.NEUTRAL;
-                }
                 break;
 
             case MOVING_TO_SPEAKER:
@@ -172,7 +158,7 @@ public class Superstructure implements ISubsystem {
                 break;
             case SCORING_SPEAKER:
                 shooter.setSetPoint(Control.shooter.kSpeakerRPM);
-                if (shooter.noteScored()) {
+                if (false/* scoring is done */) {
                     this.state = RobotState.NEUTRAL;
                 }
                 break;
