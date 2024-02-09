@@ -4,6 +4,28 @@
       "/FMSInfo": "FMSInfo"
     }
   },
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "transitory": {
+      "arm": {
+        "open": true
+      },
+      "drivetrain": {
+        "open": true
+      },
+      "intake": {
+        "open": true
+      },
+      "shooter": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   }
