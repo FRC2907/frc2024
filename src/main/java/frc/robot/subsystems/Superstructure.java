@@ -39,7 +39,7 @@ public class Superstructure implements ISubsystem {
         AMP, SPEAKER , NONE , TIED
     }
 
-    public enum RobotReversed {
+    public enum RobotCondition {
         NORMAL , REVERSED
     }
 
