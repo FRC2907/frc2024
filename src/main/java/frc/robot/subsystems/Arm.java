@@ -51,6 +51,8 @@ public class Arm implements ISubsystem {
         this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
     }
 
+
+
     public void up() {
         this.setSetPoint(setPoint + Control.arm.kManualControlDiff);
     }
@@ -59,47 +61,45 @@ public class Arm implements ISubsystem {
         this.setSetPoint(setPoint - Control.arm.kManualControlDiff);
     }
 
+
+    
     public boolean reachedSetPoint() {
         return Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis
                 && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis;
     }
 
+
+
     public void startPosition(){
         this.setSetPoint(Control.arm.kStartPosition);
     }
-
     public void setPDGains(double P, double D) {
         this.motor.getPIDController().setP(P);
         this.motor.getPIDController().setD(D);
     }
-
     public void floorPosition(){
         this.setSetPoint(Control.arm.kFloorPosition);
     }
-
     public void holdingPosition(){
         this.setSetPoint(Control.arm.kHoldingPosition);
     }
-
     public void ampPosition(){
         this.setSetPoint(Control.arm.kAmpPosition);
     }
-
     public void speakerPosition(){
         this.setSetPoint(Control.arm.kSpeakerPosition);
     }
-
     public void climbReadyPosition(){
         this.setSetPoint(Control.arm.kClimbReadyPosition);
     }
-
     public void clumbPosition(){
         this.setSetPoint(Control.arm.kClimbClumbPosition);
     }
-
     public void climbClumbPosition(){
         this.setSetPoint(Control.arm.kClimbClumbPosition);
     }
+
+
 
     public double getPosition(){
         return this.motor.getEncoder().getPosition();

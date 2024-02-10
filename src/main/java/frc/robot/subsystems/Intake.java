@@ -24,7 +24,9 @@ public class Intake implements ISubsystem {
         this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
     }
 
+
     private static Intake instance;
+
 
     public static Intake getInstance() {
         if (instance == null) {
@@ -35,37 +37,36 @@ public class Intake implements ISubsystem {
     }
     
 
-    /** Return intake speed in wheel RPM. */
-    public double getSpeed() {
-        return motor.getEncoder().getVelocity();
-    }
-
     /** Set the desired speed of the intake in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
+
+
     public void intake(){
         this.setSetPoint(Control.intake.kIntakingRpm);
     }
-
     public void outake(){
         this.setSetPoint(Control.intake.kIntakingRpm);
     }
-
     public void off(){
         this.setSetPoint(Control.intake.kOff);
     }
-
     /** Return whether the intake has a Note in it. */
     public boolean hasNote() {
         // TODO read sensor to determine whether there's a Note in the intake
         return false;
     }
 
+
+    
+    /** Return intake speed in wheel RPM. */
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }
+
+
 
     /** Update motor speed every cycle. */
     @Override
