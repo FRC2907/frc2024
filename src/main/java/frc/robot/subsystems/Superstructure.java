@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
-import frc.robot.constants.Control;
+import frc.robot.constants.Ports;
+import frc.robot.util.Util;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Superstructure implements ISubsystem {
     private Drivetrain drivetrain;
@@ -9,23 +12,33 @@ public class Superstructure implements ISubsystem {
     private Shooter shooter;
     private ISubsystem[] subsystems;
 
+    PS4Controller driver = new PS4Controller(Ports.HID.DRIVER);
+    PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
+
     private RobotState state;
     private boolean automation;
 
+
+
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
-        , START, NEUTRAL
+        , START, NEUTRAL , REVERSE
 
-        , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE
+        , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE, OUTAKING
 
         , MOVING_TO_AMP, READY_TO_SCORE_AMP, SCORING_AMP
 
         , MOVING_TO_SPEAKER, READY_TO_SCORE_SPEAKER, SCORING_SPEAKER
 
-        , PREPARING_FOR_CLIMB, CLIMBING, HUNG
+        , PREPARING_FOR_CLIMB, CLIMBING, HUNG, FORWARD
 
         // TODO self-righting
     }
+
+    public enum BestTarget {
+        AMP, SPEAKER , NONE , TIED
+    }
+
 
     private Superstructure(RobotState _state, boolean _automation) {
         this.state = _state;
@@ -59,6 +72,10 @@ public class Superstructure implements ISubsystem {
         this.state = RobotState.INTAKING;
     }
 
+    public void outakeNote(){
+        this.state = RobotState.OUTAKING;
+    }
+
     public void moveToAmp() {
         this.state = RobotState.MOVING_TO_AMP;
     }
@@ -84,7 +101,12 @@ public class Superstructure implements ISubsystem {
     }
 
     public void neutralPosition() {
-        this.state = RobotState.NEUTRAL;
+        if (intake.hasNote()){
+            this.state = RobotState.HOLDING_NOTE;
+            operator.setRumble(RumbleType.kBothRumble, 0.3);
+        } else {
+            this.state = RobotState.NEUTRAL;
+        }
     }
 
     public void automateScoring(boolean _automation) {
@@ -95,13 +117,51 @@ public class Superstructure implements ISubsystem {
         return this.automation;
     }
 
+    public void autoScore() {
+        switch (this.chooseBestTarget()) {
+            case AMP:
+                this.moveToAmp();
+                break;
+            case SPEAKER:
+                this.moveToSpeaker();
+                break;
+            case NONE:
+                operator.setRumble(RumbleType.kBothRumble, 1);
+                break;
+            case TIED:
+                operator.setRumble(RumbleType.kBothRumble, 0.5);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void cancelAction() {
+        if (intake.hasNote()){
+            this.state = RobotState.HOLDING_NOTE;
+        } else {
+            this.state = RobotState.NEUTRAL;
+        }
+    }
+
+    public BestTarget chooseBestTarget() {
+        //TODO implement limelight sensor stuff
+        return BestTarget.NONE;
+    }
+
+    public void handleManualDriving() {
+        //TODO add
+    }
+
+
+
     @Override
     public void onLoop() {
         switch (this.state) {
             case MOVING_TO_START:
-                arm.setSetPoint(Control.arm.kStartPosition);
-                intake.setSetPoint(Control.intake.kOff);
-                shooter.setSetPoint(Control.shooter.kOff);
+                arm.startPosition();
+                intake.off();
+                shooter.off();
                 if (arm.reachedSetPoint())
                     this.state = RobotState.START;
                 break;
@@ -109,26 +169,30 @@ public class Superstructure implements ISubsystem {
                 break;
 
             case MOVING_TO_INTAKING:
-                arm.setSetPoint(Control.arm.kFloorPosition);
-                intake.setSetPoint(Control.intake.kIntakingRpm);
+                arm.floorPosition();
+                intake.intake();
                 // TODO automatically drive up to the Note
                 if (arm.reachedSetPoint())
                     this.state = RobotState.INTAKING;
                 break;
             case INTAKING:
-                arm.setSetPoint(Control.arm.kFloorPosition);
-                intake.setSetPoint(Control.intake.kIntakingRpm);
-                if (false /* TODO we have a note */)
+                arm.floorPosition();
+                intake.intake();
+                if (intake.hasNote()){
                     this.state = RobotState.HOLDING_NOTE;
+                }
                 break;
 
+            case OUTAKING:
+                intake.outake();
+
             case HOLDING_NOTE:
-                arm.setSetPoint(Control.arm.kHoldingPosition);
-                intake.setSetPoint(Control.intake.kOff);
+                arm.holdingPosition();
+                intake.off();
                 break;
 
             case MOVING_TO_AMP:
-                arm.setSetPoint(Control.arm.kAmpPosition);
+                arm.ampPosition();
                 // TODO automatically drive up to the Amp
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     this.state = RobotState.READY_TO_SCORE_AMP;
@@ -139,13 +203,14 @@ public class Superstructure implements ISubsystem {
                     this.state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                shooter.setSetPoint(Control.shooter.kAmpRPM);
-                if (false/* scoring is done */)
+                shooter.ampRPM();
+                if (shooter.noteScored()){
                     this.state = RobotState.NEUTRAL;
+                }
                 break;
 
             case MOVING_TO_SPEAKER:
-                arm.setSetPoint(Control.arm.kSpeakerPosition);
+                arm.speakerPosition();
                 // TODO automatically drive up to the Speaker
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
@@ -157,32 +222,32 @@ public class Superstructure implements ISubsystem {
                     this.state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                shooter.setSetPoint(Control.shooter.kSpeakerRPM);
-                if (false/* scoring is done */) {
+                shooter.shooterRPM();
+                if (shooter.noteScored()) {
                     this.state = RobotState.NEUTRAL;
                 }
                 break;
 
             case PREPARING_FOR_CLIMB:
-                arm.setSetPoint(Control.arm.kClimbReadyPosition);
+                arm.climbReadyPosition();
                 // TODO automatically drive up to the Stage
                 if (this.isScoringAutomated() && arm.reachedSetPoint()) {
                     this.state = RobotState.CLIMBING;
                 }
                 break;
             case CLIMBING:
-                arm.setSetPoint(Control.arm.kClimbClumbPosition);
+                arm.clumbPosition();
                 if (arm.reachedSetPoint()) {
                     this.state = RobotState.HUNG;
                 }
                 break;
             case HUNG:
-                arm.setSetPoint(Control.arm.kClimbClumbPosition);
+                arm.climbClumbPosition();
                 break;
             case NEUTRAL:
-                arm.setSetPoint(Control.arm.kHoldingPosition);
-                intake.setSetPoint(Control.intake.kOff);
-                shooter.setSetPoint(Control.shooter.kOff);
+                arm.holdingPosition();
+                intake.off();
+                shooter.off();
                 break;
             default:
                 break;

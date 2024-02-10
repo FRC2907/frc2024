@@ -19,7 +19,7 @@ public class Control {
         public static final double kManualControlDiff = 0; // TODO
         public static final double kMinPosition = 0; // TODO
         public static final double kMaxPosition = 0; // TODO
-        public static final double kVelocityHysteresis = 0;
+        public static final double kVelocityHysteresis = 2;
     }
 
     public static class drivetrain {
@@ -33,6 +33,7 @@ public class Control {
         public static final double kP = 1; // TODO
         public static final double kD = 1; // TODO
         public static final double kIntakingRpm = 0; // TODO guess
+        public static final double kOutakingRpm = 0; //TODO 
         public static final double kOff = 0; // TODO be sure
     }
 
