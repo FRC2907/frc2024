@@ -11,15 +11,25 @@ import frc.robot.util.Util;
 
 public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
-    private CANSparkMax leftMotor, rightMotor;
+    private CANSparkMax leftMotor;
+    private CANSparkMax rightMotor;
     private NetworkTable NT;
     private DoublePublisher p_positionX, p_positionY, p_velocity, p_velocityL, p_velocityR, p_angle, p_angVel;
+
+
+
+    private RobotDirection state;
+    public enum RobotDirection {
+        FORWARD , REVERSED
+    }
+
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
         super(left, right);
         this.leftMotor = left; // TODO add velocity conversion factor
         this.rightMotor = right;
         this.manualControl = true;
+        this.state = RobotDirection.FORWARD;
         this.NT = NetworkTableInstance.getDefault().getTable("drivetrain");
         this.p_positionX = this.NT.getDoubleTopic("position").publish();
         this.p_positionY = this.NT.getDoubleTopic("position").publish();
@@ -57,6 +67,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
+    public void forward(){
+
+    }
+
+    public void reversed(){
+        
+    }
+
     
     private Pose2d pose;
 
@@ -74,6 +92,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
 
+
+    
 
 
     @Override

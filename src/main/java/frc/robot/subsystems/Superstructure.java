@@ -30,7 +30,7 @@ public class Superstructure implements ISubsystem {
 
         , MOVING_TO_SPEAKER, READY_TO_SCORE_SPEAKER, SCORING_SPEAKER
 
-        , PREPARING_FOR_CLIMB, CLIMBING, HUNG
+        , PREPARING_FOR_CLIMB, CLIMBING, HUNG, FORWARD
 
         // TODO self-righting
     }
@@ -39,9 +39,6 @@ public class Superstructure implements ISubsystem {
         AMP, SPEAKER , NONE , TIED
     }
 
-    public enum RobotCondition {
-        NORMAL , REVERSED
-    }
 
     private Superstructure(RobotState _state, boolean _automation) {
         this.state = _state;
@@ -156,15 +153,6 @@ public class Superstructure implements ISubsystem {
         //TODO add
     }
 
-    public void normal() {
-        //TODO add normal code
-        //TODO add normal case
-    }
-
-    public void reversed() {
-        //TODO add reverse code
-        //TODO add reverse case
-    }
 
 
     @Override
