@@ -21,7 +21,8 @@ public class ControllerThatGoesInYourHands extends PS4Controller implements ISub
         this.rumbleDuration = 0;
     }
 
-    private static Map<Integer, ControllerThatGoesInYourHands> instances = new HashMap<Integer, ControllerThatGoesInYourHands>();
+    private static Map<Integer, ControllerThatGoesInYourHands> instances
+        = new HashMap<Integer, ControllerThatGoesInYourHands>();
     public static ControllerThatGoesInYourHands getInstance(int id) {
         if (!instances.containsKey(id))
             instances.put(id, new ControllerThatGoesInYourHands(id));
