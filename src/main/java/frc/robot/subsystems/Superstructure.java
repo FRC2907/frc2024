@@ -11,6 +11,8 @@ public class Superstructure implements ISubsystem {
     private Shooter shooter;
     private ISubsystem[] subsystems;
 
+    // TODO update these to ControllerThatGoesInYourHands
+    // TODO add them to subsystems[]
     PS4Controller driver = new PS4Controller(Ports.HID.DRIVER);
     PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
 
