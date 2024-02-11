@@ -89,7 +89,13 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
 
     public void curvatureDrive(double xSpeed, double zRotation) {
-        this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
+        if (this.manualControl)
+            this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
+        else {
+            // FIXME this isn't a real system; figure out a better architecture
+            System.err.println("[EE] Someone tried to manually control the robot while in self-driving mode");
+            new Exception().printStackTrace();
+        }
     }
 
 

@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.Ports;
-import frc.robot.util.Util;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
@@ -149,8 +148,24 @@ public class Superstructure implements ISubsystem {
         return BestTarget.NONE;
     }
 
+
+    /**
+     * If we're in a manual-driving state, tell the drivetrain that, and send driver input.
+     * If we're in a self-driving state, tell the drivetrain that and let it do its thing.
+     */
     public void handleManualDriving() {
-        //TODO add
+        switch (this.state) {
+            case MOVING_TO_START:
+            case START:
+            case NEUTRAL:
+            case HOLDING_NOTE:
+            case OUTAKING:
+                drivetrain.setManualControl();
+                drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
+                break;
+            default:
+                drivetrain.setAutomaticControl();
+        }
     }
 
 
@@ -252,6 +267,8 @@ public class Superstructure implements ISubsystem {
             default:
                 break;
         }
+
+        handleManualDriving();
 
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)

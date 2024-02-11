@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.Ports;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Superstructure;
 
 /**
@@ -25,7 +24,6 @@ import frc.robot.subsystems.Superstructure;
 public class Robot extends TimedRobot {
 
   private PS4Controller driver, operator;
-  private Drivetrain drivetrain;
   private Superstructure superstructure;
   private Routine auto;
 
@@ -33,7 +31,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driver = new PS4Controller(Ports.HID.DRIVER);
     operator = new PS4Controller(Ports.HID.OPERATOR);
-    drivetrain = Drivetrain.getInstance();
     superstructure = Superstructure.getInstance();
   }
 
@@ -59,10 +56,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    superstructure.handleManualDriving();
+    
 
-
-    drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
     if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
       superstructure.cancelAction(); 
     }
