@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.Drivetrain.DriveMode;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
@@ -19,7 +20,10 @@ public class Superstructure implements ISubsystem {
     PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
 
     private RobotState state;
-    private boolean automation;
+    private boolean automateScoring;
+
+    // TODO do the things!
+    private Trajectory trajectory;
 
 
 
@@ -117,11 +121,11 @@ public class Superstructure implements ISubsystem {
     }
 
     public void automateScoring(boolean _automation) {
-        this.automation = _automation;
+        this.automateScoring = _automation;
     }
 
     public boolean isScoringAutomated() {
-        return this.automation;
+        return this.automateScoring;
     }
 
     public BestTarget chooseBestTarget() {
