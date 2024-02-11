@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import frc.robot.subsystems.Drivetrain.DriveMode;
+
 /**
  * Style guidance:
  * - SCREAMING_SNAKE_CASE for properties of the robot hardware, things that are not configurable as code
@@ -37,7 +39,7 @@ public class Control {
     }
 
     public static class drivetrain {
-
+        public static final DriveMode kDefaultDriveMode = DriveMode.LOCAL_FORWARD;
     }
 
     // TODO consider defining intake speed as a linear unit (m/s)
