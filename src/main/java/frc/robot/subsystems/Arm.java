@@ -10,15 +10,16 @@ import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
 public class Arm implements ISubsystem {
-    private double setPoint;
+    private double setPoint; // deg
     private CANSparkMax motor;
     private NetworkTable NT;
     private DoublePublisher p_position, p_velocity;
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.TICK_PER_DEGREE);
-        this.setPDGains(Control.arm.kP, Control.arm.kD);
+        this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_POS_UNIT_PER_DEGREE);
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND);
+        this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
         this.NT = NetworkTableInstance.getDefault().getTable("arm");
         this.p_position = this.NT.getDoubleTopic("position").publish();
         this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
@@ -44,6 +45,7 @@ public class Arm implements ISubsystem {
         // CAN traffic
         // ^ actually if we were to generalize these classes, we could incorporate ref
         // caching there
+        // TODO work on motion profiling this / using velocity -> position control
         this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
     }
 
@@ -64,8 +66,9 @@ public class Arm implements ISubsystem {
 
     
     public boolean reachedSetPoint() {
-        return Math.abs(this.setPoint - this.motor.getEncoder().getPosition()) < Control.arm.kPositionHysteresis
-                && Math.abs(this.motor.getEncoder().getVelocity()) < Control.arm.kVelocityHysteresis;
+        return
+            Math.abs(this.setPoint - getPosition()) < Control.arm.kPositionHysteresis
+         && Math.abs(0             - getVelocity()) < Control.arm.kVelocityHysteresis;
     }
 
 
@@ -73,6 +76,8 @@ public class Arm implements ISubsystem {
     public void startPosition(){
         this.setSetPoint(Control.arm.kStartPosition);
     }
+    // FIXME if we use this for position and velocity PD control
+    // we might need a way to differentiate controllers or something, idk
     public void setPDGains(double P, double D) {
         this.motor.getPIDController().setP(P);
         this.motor.getPIDController().setD(D);
@@ -106,7 +111,7 @@ public class Arm implements ISubsystem {
     }
 
     public double getVelocity(){
-        return this.motor.getEncoder().getVelocity(); //TODO add velocity conversion factor
+        return this.motor.getEncoder().getVelocity();
     }
 
     @Override

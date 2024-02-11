@@ -13,7 +13,7 @@ import frc.robot.util.Util;
 // TODO further consider generalizing flywheels, arms, and elevators into generic classes
 // and then extending them for whatever
 public class Shooter implements ISubsystem {
-    private double setPoint; // wheel rpm
+    private double setPoint; // wheel m/s
 
     private CANSparkMax motor;
     private NetworkTable NT;
@@ -21,7 +21,7 @@ public class Shooter implements ISubsystem {
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_RPM_PER_WHEEL_RPM);
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_VEL_UNIT_PER_SHOOTER_MPS);
         this.NT = NetworkTableInstance.getDefault().getTable("shooter");
         this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
     }
@@ -44,10 +44,10 @@ public class Shooter implements ISubsystem {
         this.setSetPoint(Control.shooter.kOff);
     }
     public void ampRPM (){
-        this.setSetPoint(Control.shooter.kAmpRPM);
+        this.setSetPoint(Control.shooter.kAmpSpeed);
     }
     public void shooterRPM (){
-        this.setSetPoint(Control.shooter.kSpeakerRPM);
+        this.setSetPoint(Control.shooter.kSpeakerSpeed);
     }
     public boolean noteScored(){
         return false;
