@@ -21,6 +21,9 @@
       "intake": {
         "open": true
       },
+      "note-tracking": {
+        "open": true
+      },
       "shooter": {
         "open": true
       }
