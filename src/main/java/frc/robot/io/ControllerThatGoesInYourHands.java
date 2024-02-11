@@ -3,6 +3,7 @@ package frc.robot.io;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ISubsystem;
@@ -39,6 +40,19 @@ public class ControllerThatGoesInYourHands extends PS4Controller implements ISub
     public void rumble(double duration) {
         this.rumble(duration, 1.0);
     }
+
+   public Rotation2d getLeftAngle() {
+    return Rotation2d.fromRadians(Math.atan2(getLeftY(), getLeftX()));
+   } 
+   public double getLeftMagnitude() {
+    return Math.sqrt(Math.pow(getLeftX(), 2) + Math.pow(getLeftY(), 2));
+   } 
+   public Rotation2d getRightAngle() {
+    return Rotation2d.fromRadians(Math.atan2(getRightY(), getRightX()));
+   } 
+   public double getRightMagnitude() {
+    return Math.sqrt(Math.pow(getRightX(), 2) + Math.pow(getRightY(), 2));
+   } 
 
     @Override
     public void onLoop() {
