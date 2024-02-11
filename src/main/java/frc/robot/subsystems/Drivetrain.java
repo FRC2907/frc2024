@@ -106,6 +106,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     @Override
     public void onLoop() {
+        /**
+         * FIXME maybe...maybe the other functions just set the variables:
+         * - manualControl
+         * - speed, rotation
+         * - left, right
+         * and then this function decides which set of vars to use and how to use them
+         * this model reduces the amount of Actual Stuff that Happens outside of the onLoop family
+         */
     }
 
 
