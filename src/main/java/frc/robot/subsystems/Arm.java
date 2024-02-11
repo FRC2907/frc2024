@@ -100,9 +100,6 @@ public class Arm implements ISubsystem {
     public void clumbPosition(){
         this.setSetPoint(Control.arm.kClimbClumbPosition);
     }
-    public void climbClumbPosition(){
-        this.setSetPoint(Control.arm.kClimbClumbPosition);
-    }
 
 
 

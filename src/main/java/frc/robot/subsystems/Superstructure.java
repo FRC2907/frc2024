@@ -257,7 +257,7 @@ public class Superstructure implements ISubsystem {
                 }
                 break;
             case HUNG:
-                arm.climbClumbPosition();
+                arm.clumbPosition();
                 break;
             case NEUTRAL:
                 arm.holdingPosition();
