@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ISubsystem;
 
-public class ControllerThatGoesInYourHands extends PS4Controller implements ISubsystem {
+public class ControllerRumble extends PS4Controller implements ISubsystem {
     /* TODO
      * - integrate this into Robot and Superstructure classes
      */
@@ -16,17 +16,17 @@ public class ControllerThatGoesInYourHands extends PS4Controller implements ISub
     private Timer rumbleTimer;
     private double rumbleDuration;
 
-    private ControllerThatGoesInYourHands(int port) {
+    private ControllerRumble(int port) {
         super(port);
         this.rumbleTimer = new Timer();
         this.rumbleDuration = 0;
     }
 
-    private static Map<Integer, ControllerThatGoesInYourHands> instances
-        = new HashMap<Integer, ControllerThatGoesInYourHands>();
-    public static ControllerThatGoesInYourHands getInstance(int id) {
+    private static Map<Integer, ControllerRumble> instances
+        = new HashMap<Integer, ControllerRumble>();
+    public static ControllerRumble getInstance(int id) {
         if (!instances.containsKey(id))
-            instances.put(id, new ControllerThatGoesInYourHands(id));
+            instances.put(id, new ControllerRumble(id));
         return instances.get(id);
     }
 
