@@ -73,14 +73,14 @@ public class Arm implements ISubsystem {
 
 
 
-    public void startPosition(){
-        this.setSetPoint(Control.arm.kStartPosition);
-    }
     // FIXME if we use this for position and velocity PD control
     // we might need a way to differentiate controllers or something, idk
     public void setPDGains(double P, double D) {
         this.motor.getPIDController().setP(P);
         this.motor.getPIDController().setD(D);
+    }
+    public void startPosition(){
+        this.setSetPoint(Control.arm.kStartPosition);
     }
     public void floorPosition(){
         this.setSetPoint(Control.arm.kFloorPosition);

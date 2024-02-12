@@ -21,7 +21,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     private DriveMode mode;
     public enum DriveMode {
-        AUTO
+          AUTO
 
         , FIELD_FORWARD, FIELD_REVERSED
 
@@ -59,15 +59,26 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
-    public void forward(){
 
+    public void localForward(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
     }
-
-    public void reversed(){
-        
+    public void localReversed(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
+    }
+    public void fieldForward(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
+    }
+    public void fieldReversed(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
     }
 
     
+
     private Pose2d pose;
 
     public Pose2d getPose() {
