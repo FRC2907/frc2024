@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     }
 
 
+    
     if (operator.getCrossButtonPressed()){ //TODO automatic intake
         superstructure.outakeNote();
     }
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
     if (operator.getR2ButtonPressed()){ //TODO manual intaking
         superstructure.intakeNote();
     }
+
 
 
     if (driver.getR2Button()) {

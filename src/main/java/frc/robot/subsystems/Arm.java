@@ -49,6 +49,8 @@ public class Arm implements ISubsystem {
         this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
     }
 
+
+    
     public void setSetPoint(double _setPoint) {
         this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
     }
@@ -58,7 +60,6 @@ public class Arm implements ISubsystem {
     public void up() {
         this.setSetPoint(setPoint + Control.arm.kManualControlDiff);
     }
-
     public void down() {
         this.setSetPoint(setPoint - Control.arm.kManualControlDiff);
     }
@@ -106,10 +107,11 @@ public class Arm implements ISubsystem {
     public double getPosition(){
         return this.motor.getEncoder().getPosition();
     }
-
     public double getVelocity(){
         return this.motor.getEncoder().getVelocity();
     }
+
+
 
     @Override
     public void submitTelemetry() {

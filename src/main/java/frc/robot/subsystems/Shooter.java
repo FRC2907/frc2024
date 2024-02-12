@@ -55,17 +55,18 @@ public class Shooter implements ISubsystem {
     }
 
 
+
     /** Set the desired speed of the shooter in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
 
+    
     /** Return shooter speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity();
     }
-
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }
