@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
-import frc.robot.util.Util;
+import frc.robot.subsystems.Drivetrain.DriveMode;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
@@ -12,17 +14,22 @@ public class Superstructure implements ISubsystem {
     private Shooter shooter;
     private ISubsystem[] subsystems;
 
+    // TODO update these to ControllerThatGoesInYourHands
+    // TODO add them to subsystems[]
     PS4Controller driver = new PS4Controller(Ports.HID.DRIVER);
     PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
 
     private RobotState state;
-    private boolean automation;
+    private boolean automateScoring;
+
+    // TODO do the things!
+    private Trajectory trajectory;
 
 
 
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
-        , START, NEUTRAL , REVERSE
+        , START, NEUTRAL
 
         , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE, OUTAKING
 
@@ -30,7 +37,7 @@ public class Superstructure implements ISubsystem {
 
         , MOVING_TO_SPEAKER, READY_TO_SCORE_SPEAKER, SCORING_SPEAKER
 
-        , PREPARING_FOR_CLIMB, CLIMBING, HUNG, FORWARD
+        , PREPARING_FOR_CLIMB, CLIMBING, HUNG
 
         // TODO self-righting
     }
@@ -109,12 +116,21 @@ public class Superstructure implements ISubsystem {
         }
     }
 
+    public void cancelAction() {
+        neutralPosition();
+    }
+
     public void automateScoring(boolean _automation) {
-        this.automation = _automation;
+        this.automateScoring = _automation;
     }
 
     public boolean isScoringAutomated() {
-        return this.automation;
+        return this.automateScoring;
+    }
+
+    public BestTarget chooseBestTarget() {
+        //TODO implement limelight sensor stuff
+        return BestTarget.NONE;
     }
 
     public void autoScore() {
@@ -126,9 +142,11 @@ public class Superstructure implements ISubsystem {
                 this.moveToSpeaker();
                 break;
             case NONE:
+            // FIXME
                 operator.setRumble(RumbleType.kBothRumble, 1);
                 break;
             case TIED:
+            // FIXME
                 operator.setRumble(RumbleType.kBothRumble, 0.5);
                 break;
             default:
@@ -136,21 +154,27 @@ public class Superstructure implements ISubsystem {
         }
     }
 
-    public void cancelAction() {
-        if (intake.hasNote()){
-            this.state = RobotState.HOLDING_NOTE;
-        } else {
-            this.state = RobotState.NEUTRAL;
+
+    /**
+     * If we're in a manual-driving state, tell the drivetrain that, and send driver input.
+     * If we're in a self-driving state, tell the drivetrain that and let it do its thing.
+     */
+    public void handleDriving() {
+        switch (this.state) {
+            case MOVING_TO_START:
+            case START:
+            case NEUTRAL:
+            case HOLDING_NOTE:
+            case OUTAKING:
+                if (drivetrain.getDriveMode() == DriveMode.AUTO)
+                    drivetrain.setDriveMode(Control.drivetrain.kDefaultDriveMode);
+                drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
+                break;
+            default:
+                drivetrain.setDriveMode(DriveMode.AUTO);
+                // TODO feed the drivetrain values from a trajectory
+                //drivetrain.setTankInputs(0, 0);
         }
-    }
-
-    public BestTarget chooseBestTarget() {
-        //TODO implement limelight sensor stuff
-        return BestTarget.NONE;
-    }
-
-    public void handleManualDriving() {
-        //TODO add
     }
 
 
@@ -242,7 +266,7 @@ public class Superstructure implements ISubsystem {
                 }
                 break;
             case HUNG:
-                arm.climbClumbPosition();
+                arm.clumbPosition();
                 break;
             case NEUTRAL:
                 arm.holdingPosition();
@@ -252,6 +276,8 @@ public class Superstructure implements ISubsystem {
             default:
                 break;
         }
+
+        handleDriving();
 
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)

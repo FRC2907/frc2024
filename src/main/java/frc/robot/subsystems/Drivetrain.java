@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,18 +19,22 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
 
 
-    private RobotDirection state;
-    public enum RobotDirection {
-        FORWARD , REVERSED
+    private DriveMode mode;
+    public enum DriveMode {
+        AUTO
+
+        , FIELD_FORWARD, FIELD_REVERSED
+
+        , LOCAL_FORWARD, LOCAL_REVERSED
     }
+    private double leftSpeed, rightSpeed, totalSpeed, turningness;
 
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
         super(left, right);
         this.leftMotor = left; // TODO add velocity conversion factor
         this.rightMotor = right;
-        this.manualControl = true;
-        this.state = RobotDirection.FORWARD;
+        this.mode = DriveMode.LOCAL_FORWARD;
         this.NT = NetworkTableInstance.getDefault().getTable("drivetrain");
         this.p_positionX = this.NT.getDoubleTopic("position").publish();
         this.p_positionY = this.NT.getDoubleTopic("position").publish();
@@ -41,7 +46,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
     private static Drivetrain instance;
-    private boolean manualControl;
 
     public static Drivetrain getInstance() {
         CANSparkMax left, right;
@@ -52,18 +56,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
         }
         return instance;
-    }
-
-    public void setManualControl(boolean _mC) {
-        this.manualControl = _mC;
-    }
-
-    public void setManualControl() {
-        this.setManualControl(true);
-    }
-
-    public void setAutomaticControl() {
-        this.setManualControl(false);
     }
 
 
@@ -93,11 +85,65 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
-    
+    public void setTankInputs(double left, double right) {
+        this.leftSpeed = left;
+        this.rightSpeed = right;
+    }
+
+   public void setLocalDriveInputs(double speed, double turn) {
+    this.totalSpeed = speed;
+    this.turningness = turn;
+   }
+
+   public void setDriveMode(DriveMode newMode) {
+    this.mode = newMode;
+   }
+   public DriveMode getDriveMode() { return this.mode; }
+
+    // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
+   public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
+            // TODO we can probably use curvatureDrive for field-relative steering as well
+            // instead of turningness being just the x value of a stick,
+            // use the difference between our heading and our desired heading
+            // and then speed is probably just the magnitude of the stick
+    this.totalSpeed = magnitude;
+    this.turningness = 0; // TODO solve this
+    // keeping in mind that we also need to account for forward/reverse when calculating our heading error
+   }
 
 
+   /**
+    * Other functions outside this class should interact by calling the helper
+    * functions to set these variables:
+    * <ul>
+    * <li>manualControl
+    * <li>speed, rotation
+    * <li>left, right
+    * </ul>
+    *
+    * This function decides which set of vars to use and how to use them. This
+    * model reduces the amount of Actual Stuff that Happens outside of the onLoop
+    * family.
+    */
     @Override
     public void onLoop() {
+        switch (this.mode) {
+            case AUTO:
+                double[] speeds = new double[] {leftSpeed, rightSpeed};
+                normalize(speeds);
+                this.tankDrive(speeds[0], speeds[1], false);
+                break;
+            case FIELD_FORWARD:
+            case LOCAL_FORWARD:
+                this.curvatureDrive(totalSpeed, turningness);
+                break;
+            case FIELD_REVERSED: // not sure if this actually holds up: TODO verify
+            case LOCAL_REVERSED:
+                this.curvatureDrive(-totalSpeed, -turningness);
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -148,8 +194,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         // TODO Auto-generated method stub
     }
 
-    // TODO(justincredible2508,josephreed2600) implement field-relative control
-    // scheme
 
     public void reverse() {
     } // TODO

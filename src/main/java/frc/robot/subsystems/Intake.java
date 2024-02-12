@@ -19,7 +19,7 @@ public class Intake implements ISubsystem {
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_RPM_PER_WHEEL_RPM);
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_VEL_UNIT_PER_INTAKE_MPS);
         this.NT = NetworkTableInstance.getDefault().getTable("intake");
         this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
     }
@@ -45,10 +45,10 @@ public class Intake implements ISubsystem {
 
 
     public void intake(){
-        this.setSetPoint(Control.intake.kIntakingRpm);
+        this.setSetPoint(Control.intake.kIntakingSpeed);
     }
     public void outake(){
-        this.setSetPoint(Control.intake.kIntakingRpm);
+        this.setSetPoint(Control.intake.kOutakingSpeed);
     }
     public void off(){
         this.setSetPoint(Control.intake.kOff);

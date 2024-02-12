@@ -10,7 +10,6 @@ import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superstructure;
 
@@ -27,7 +26,6 @@ import frc.robot.subsystems.Superstructure;
 public class Robot extends TimedRobot {
 
   private PS4Controller driver, operator;
-  private Drivetrain drivetrain;
   private Superstructure superstructure;
   private Routine auto;
   private Thread noteTargetingThread;
@@ -36,7 +34,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driver = new PS4Controller(Ports.HID.DRIVER);
     operator = new PS4Controller(Ports.HID.OPERATOR);
-    drivetrain = Drivetrain.getInstance();
     superstructure = Superstructure.getInstance();
 
     noteTargetingThread = new Thread(
@@ -58,6 +55,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    // TODO implement NT auto chooser
+    // TODO also. write auto routines
     auto = new SampleRoutine();
   }
 
@@ -73,10 +72,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    superstructure.handleManualDriving();
-
-
-    drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
+    
+    // FIXME what if we move all of this to like... Superstructure::handleInputs()
+    // and then call that from Superstructure::onLoop()?
+    // then this class is simpler and the controllers are only ever used in Superstructure
     if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
       superstructure.cancelAction(); 
     }
