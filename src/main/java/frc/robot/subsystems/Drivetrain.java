@@ -58,23 +58,30 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return instance;
     }
 
+    
+    
+    public void setForward(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
+    }
+    public void setReversed(){
+        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
+        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
+    }
+
 
 
     public void localForward(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
+        setForward();
     }
     public void localReversed(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
+        setReversed();
     }
     public void fieldForward(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
+        setForward();
     }
     public void fieldReversed(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
+        setReversed();
     }
 
     
