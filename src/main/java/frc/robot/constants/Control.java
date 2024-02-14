@@ -19,7 +19,6 @@ public class Control {
         public static final Rotation2d kPositionHysteresis =  Rotation2d.fromDegrees( 2);   /// TODO
         public static final Rotation2d kVelocityHysteresis =  Rotation2d.fromDegrees( 2); // rot/s /// TODO
 
-        // TODO migrate these to Rotation2d
         public static final Rotation2d kStartPosition      = Rotation2d.fromDegrees(90);   /// TODO
         public static final Rotation2d kFloorPosition      = Rotation2d.fromDegrees( 0);   /// TODO
         public static final Rotation2d kAmpPosition        = Rotation2d.fromDegrees(91);   /// TODO
@@ -50,8 +49,6 @@ public class Control {
         public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;
     }
 
-    // TODO consider defining intake speed as a linear unit (m/s)
-    // and then translating that to RPM for the motors
     public static class intake {
         public static final double ENCODER_VEL_UNIT_PER_INTAKE_MPS = 0; // m/s /// TODO calculate // use wheel dims to find linear speed
 
