@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
+import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Superduperstructure implements ISubsystem {
@@ -13,12 +13,10 @@ public class Superduperstructure implements ISubsystem {
     private Arm arm;
     private Intake intake;
     private Shooter shooter;
+    private Hat hat;
+    private ControllerRumble driver, operator;
     private ISubsystem[] subsystems;
 
-    // TODO update these to ControllerThatGoesInYourHands
-    // TODO add them to subsystems[]
-    PS4Controller driver = new PS4Controller(Ports.HID.DRIVER);
-    PS4Controller operator = new PS4Controller(Ports.HID.OPERATOR);
 
     private RobotState state;
     private boolean automateScoring;
@@ -56,7 +54,10 @@ public class Superduperstructure implements ISubsystem {
         this.arm = Arm.getInstance();
         this.intake = Intake.getInstance();
         this.shooter = Shooter.getInstance();
-        this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter};
+        this.hat = Hat.getInstance();
+        this.driver = ControllerRumble.getInstance(Ports.HID.DRIVER);
+        this.operator = ControllerRumble.getInstance(Ports.HID.OPERATOR);
+        this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, driver, operator};
     }
 
     private Superduperstructure() {
