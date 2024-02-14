@@ -9,9 +9,9 @@ import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
-// TODO consider converging the Shooter and Intake classes into a single Flywheel class
+// TODO consider converging the Shooter and Intake classes into a single Flywheel class 
 // TODO further consider generalizing flywheels, arms, and elevators into generic classes
-// and then extending them for whatever
+// and then extending them for whatever (summer stuff probs)
 public class Shooter implements ISubsystem {
     private double setPoint; // wheel m/s
 
