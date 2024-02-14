@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -10,15 +11,15 @@ import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
 public class Arm implements ISubsystem {
-    private double setPoint; // deg
+    private Rotation2d setPoint;
     private CANSparkMax motor;
     private NetworkTable NT;
     private DoublePublisher p_position, p_velocity;
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_POS_UNIT_PER_DEGREE);
-        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND);
+        //this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_POS_UNIT_PER_DEGREE);
+        //this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND);
         this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
         this.NT = NetworkTableInstance.getDefault().getTable("arm");
         this.p_position = this.NT.getDoubleTopic("position").publish();
@@ -46,30 +47,30 @@ public class Arm implements ISubsystem {
         // ^ actually if we were to generalize these classes, we could incorporate ref
         // caching there
         // TODO work on motion profiling this / using velocity -> position control
-        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kPosition);
+        this.motor.getPIDController().setReference(this.setPoint.getRotations(), CANSparkMax.ControlType.kPosition);
     }
 
 
     
-    public void setSetPoint(double _setPoint) {
+    public void setSetPoint(Rotation2d _setPoint) {
         this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
     }
 
 
 
     public void up() {
-        this.setSetPoint(setPoint + Control.arm.kManualControlDiff);
+        this.setSetPoint(setPoint.plus(Control.arm.kManualControlDiff));
     }
     public void down() {
-        this.setSetPoint(setPoint - Control.arm.kManualControlDiff);
+        this.setSetPoint(setPoint.minus(Control.arm.kManualControlDiff));
     }
 
 
     
     public boolean reachedSetPoint() {
         return
-            Math.abs(this.setPoint - getPosition()) < Control.arm.kPositionHysteresis
-         && Math.abs(0             - getVelocity()) < Control.arm.kVelocityHysteresis;
+            Math.abs(setPoint.minus(getPosition()).getDegrees()) < Control.arm.kPositionHysteresis.getDegrees()
+         && Math.abs(               getVelocity() .getDegrees()) < Control.arm.kVelocityHysteresis.getDegrees();
     }
 
 
@@ -104,19 +105,20 @@ public class Arm implements ISubsystem {
 
 
 
-    public double getPosition(){
-        return this.motor.getEncoder().getPosition();
+    public Rotation2d getPosition(){
+        return Rotation2d.fromRotations(this.motor.getEncoder().getPosition());
     }
-    public double getVelocity(){
-        return this.motor.getEncoder().getVelocity();
+    /** Returns the velocity of the arm in Rotation2d-per-second. */
+    public Rotation2d getVelocity(){
+        return Rotation2d.fromRotations(this.motor.getEncoder().getVelocity());
     }
 
 
 
     @Override
     public void submitTelemetry() {
-        p_position.set(getPosition());
-        p_velocity.set(getVelocity());
+        p_position.set(getPosition().getDegrees());
+        p_velocity.set(getVelocity().getDegrees());
     }
 
     @Override
