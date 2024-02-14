@@ -39,6 +39,7 @@ public class Superstructure implements ISubsystem {
 
         , PREPARING_FOR_CLIMB, CLIMBING, HUNG
 
+        , KNOCKED_OVER, SELF_RIGHTING
         // TODO self-righting
     }
 
@@ -97,6 +98,12 @@ public class Superstructure implements ISubsystem {
     }
     public void startClimb() {
         this.state = RobotState.CLIMBING;
+    }
+    public void knockedOver(){
+        this.state = RobotState.KNOCKED_OVER;
+    }
+    public void selfRighting(){
+        this.state = RobotState.SELF_RIGHTING;
     }
 
     public void neutralPosition() {
@@ -261,6 +268,12 @@ public class Superstructure implements ISubsystem {
                 arm.holdingPosition();
                 intake.off();
                 shooter.off();
+                break;
+            case KNOCKED_OVER:
+                //TODO
+                break;
+            case SELF_RIGHTING:
+                //TODO
                 break;
             default:
                 break;
