@@ -14,9 +14,10 @@ public class ScoreAmp extends Action {
 
     @Override
     public void whileRunning() {
-        if (superduperstructure.getState() == RobotState.NEUTRAL)
-        this.running = false;
-        this.finished = true;
+        if (superduperstructure.getState() == RobotState.NEUTRAL){
+            this.running = false;
+            this.finished = true;
+        }
     }
 
     @Override
