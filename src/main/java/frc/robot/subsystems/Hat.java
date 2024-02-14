@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+
 /**
  * The Hat generates trajectories in real time based on
  * localization feedback from the Limelight, object tracking
@@ -25,5 +27,20 @@ public class Hat implements ISubsystem {
     @Override
     public void receiveOptions() {
         // TODO Auto-generated method stub
+    }
+
+    public TrajectoryFollower findPathToNote() {
+        // TODO implement
+        return null;
+    }
+
+    public TrajectoryFollower findPathToSpeaker() {
+        // TODO implement
+        return null;
+    }
+
+    public TrajectoryFollower findPathToAmp() {
+        // TODO implement
+        return null;
     }
 }
