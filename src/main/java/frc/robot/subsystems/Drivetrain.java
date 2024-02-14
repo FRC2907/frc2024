@@ -83,12 +83,12 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
    public void setLocalDriveInputs(double speed, double turn) {
-    this.totalSpeed = speed;
-    this.turningness = turn;
+        this.totalSpeed = speed;
+        this.turningness = turn;
    }
 
    public void setDriveMode(DriveMode newMode) {
-    this.mode = newMode;
+        this.mode = newMode;
    }
    public DriveMode getDriveMode() { return this.mode; }
 

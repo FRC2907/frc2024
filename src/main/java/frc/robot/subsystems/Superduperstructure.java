@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.Drivetrain.DriveMode;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -164,6 +165,22 @@ public class Superduperstructure implements ISubsystem {
             case OUTAKING:
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
                     drivetrain.setDriveMode(Control.drivetrain.kDefaultDriveMode);
+                    switch(drivetrain.getDriveMode()){
+                        case FIELD_FORWARD:
+                        case FIELD_REVERSED:
+                            double magnitude = Math.pow(Math.pow(driver.getLeftY(), 2)
+                                                      + Math.pow(driver.getLeftX(), 2), 0.5);
+                            Rotation2d rotation = Rotation2d.fromRadians
+                            (Math.atan2(driver.getLeftY(), driver.getLeftX()));
+                            drivetrain.setFieldDriveInputs(magnitude, rotation);
+                            break;
+                        case LOCAL_FORWARD:
+                        case LOCAL_REVERSED:
+                            drivetrain.setLocalDriveInputs(driver.getLeftY(), driver.getRightX());
+                            break;
+                        default:
+                            break;
+                    }
                 drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
                 break;
             default:
@@ -220,6 +237,7 @@ public class Superduperstructure implements ISubsystem {
 
     @Override
     public void onLoop() {
+        handleInputs();
         switch (this.state) {
             case MOVING_TO_START:
                 arm.startPosition();
@@ -323,7 +341,6 @@ public class Superduperstructure implements ISubsystem {
         }
 
         handleDriving();
-        handleInputs();
 
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)
