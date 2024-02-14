@@ -4,11 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
-import frc.robot.constants.Ports;
 import frc.robot.subsystems.Superduperstructure;
 
 /**
@@ -23,14 +21,11 @@ import frc.robot.subsystems.Superduperstructure;
 
 public class Robot extends TimedRobot {
 
-  private PS4Controller driver, operator;
   private Superduperstructure superduperstructure;
   private Routine auto;
 
   @Override
   public void robotInit() {
-    driver = new PS4Controller(Ports.HID.DRIVER);
-    operator = new PS4Controller(Ports.HID.OPERATOR);
     superduperstructure = Superduperstructure.getInstance();
   }
 
