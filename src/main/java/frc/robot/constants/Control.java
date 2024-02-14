@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
@@ -39,7 +40,10 @@ public class Control {
     }
 
     public static class drivetrain {
-        public static final DriveMode kDefaultDriveMode = DriveMode.LOCAL_FORWARD;
+        public static final DriveMode kDefaultDriveMode = DriveMode.FIELD_FORWARD;
+        public static final double TRACK_WIDTH = 0; // m  /// TODO
+        public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
     }
 
     // TODO consider defining intake speed as a linear unit (m/s)
