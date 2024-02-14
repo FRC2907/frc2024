@@ -118,8 +118,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     * functions to set these variables:
     * <ul>
     * <li>manualControl
-    * <li>speed, rotation
-    * <li>left, right
+    * <li>local mode: speed, rotation
+    * <li>field mode: speed, heading
+    * <li>tank/follower mode: leftSpeed, rightSpeed
     * </ul>
     *
     * This function decides which set of vars to use and how to use them. This
