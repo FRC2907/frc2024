@@ -15,7 +15,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
-    private NetworkTable NT;
     private DoublePublisher p_positionX, p_positionY, p_velocity, p_velocityL, p_velocityR, p_angle, p_angVel;
    private double leftSpeed, rightSpeed, totalSpeed, turningness;
    private Rotation2d desiredHeading;
@@ -40,14 +39,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.leftMotor = left; // TODO add velocity conversion factor
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
-        this.NT = NetworkTableInstance.getDefault().getTable("drivetrain");
-        this.p_positionX = this.NT.getDoubleTopic("position").publish();
-        this.p_positionY = this.NT.getDoubleTopic("position").publish();
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
-        this.p_velocityL = this.NT.getDoubleTopic("velocityL").publish();
-        this.p_velocityR = this.NT.getDoubleTopic("velocityR").publish();
-        this.p_angle = this.NT.getDoubleTopic("angle").publish();
-        this.p_angVel = this.NT.getDoubleTopic("angularVelocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("drivetrain");
+        this.p_positionX = NT.getDoubleTopic("position").publish();
+        this.p_positionY = NT.getDoubleTopic("position").publish();
+        this.p_velocity  = NT.getDoubleTopic("velocity").publish();
+        this.p_velocityL = NT.getDoubleTopic("velocityL").publish();
+        this.p_velocityR = NT.getDoubleTopic("velocityR").publish();
+        this.p_angle     = NT.getDoubleTopic("angle").publish();
+        this.p_angVel    = NT.getDoubleTopic("angularVelocity").publish();
     }
 
     private static Drivetrain instance;

@@ -13,7 +13,6 @@ import frc.robot.util.Util;
 public class Arm implements ISubsystem {
     private Rotation2d setPoint;
     private CANSparkMax motor;
-    private NetworkTable NT;
     private DoublePublisher p_position, p_velocity;
 
     private Arm(CANSparkMax _motor) {
@@ -21,9 +20,9 @@ public class Arm implements ISubsystem {
         //this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_POS_UNIT_PER_DEGREE);
         //this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND);
         this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
-        this.NT = NetworkTableInstance.getDefault().getTable("arm");
-        this.p_position = this.NT.getDoubleTopic("position").publish();
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("arm");
+        this.p_position = NT.getDoubleTopic("position").publish();
+        this.p_velocity = NT.getDoubleTopic("velocity").publish();
     }
 
     private static Arm instance;

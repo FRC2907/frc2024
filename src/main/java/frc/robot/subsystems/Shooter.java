@@ -16,14 +16,13 @@ public class Shooter implements ISubsystem {
     private double setPoint; // wheel m/s
 
     private CANSparkMax motor;
-    private NetworkTable NT;
     private DoublePublisher p_velocity;
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
         this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_VEL_UNIT_PER_SHOOTER_MPS);
-        this.NT = NetworkTableInstance.getDefault().getTable("shooter");
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("shooter");
+        this.p_velocity = NT.getDoubleTopic("velocity").publish();
     }
 
     private static Shooter instance;
