@@ -5,7 +5,6 @@ import frc.robot.constants.Ports;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Superduperstructure implements ISubsystem {
@@ -20,10 +19,7 @@ public class Superduperstructure implements ISubsystem {
 
     private RobotState state;
     private boolean automateScoring;
-
-    // TODO do the things!
-    private Trajectory trajectory;
-
+    private TrajectoryFollower tjf;
 
 
     public enum RobotState {
@@ -109,6 +105,7 @@ public class Superduperstructure implements ISubsystem {
     }
 
     public void neutralPosition() {
+        this.tjf = null;
         if (intake.hasNote()){
             this.state = RobotState.HOLDING_NOTE;
             operator.setRumble(RumbleType.kBothRumble, 0.3);
@@ -164,30 +161,44 @@ public class Superduperstructure implements ISubsystem {
             case NEUTRAL:
             case HOLDING_NOTE:
             case OUTAKING:
+                this.tjf = null;
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
-                    drivetrain.setDriveMode(Control.drivetrain.kDefaultDriveMode);
-                    switch(drivetrain.getDriveMode()){
-                        case FIELD_FORWARD:
-                        case FIELD_REVERSED:
-                            double magnitude = Math.pow(Math.pow(driver.getLeftY(), 2)
-                                                      + Math.pow(driver.getLeftX(), 2), 0.5);
-                            Rotation2d rotation = Rotation2d.fromRadians
-                            (Math.atan2(driver.getLeftY(), driver.getLeftX()));
-                            drivetrain.setFieldDriveInputs(magnitude, rotation);
-                            break;
-                        case LOCAL_FORWARD:
-                        case LOCAL_REVERSED:
-                            drivetrain.setLocalDriveInputs(driver.getLeftY(), driver.getRightX());
-                            break;
-                        default:
-                            break;
-                    }
+                    drivetrain.setDriveMode(
+                        intake.hasNote()
+                        ? Control.drivetrain.kDefaultDriveModeWithNote
+                        : Control.drivetrain.kDefaultDriveModeWithoutNote
+                    );
+                switch(drivetrain.getDriveMode()){
+                    case FIELD_FORWARD:
+                    case FIELD_REVERSED:
+                        double magnitude = Math.pow(Math.pow(driver.getLeftY(), 2)
+                                                  + Math.pow(driver.getLeftX(), 2), 0.5);
+                        Rotation2d rotation = Rotation2d.fromRadians(
+                            Math.atan2(driver.getLeftY(), driver.getLeftX())
+                        );
+                        drivetrain.setFieldDriveInputs(magnitude, rotation);
+                        break;
+                    case LOCAL_FORWARD:
+                    case LOCAL_REVERSED:
+                        drivetrain.setLocalDriveInputs(driver.getLeftY(), driver.getRightX());
+                        break;
+                    default:
+                        break;
+                }
                 drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
                 break;
             default:
                 drivetrain.setDriveMode(DriveMode.AUTO);
-                // TODO feed the drivetrain values from a trajectory
-                //drivetrain.setTankInputs(0, 0);
+                // NOTE so if we reach the end of the trajectory, but we haven't moved on to the next state...
+                // then what? should we have a timeout that auto-cancels if that happens? FIXME consider that
+                if (tjf == null) {
+                    driver.rumble(2);
+                    operator.rumble(2);
+                    System.err.println("[EE] Tried to self-drive without a trajectory to follow");
+                    new Exception().printStackTrace();
+                    neutralPosition();
+                } else
+                drivetrain.setTankInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
         }
     }
 
@@ -254,6 +265,13 @@ public class Superduperstructure implements ISubsystem {
                 arm.floorPosition();
                 intake.intake();
                 // TODO automatically drive up to the Note
+                // steps:
+                // if we don't currently have a TrajectoryFollower: get one from the Hat
+                // then the handleDriving function will follow it each cycle
+                // for intaking i guess we don't really need to check whether we've finished the trajectory
+                // since having the note is all that matters
+                if (this.tjf == null)
+                    this.tjf = hat.findPathToNote();
                 if (arm.reachedSetPoint())
                     this.state = RobotState.INTAKING;
                 break;
@@ -267,6 +285,8 @@ public class Superduperstructure implements ISubsystem {
 
             case OUTAKING:
                 intake.outake();
+                if (automateScoring && !intake.hasNote())
+                    this.state = RobotState.NEUTRAL;
 
             case HOLDING_NOTE:
                 arm.holdingPosition();
