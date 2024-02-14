@@ -1,153 +1,21 @@
 package frc.robot.subsystems;
 
+/**
+ * The Hat generates trajectories in real time based on
+ * localization feedback from the Limelight, object tracking
+ * from the simple camera, and strategic directives.
+ */
 public class Hat implements ISubsystem {
+
+    private static Hat instance;
+    public static Hat getInstance() {
+        if (instance == null)
+            instance = new Hat();
+        return instance;
+    }
+
     @Override
     public void onLoop() {}
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
-        //hat
 
     @Override
     public void submitTelemetry() {
