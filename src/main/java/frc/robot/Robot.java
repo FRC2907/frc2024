@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // TODO implement NT auto chooser
+    // TODO implement NT autonomous chooser
     // TODO also. write auto routines
     auto = new SampleRoutine();
   }
