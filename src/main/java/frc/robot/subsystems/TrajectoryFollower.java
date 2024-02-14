@@ -7,8 +7,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.auto.actions.templates.Action;
+import frc.robot.constants.Control;
 
-public class TrajectoryFollower {
+public class TrajectoryFollower extends Action {
     private Trajectory trajectory;
     private Timer timer;
     private DifferentialDriveKinematics kinematics;
@@ -18,15 +20,15 @@ public class TrajectoryFollower {
 
 
     public TrajectoryFollower(Trajectory t, DifferentialDriveKinematics k){
-        
-    }
-
-
-    public void startTrajectory(Trajectory t){
-        timer.reset();
         this.trajectory = t;
-        timer.start();
+        this.kinematics = k;
+        this.timer = new Timer();
     }
+
+    public TrajectoryFollower(Trajectory t) {
+        this(t, Control.drivetrain.DRIVE_KINEMATICS);
+    }
+
 
     public double[] getWheelSpeeds(Pose2d current){
         Trajectory.State goal = trajectory.sample(timer.get()); 
@@ -38,7 +40,20 @@ public class TrajectoryFollower {
         return new double[] {left, right};
     }
 
-    public boolean isDone(){
-        return trajectory.getTotalTimeSeconds() < timer.get();
+    @Override
+    public void onStart() {
+        timer.restart();
+        this.started = true;
+        this.running = true;
+    }
+
+    @Override
+    public void whileRunning() {
+        this.finished = trajectory.getTotalTimeSeconds() < timer.get();
+        this.running = !this.finished;
+    }
+
+    @Override
+    public void onCleanup() {
     }
 }
