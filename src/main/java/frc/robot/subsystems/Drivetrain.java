@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.constants.Control;
 import frc.robot.util.Util;
 
 public class Drivetrain extends DifferentialDrive implements ISubsystem {
@@ -16,6 +17,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     private CANSparkMax rightMotor;
     private NetworkTable NT;
     private DoublePublisher p_positionX, p_positionY, p_velocity, p_velocityL, p_velocityR, p_angle, p_angVel;
+   private double leftSpeed, rightSpeed, totalSpeed, turningness;
+   private Rotation2d desiredHeading;
 
 
 
@@ -27,7 +30,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
         , LOCAL_FORWARD, LOCAL_REVERSED
     }
-    private double leftSpeed, rightSpeed, totalSpeed, turningness;
+   public void setDriveMode(DriveMode newMode) { this.mode = newMode; }
+   public DriveMode getDriveMode() { return this.mode; }
+
 
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
@@ -72,6 +77,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
 
 
+    // TODO revisit whether that turnInPlace parameter makes sense
     public void curvatureDrive(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
@@ -81,16 +87,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.leftSpeed = left;
         this.rightSpeed = right;
     }
+    public void setTankInputs(double[] wheelSpeeds) {
+        setTankInputs(wheelSpeeds[0], wheelSpeeds[1]);
+    }
 
    public void setLocalDriveInputs(double speed, double turn) {
         this.totalSpeed = speed;
         this.turningness = turn;
    }
-
-   public void setDriveMode(DriveMode newMode) {
-        this.mode = newMode;
-   }
-   public DriveMode getDriveMode() { return this.mode; }
 
     // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
    public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
@@ -99,9 +103,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
             // use the difference between our heading and our desired heading
             // and then speed is probably just the magnitude of the stick
     this.totalSpeed = magnitude;
-    this.turningness = 0; // TODO solve this
+    this.desiredHeading = direction;
     // keeping in mind that we also need to account for forward/reverse when calculating our heading error
    }
+
+   private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
+    return Control.drivetrain.kP_fieldRelativeHeading * desired.minus(current).getRadians(); // TODO verify
+   }
+
 
 
    /**
@@ -128,13 +137,26 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 normalize(speeds);
                 this.tankDrive(speeds[0], speeds[1], false);
                 break;
-            case FIELD_FORWARD:
+
             case LOCAL_FORWARD:
                 this.curvatureDrive(totalSpeed, turningness);
                 break;
-            case FIELD_REVERSED: // not sure if this actually holds up: TODO verify
+
             case LOCAL_REVERSED:
                 this.curvatureDrive(-totalSpeed, -turningness);
+                break;
+
+            case FIELD_FORWARD:
+                this.curvatureDrive(totalSpeed, convertHeadingToTurningness(this.getAngle(), desiredHeading));
+                break;
+            case FIELD_REVERSED:
+                this.curvatureDrive(-totalSpeed
+                // TODO verify but I think this is right?
+                    , convertHeadingToTurningness(
+                        this.getAngle()
+                        , desiredHeading.minus(Rotation2d.fromRotations(0.5))
+                    )
+                );
                 break;
             default:
                 break;
@@ -163,8 +185,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return getPose().getY();
     }
 
-    public double getAngle() {
-        return getPose().getRotation().getDegrees();
+    public Rotation2d getAngle() {
+        return getPose().getRotation();
     }
 
     public double getAngularVelocity() { //TODO
@@ -180,7 +202,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         p_velocity.set(getVelocity());
         p_velocityL.set(getVelocityL());
         p_velocityR.set(getVelocityR());
-        p_angle.set(getAngle());
+        p_angle.set(getAngle().getDegrees());
         p_angVel.set(getAngularVelocity());
     }
 
@@ -192,4 +214,5 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     public void reverse() {
     } // TODO
+
 }
