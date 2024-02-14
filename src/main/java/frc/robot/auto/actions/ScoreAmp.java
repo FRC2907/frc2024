@@ -1,11 +1,11 @@
 package frc.robot.auto.actions;
 
 import frc.robot.auto.actions.templates.Action;
-import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Superstructure.RobotState;
+import frc.robot.subsystems.Superduperstructure;
+import frc.robot.subsystems.Superduperstructure.RobotState;
 
 public class ScoreAmp extends Action {
-    private Superstructure superstructure = Superstructure.getInstance();
+    private Superduperstructure superstructure = Superduperstructure.getInstance();
 
     @Override
     public void onStart() {

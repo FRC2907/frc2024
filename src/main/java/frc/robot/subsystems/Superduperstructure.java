@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
-public class Superstructure implements ISubsystem {
+public class Superduperstructure implements ISubsystem {
     private Drivetrain drivetrain;
     private Arm arm;
     private Intake intake;
@@ -48,7 +48,7 @@ public class Superstructure implements ISubsystem {
     }
 
 
-    private Superstructure(RobotState _state, boolean _automation) {
+    private Superduperstructure(RobotState _state, boolean _automation) {
         this.state = _state;
         this.automateScoring(_automation);
         this.drivetrain = Drivetrain.getInstance();
@@ -58,15 +58,15 @@ public class Superstructure implements ISubsystem {
         this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter};
     }
 
-    private Superstructure() {
+    private Superduperstructure() {
         this(RobotState.START, true);
     }
 
-    private static Superstructure instance;
+    private static Superduperstructure instance;
 
-    public static Superstructure getInstance() {
+    public static Superduperstructure getInstance() {
         if (instance == null)
-            instance = new Superstructure();
+            instance = new Superduperstructure();
         return instance;
     }
 
@@ -173,7 +173,50 @@ public class Superstructure implements ISubsystem {
         }
     }
 
-
+    public void handleInputs(){
+        if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
+            cancelAction(); 
+          }
+      
+      
+          
+          if (operator.getCrossButtonPressed()){ //TODO automatic intake
+            outakeNote();
+          }
+          if (operator.getSquareButtonPressed()) {
+            autoScore();
+          }
+          if (operator.getTriangleButtonPressed()) {
+            neutralPosition();
+          }
+          if (operator.getL2Button()) {
+            moveToSpeaker(); // TODO gavin rawr
+          }
+          if (operator.getL1Button()) {
+            moveToIntaking();
+          }
+          if (operator.getR1ButtonPressed()){
+              outakeNote();
+          }
+          if (operator.getR2ButtonPressed()){ //TODO manual intaking
+              intakeNote();
+          }
+      
+      
+      
+          if (driver.getR2Button()) {
+            moveToSpeaker(); 
+          }
+          if (driver.getR1Button()) {
+            moveToAmp(); 
+          }
+          if (driver.getCrossButtonPressed()) {
+            prepareForClimb();
+          }
+          if (driver.getR3ButtonPressed()){
+            //TODO reverse
+          }
+    }
 
     @Override
     public void onLoop() {
@@ -280,6 +323,7 @@ public class Superstructure implements ISubsystem {
         }
 
         handleDriving();
+        handleInputs();
 
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)
