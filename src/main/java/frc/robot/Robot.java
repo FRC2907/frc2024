@@ -24,19 +24,19 @@ import frc.robot.subsystems.Superduperstructure;
 public class Robot extends TimedRobot {
 
   private PS4Controller driver, operator;
-  private Superduperstructure superstructure;
+  private Superduperstructure superduperstructure;
   private Routine auto;
 
   @Override
   public void robotInit() {
     driver = new PS4Controller(Ports.HID.DRIVER);
     operator = new PS4Controller(Ports.HID.OPERATOR);
-    superstructure = Superduperstructure.getInstance();
+    superduperstructure = Superduperstructure.getInstance();
   }
 
   @Override
   public void robotPeriodic() {
-    superstructure.onLoop();
+    superduperstructure.onLoop();
   }
 
   @Override
@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    superstructure.neutralPosition();
+    superduperstructure.neutralPosition();
   }
 
   @Override

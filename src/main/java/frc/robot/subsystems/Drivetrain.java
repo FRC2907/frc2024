@@ -58,33 +58,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return instance;
     }
 
-    
-    
-    public void setForward(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
-    }
-    public void setReversed(){
-        leftMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, false);
-        rightMotor = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, true);
-    }
 
-
-
-    public void localForward(){
-        setForward();
-    }
-    public void localReversed(){
-        setReversed();
-    }
-    public void fieldForward(){
-        setForward();
-    }
-    public void fieldReversed(){
-        setReversed();
-    }
-
-    
 
     private Pose2d pose;
 
@@ -143,6 +117,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     * model reduces the amount of Actual Stuff that Happens outside of the onLoop
     * family.
     */
+
+   //reversed means basically changing direction rather than like a car reverse
+
     @Override
     public void onLoop() {
         switch (this.mode) {
