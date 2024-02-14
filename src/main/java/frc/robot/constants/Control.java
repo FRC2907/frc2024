@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
@@ -19,6 +20,7 @@ public class Control {
         public static final double kP_pos = 1;                        /// TODO
         public static final double kD_pos = 1;                        /// TODO
 
+        // TODO migrate these to Rotation2d
         public static final double kStartPosition      = 90; // deg   /// TODO
         public static final double kFloorPosition      =  0; // deg   /// TODO
         public static final double kAmpPosition        = 91; // deg   /// TODO
@@ -40,10 +42,15 @@ public class Control {
     }
 
     public static class drivetrain {
-        public static final DriveMode kDefaultDriveMode = DriveMode.FIELD_FORWARD;
         public static final double TRACK_WIDTH = 0; // m  /// TODO
+
         public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
+
+        public static final double kP_fieldRelativeHeading = 0; // TODO
+
+        public static final DriveMode kDefaultDriveModeWithoutNote = DriveMode.FIELD_FORWARD;
+        public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;
     }
 
     // TODO consider defining intake speed as a linear unit (m/s)
