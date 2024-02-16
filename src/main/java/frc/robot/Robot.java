@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
+import frc.robot.constants.Control;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
 
