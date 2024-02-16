@@ -151,12 +151,11 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 break;
             case FIELD_REVERSED:
                 this.curvatureDrive(-totalSpeed
-                // TODO verify but I think this is right?
                     , convertHeadingToTurningness(
                         this.getAngle()
                         , desiredHeading.minus(Rotation2d.fromRotations(0.5))
                     )
-                );
+                ); // TODO verify but I think this is right?
                 break;
             default:
                 break;

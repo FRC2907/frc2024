@@ -183,6 +183,8 @@ public class Superduperstructure implements ISubsystem {
                         drivetrain.setLocalDriveInputs(driver.getLeftY(), driver.getRightX());
                         break;
                     default:
+                        System.err.println("[EE] Auto driving in non-auto robot state");
+                        new Exception().printStackTrace();
                         break;
                 }
                 drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
@@ -273,10 +275,12 @@ public class Superduperstructure implements ISubsystem {
                 // then the handleDriving function will follow it each cycle
                 // for intaking i guess we don't really need to check whether we've finished the trajectory
                 // since having the note is all that matters
-                if (this.tjf == null)
+                if (this.tjf == null){
                     this.tjf = hat.findPathToNote();
-                if (arm.reachedSetPoint())
+                }
+                if (arm.reachedSetPoint()){
                     this.state = RobotState.INTAKING;
+                }
                 break;
             case INTAKING:
                 arm.floorPosition();
@@ -298,7 +302,9 @@ public class Superduperstructure implements ISubsystem {
 
             case MOVING_TO_AMP:
                 arm.ampPosition();
-                // TODO automatically drive up to the Amp
+                if (this.tjf == null){
+                    this.tjf = hat.findPathToAmp();
+                }
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
                     this.state = RobotState.READY_TO_SCORE_AMP;
                 }
@@ -316,8 +322,9 @@ public class Superduperstructure implements ISubsystem {
 
             case MOVING_TO_SPEAKER:
                 arm.speakerPosition();
-                // TODO automatically drive up to the Speaker
-                if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
+                if (this.tjf == null)
+                    this.tjf = hat.findPathToSpeaker();
+                if (arm.reachedSetPoint() && tjf.isDone()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
                     this.state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
