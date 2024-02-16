@@ -31,9 +31,8 @@ public class Util {
 	}
 
 	public static double clamp(double min, double value, double max) {
-		if (max < min) { // FIXME we really oughta like, catch this or something
-			System.err.println("[EE] I was asked to clamp value " + value + " between min " + min + " and max " + max);
-			new Exception().printStackTrace();
+		if (max < min) { 
+			return clamp(max, value, min);
 		}
 		if (value < min)
 			return min;
