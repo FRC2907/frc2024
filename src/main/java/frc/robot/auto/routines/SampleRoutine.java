@@ -7,7 +7,7 @@ import frc.robot.auto.routines.templates.Routine;
 public class SampleRoutine extends Routine {
 
     public SampleRoutine() {
-        super(
+        super("Sample",
             new SampleAction("A")
             , new ParallelAction(
                 new SampleAction("B")

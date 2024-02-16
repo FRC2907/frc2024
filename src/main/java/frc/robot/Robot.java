@@ -5,8 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
+import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.Control;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
@@ -24,8 +26,10 @@ import frc.robot.subsystems.Superduperstructure;
 public class Robot extends TimedRobot {
 
   private Superduperstructure superduperstructure;
-  private Routine auto;
   private Thread noteTargetingThread;
+
+  private SendableChooser<Routine> autoChooser;
+  private Routine auto;
 
   @Override
   public void robotInit() {
@@ -40,6 +44,12 @@ public class Robot extends TimedRobot {
     noteTargetingThread.setDaemon(true);
     noteTargetingThread.start();
     superduperstructure = Superduperstructure.getInstance();
+
+    RoutineInstantiator.go();
+    autoChooser = new SendableChooser<>();
+    for (Routine r : Routine.getRoutines())
+      autoChooser.addOption(r.getName(), r);
+    autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Sample"));
   }
 
   @Override
