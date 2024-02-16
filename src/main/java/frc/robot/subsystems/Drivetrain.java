@@ -8,26 +8,30 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.constants.Control;
 import frc.robot.util.Util;
 
 public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
-    private NetworkTable NT;
     private DoublePublisher p_positionX, p_positionY, p_velocity, p_velocityL, p_velocityR, p_angle, p_angVel;
+   private double leftSpeed, rightSpeed, totalSpeed, turningness;
+   private Rotation2d desiredHeading;
 
 
 
     private DriveMode mode;
     public enum DriveMode {
-        AUTO
+          AUTO
 
         , FIELD_FORWARD, FIELD_REVERSED
 
         , LOCAL_FORWARD, LOCAL_REVERSED
     }
-    private double leftSpeed, rightSpeed, totalSpeed, turningness;
+   public void setDriveMode(DriveMode newMode) { this.mode = newMode; }
+   public DriveMode getDriveMode() { return this.mode; }
+
 
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
@@ -35,14 +39,14 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.leftMotor = left; // TODO add velocity conversion factor
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
-        this.NT = NetworkTableInstance.getDefault().getTable("drivetrain");
-        this.p_positionX = this.NT.getDoubleTopic("position").publish();
-        this.p_positionY = this.NT.getDoubleTopic("position").publish();
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
-        this.p_velocityL = this.NT.getDoubleTopic("velocityL").publish();
-        this.p_velocityR = this.NT.getDoubleTopic("velocityR").publish();
-        this.p_angle = this.NT.getDoubleTopic("angle").publish();
-        this.p_angVel = this.NT.getDoubleTopic("angularVelocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("drivetrain");
+        this.p_positionX = NT.getDoubleTopic("position").publish();
+        this.p_positionY = NT.getDoubleTopic("position").publish();
+        this.p_velocity  = NT.getDoubleTopic("velocity").publish();
+        this.p_velocityL = NT.getDoubleTopic("velocityL").publish();
+        this.p_velocityR = NT.getDoubleTopic("velocityR").publish();
+        this.p_angle     = NT.getDoubleTopic("angle").publish();
+        this.p_angVel    = NT.getDoubleTopic("angularVelocity").publish();
     }
 
     private static Drivetrain instance;
@@ -59,15 +63,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
-    public void forward(){
 
-    }
-
-    public void reversed(){
-        
-    }
-
-    
     private Pose2d pose;
 
     public Pose2d getPose() {
@@ -80,6 +76,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
 
 
+    // TODO revisit whether that turnInPlace parameter makes sense
     public void curvatureDrive(double xSpeed, double zRotation) {
         this.curvatureDrive((xSpeed) * Math.abs(xSpeed), zRotation, Math.abs(xSpeed) < 0.1);
     }
@@ -89,27 +86,25 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.leftSpeed = left;
         this.rightSpeed = right;
     }
+    public void setTankInputs(double[] wheelSpeeds) {
+        setTankInputs(wheelSpeeds[0], wheelSpeeds[1]);
+    }
 
    public void setLocalDriveInputs(double speed, double turn) {
-    this.totalSpeed = speed;
-    this.turningness = turn;
+        this.totalSpeed = speed;
+        this.turningness = turn;
    }
 
-   public void setDriveMode(DriveMode newMode) {
-    this.mode = newMode;
-   }
-   public DriveMode getDriveMode() { return this.mode; }
 
-    // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
    public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
-            // TODO we can probably use curvatureDrive for field-relative steering as well
-            // instead of turningness being just the x value of a stick,
-            // use the difference between our heading and our desired heading
-            // and then speed is probably just the magnitude of the stick
     this.totalSpeed = magnitude;
-    this.turningness = 0; // TODO solve this
-    // keeping in mind that we also need to account for forward/reverse when calculating our heading error
+    this.desiredHeading = direction;
    }
+
+   private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
+    return Control.drivetrain.kP_fieldRelativeHeading * desired.minus(current).getRadians(); // TODO verify
+   }
+
 
 
    /**
@@ -117,14 +112,18 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     * functions to set these variables:
     * <ul>
     * <li>manualControl
-    * <li>speed, rotation
-    * <li>left, right
+    * <li>local mode: speed, rotation
+    * <li>field mode: speed, heading
+    * <li>tank/follower mode: leftSpeed, rightSpeed
     * </ul>
     *
     * This function decides which set of vars to use and how to use them. This
     * model reduces the amount of Actual Stuff that Happens outside of the onLoop
     * family.
     */
+
+   //reversed means basically changing direction rather than like a car reverse
+
     @Override
     public void onLoop() {
         switch (this.mode) {
@@ -133,13 +132,25 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 normalize(speeds);
                 this.tankDrive(speeds[0], speeds[1], false);
                 break;
-            case FIELD_FORWARD:
+
             case LOCAL_FORWARD:
                 this.curvatureDrive(totalSpeed, turningness);
                 break;
-            case FIELD_REVERSED: // not sure if this actually holds up: TODO verify
+
             case LOCAL_REVERSED:
                 this.curvatureDrive(-totalSpeed, -turningness);
+                break;
+
+            case FIELD_FORWARD:
+                this.curvatureDrive(totalSpeed, convertHeadingToTurningness(this.getAngle(), desiredHeading));
+                break;
+            case FIELD_REVERSED:
+                this.curvatureDrive(-totalSpeed
+                    , convertHeadingToTurningness(
+                        this.getAngle()
+                        , desiredHeading.minus(Rotation2d.fromRotations(0.5))
+                    )
+                ); // TODO verify but I think this is right?
                 break;
             default:
                 break;
@@ -168,8 +179,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return getPose().getY();
     }
 
-    public double getAngle() {
-        return getPose().getRotation().getDegrees();
+    public Rotation2d getAngle() {
+        return getPose().getRotation();
     }
 
     public double getAngularVelocity() { //TODO
@@ -185,16 +196,22 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         p_velocity.set(getVelocity());
         p_velocityL.set(getVelocityL());
         p_velocityR.set(getVelocityR());
-        p_angle.set(getAngle());
+        p_angle.set(getAngle().getDegrees());
         p_angVel.set(getAngularVelocity());
     }
 
     @Override
-    public void receiveOptions() {
-        // TODO Auto-generated method stub
-    }
+    public void receiveOptions() {}
 
 
     public void reverse() {
-    } // TODO
+        if (mode == DriveMode.LOCAL_FORWARD)
+            mode = DriveMode.LOCAL_REVERSED;
+        else if (mode == DriveMode.LOCAL_REVERSED)
+            mode = DriveMode.LOCAL_FORWARD;
+        else if (mode == DriveMode.FIELD_FORWARD)
+            mode = DriveMode.FIELD_REVERSED;
+        else if (mode == DriveMode.FIELD_REVERSED)
+            mode = DriveMode.FIELD_FORWARD;
+    }
 }

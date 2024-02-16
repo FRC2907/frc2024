@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.auto.routines.SampleRoutine;
 import frc.robot.auto.routines.templates.Routine;
-import frc.robot.constants.Control;
-import frc.robot.constants.Ports;
 import frc.robot.subsystems.NoteTargetingPipeline;
-import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superduperstructure;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,17 +22,12 @@ import frc.robot.subsystems.Superstructure;
 
 public class Robot extends TimedRobot {
 
-  private PS4Controller driver, operator;
-  private Superstructure superstructure;
+  private Superduperstructure superduperstructure;
   private Routine auto;
   private Thread noteTargetingThread;
 
   @Override
   public void robotInit() {
-    driver = new PS4Controller(Ports.HID.DRIVER);
-    operator = new PS4Controller(Ports.HID.OPERATOR);
-    superstructure = Superstructure.getInstance();
-
     noteTargetingThread = new Thread(
       new NoteTargetingPipeline(
         Control.camera.WIDTH
@@ -46,17 +38,18 @@ public class Robot extends TimedRobot {
     );
     noteTargetingThread.setDaemon(true);
     noteTargetingThread.start();
+    superduperstructure = Superduperstructure.getInstance();
   }
 
   @Override
   public void robotPeriodic() {
-    superstructure.onLoop();
+    superduperstructure.onLoop();
   }
 
   @Override
   public void autonomousInit() {
-    // TODO implement NT auto chooser
-    // TODO also. write auto routines
+    // TODO implement NT autonomous chooser
+    // TODO also write auto routines
     auto = new SampleRoutine();
   }
 
@@ -67,55 +60,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    superstructure.neutralPosition();
+    superduperstructure.neutralPosition();
   }
 
   @Override
   public void teleopPeriodic() {
-    
-    // FIXME what if we move all of this to like... Superstructure::handleInputs()
-    // and then call that from Superstructure::onLoop()?
-    // then this class is simpler and the controllers are only ever used in Superstructure
-    if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
-      superstructure.cancelAction(); 
-    }
-
-
-    if (operator.getCrossButtonPressed()){ //TODO automatic intake
-        superstructure.outakeNote();
-    }
-    if (operator.getSquareButtonPressed()) {
-      superstructure.autoScore();
-    }
-    if (operator.getTriangleButtonPressed()) {
-      superstructure.neutralPosition();
-    }
-    if (operator.getL2Button()) {
-      superstructure.moveToSpeaker(); // TODO gavin rawr
-    }
-    if (operator.getL1Button()) {
-      superstructure.moveToIntaking();
-    }
-    if (operator.getR1ButtonPressed()){
-        superstructure.outakeNote();
-    }
-    if (operator.getR2ButtonPressed()){ //TODO manual intaking
-        superstructure.intakeNote();
-    }
-
-
-    if (driver.getR2Button()) {
-      superstructure.moveToSpeaker(); 
-    }
-    if (driver.getR1Button()) {
-      superstructure.moveToAmp(); 
-    }
-    if (driver.getCrossButtonPressed()) {
-      superstructure.prepareForClimb();
-    }
-    if (driver.getR3ButtonPressed()){
-      //TODO reverse
-    }
   }
 
   @Override

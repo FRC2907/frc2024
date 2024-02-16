@@ -9,21 +9,20 @@ import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
-// TODO consider converging the Shooter and Intake classes into a single Flywheel class
+// TODO consider converging the Shooter and Intake classes into a single Flywheel class 
 // TODO further consider generalizing flywheels, arms, and elevators into generic classes
-// and then extending them for whatever
+// and then extending them for whatever (summer stuff probs)
 public class Shooter implements ISubsystem {
     private double setPoint; // wheel m/s
 
     private CANSparkMax motor;
-    private NetworkTable NT;
     private DoublePublisher p_velocity;
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
         this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_VEL_UNIT_PER_SHOOTER_MPS);
-        this.NT = NetworkTableInstance.getDefault().getTable("shooter");
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("shooter");
+        this.p_velocity = NT.getDoubleTopic("velocity").publish();
     }
 
     private static Shooter instance;
@@ -55,17 +54,18 @@ public class Shooter implements ISubsystem {
     }
 
 
+
     /** Set the desired speed of the shooter in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
 
 
+    
     /** Return shooter speed in wheel RPM. */
     public double getSpeed() {
         return motor.getEncoder().getVelocity();
     }
-
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }

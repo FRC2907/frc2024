@@ -13,15 +13,14 @@ public class Intake implements ISubsystem {
     private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
-    private NetworkTable NT;
     private DoublePublisher p_velocity;
 
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
         this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_VEL_UNIT_PER_INTAKE_MPS);
-        this.NT = NetworkTableInstance.getDefault().getTable("intake");
-        this.p_velocity = this.NT.getDoubleTopic("velocity").publish();
+        NetworkTable NT = NetworkTableInstance.getDefault().getTable("intake");
+        this.p_velocity = NT.getDoubleTopic("velocity").publish();
     }
 
 

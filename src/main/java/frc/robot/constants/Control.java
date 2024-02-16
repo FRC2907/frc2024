@@ -1,6 +1,8 @@
 package frc.robot.constants;
 
 import org.opencv.core.Scalar;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
@@ -13,38 +15,46 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 public class Control {
 
     public static class arm {
-        public static final double ENCODER_POS_UNIT_PER_DEGREE = 0; // tick/deg   /// TODO measure
-        public static final double ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND = 0; // tick/deg/s  /// TODO measure
+        public static final double ENCODER_REV_PER_ARM_REV = 1; /// TODO
 
         public static final double kP_pos = 1;                        /// TODO
         public static final double kD_pos = 1;                        /// TODO
+        public static final Rotation2d kPositionHysteresis =  Rotation2d.fromDegrees( 2);   /// TODO
+        public static final Rotation2d kVelocityHysteresis =  Rotation2d.fromDegrees( 2); // rot/s /// TODO
 
-        public static final double kStartPosition      = 90; // deg   /// TODO
-        public static final double kFloorPosition      =  0; // deg   /// TODO
-        public static final double kAmpPosition        = 91; // deg   /// TODO
-        public static final double kSpeakerPosition    = 30; // deg   /// TODO
-        public static final double kHoldingPosition    =  0; // deg   /// TODO
-        public static final double kClimbReadyPosition =  0; // deg   /// TODO
-        public static final double kClimbClumbPosition =  0; // deg   /// TODO
-        public static final double kMinPosition        =  0; // deg   /// TODO
-        public static final double kMaxPosition        =  0; // deg   /// TODO
+        public static final Rotation2d kStartPosition      = Rotation2d.fromDegrees(90);   /// TODO
+        public static final Rotation2d kFloorPosition      = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kAmpPosition        = Rotation2d.fromDegrees(91);   /// TODO
+        public static final Rotation2d kSpeakerPosition    = Rotation2d.fromDegrees(30);   /// TODO
+        public static final Rotation2d kHoldingPosition    = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kClimbReadyPosition = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kClimbClumbPosition = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kMinPosition        = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kMaxPosition        = Rotation2d.fromDegrees( 0);   /// TODO
 
         /**
          * manual control works by incrementing the arm's position setpoint every cycle.
          * this might be a bad idea. TODO consider complexity of moving to a velocity
          * model?
          */
-        public static final double kManualControlDiff  =  0; // deg   /// TODO
-        public static final double kPositionHysteresis =  2; // deg   /// TODO
-        public static final double kVelocityHysteresis =  2; // deg/s /// TODO
+        public static final Rotation2d kManualControlDiff  =  Rotation2d.fromDegrees( 0);   /// TODO
     }
 
     public static class drivetrain {
-        public static final DriveMode kDefaultDriveMode = DriveMode.LOCAL_FORWARD;
+
+        public static final double TRACK_WIDTH = 0.5823458; // m 
+        public static final double ENCODER_REV_PER_WHEEL_REV = 1; /// TODO
+
+
+        public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
+
+        public static final double kP_fieldRelativeHeading = 0; // TODO
+
+        public static final DriveMode kDefaultDriveModeWithoutNote = DriveMode.FIELD_FORWARD;
+        public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;
     }
 
-    // TODO consider defining intake speed as a linear unit (m/s)
-    // and then translating that to RPM for the motors
     public static class intake {
         public static final double ENCODER_VEL_UNIT_PER_INTAKE_MPS = 0; // m/s /// TODO calculate // use wheel dims to find linear speed
 
