@@ -259,6 +259,9 @@ public class Superduperstructure implements ISubsystem {
                     this.state = RobotState.START;
                 break;
             case START:
+                arm.startPosition();
+                intake.off();
+                shooter.off();
                 break;
 
             case MOVING_TO_INTAKING:
