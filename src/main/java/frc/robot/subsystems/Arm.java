@@ -17,8 +17,8 @@ public class Arm implements ISubsystem {
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
-        //this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_POS_UNIT_PER_DEGREE);
-        //this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_VEL_UNIT_PER_DEGREE_PER_SECOND);
+        this.motor.getEncoder().setPositionConversionFactor(1 / Control.arm.ENCODER_REV_PER_ARM_REV);
+        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.arm.ENCODER_REV_PER_ARM_REV / 60); // 1 min / 60 s
         this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
         NetworkTable NT = NetworkTableInstance.getDefault().getTable("arm");
         this.p_position = NT.getDoubleTopic("position").publish();

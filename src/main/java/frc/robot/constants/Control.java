@@ -14,6 +14,8 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 public class Control {
 
     public static class arm {
+        public static final double ENCODER_REV_PER_ARM_REV = 1; /// TODO
+
         public static final double kP_pos = 1;                        /// TODO
         public static final double kD_pos = 1;                        /// TODO
         public static final Rotation2d kPositionHysteresis =  Rotation2d.fromDegrees( 2);   /// TODO
@@ -38,7 +40,10 @@ public class Control {
     }
 
     public static class drivetrain {
+
         public static final double TRACK_WIDTH = 0.5823458; // m 
+        public static final double ENCODER_REV_PER_WHEEL_REV = 1; /// TODO
+
 
         public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
