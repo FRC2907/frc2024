@@ -9,10 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ISubsystem;
 
 public class ControllerRumble extends PS4Controller implements ISubsystem {
-    /* TODO
-     * - integrate this into Robot and Superduperstructure classes
-     */
-
     private Timer rumbleTimer;
     private double rumbleDuration;
 

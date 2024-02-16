@@ -20,14 +20,10 @@ public class Hat implements ISubsystem {
     public void onLoop() {}
 
     @Override
-    public void submitTelemetry() {
-        // TODO Auto-generated method stub
-    }
+    public void submitTelemetry() {}
 
     @Override
-    public void receiveOptions() {
-        // TODO Auto-generated method stub
-    }
+    public void receiveOptions() {}
 
     public TrajectoryFollower findPathToNote() {
         // TODO implement

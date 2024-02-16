@@ -95,15 +95,10 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.turningness = turn;
    }
 
-    // TODO(justincredible2508,josephreed2600) implement field-relative control scheme
+
    public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
-            // TODO we can probably use curvatureDrive for field-relative steering as well
-            // instead of turningness being just the x value of a stick,
-            // use the difference between our heading and our desired heading
-            // and then speed is probably just the magnitude of the stick
     this.totalSpeed = magnitude;
     this.desiredHeading = direction;
-    // keeping in mind that we also need to account for forward/reverse when calculating our heading error
    }
 
    private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
@@ -206,12 +201,17 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
     @Override
-    public void receiveOptions() {
-        // TODO Auto-generated method stub
-    }
+    public void receiveOptions() {}
 
 
     public void reverse() {
-    } // TODO
-
+        if (mode == DriveMode.LOCAL_FORWARD)
+            mode = DriveMode.LOCAL_REVERSED;
+        else if (mode == DriveMode.LOCAL_REVERSED)
+            mode = DriveMode.LOCAL_FORWARD;
+        else if (mode == DriveMode.FIELD_FORWARD)
+            mode = DriveMode.FIELD_REVERSED;
+        else if (mode == DriveMode.FIELD_REVERSED)
+            mode = DriveMode.FIELD_FORWARD;
+    }
 }
