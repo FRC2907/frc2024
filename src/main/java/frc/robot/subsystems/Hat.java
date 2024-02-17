@@ -21,7 +21,6 @@ public class Hat implements ISubsystem {
 
     @Override
     public void submitTelemetry() {}
-
     @Override
     public void receiveOptions() {}
 

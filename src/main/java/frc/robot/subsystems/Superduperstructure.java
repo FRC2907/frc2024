@@ -384,7 +384,5 @@ public class Superduperstructure implements ISubsystem {
     }
 
     @Override
-    public void receiveOptions() {
-        // TODO Auto-generated method stub
-    }
+    public void receiveOptions() {}
 }

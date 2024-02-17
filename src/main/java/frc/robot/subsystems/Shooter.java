@@ -85,8 +85,6 @@ public class Shooter implements ISubsystem {
     }
 
     @Override
-    public void receiveOptions() {
-        // TODO Auto-generated method stub
-    }
+    public void receiveOptions() {}
 
 }

@@ -122,6 +122,5 @@ public class Arm implements ISubsystem {
 
     @Override
     public void receiveOptions() {
-        // TODO Auto-generated method stub
     }
 }
