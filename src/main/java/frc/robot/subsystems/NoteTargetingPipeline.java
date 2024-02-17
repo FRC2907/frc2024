@@ -94,8 +94,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
         Imgproc.cvtColor(i_color, m_tmp, Imgproc.COLOR_BGR2HSV);
         Core.inRange(m_tmp, orangeLow, orangeHigh, i_mask);
-        // Core.bitwise_not(i_mask, m_tmp);
-        // i_color.setTo(new Scalar(0, 0, 0), m_tmp);
+        Core.bitwise_not(i_mask, m_tmp);
+        i_color.setTo(new Scalar(0, 0, 0), m_tmp);
 
         pts.clear();
         Imgproc.findContours(i_mask, pts, m_tmp, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
