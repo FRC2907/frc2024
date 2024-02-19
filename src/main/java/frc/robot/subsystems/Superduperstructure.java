@@ -24,9 +24,10 @@ public class Superduperstructure implements ISubsystem {
 
     public enum RobotState {
         MOVING_TO_START // could use in testing scenarios
-        , START, NEUTRAL
+        , START, MOVING_TO_NEUTRAL, NEUTRAL
 
-        , MOVING_TO_INTAKING, INTAKING, HOLDING_NOTE, OUTAKING
+        , MOVING_TO_INTAKING, INTAKING, OUTAKING
+        , MOVING_TO_HOLDING_NOTE, HOLDING_NOTE
 
         , MOVING_TO_AMP, READY_TO_SCORE_AMP, SCORING_AMP
 
@@ -54,6 +55,8 @@ public class Superduperstructure implements ISubsystem {
         this.driver = ControllerRumble.getInstance(Ports.HID.DRIVER);
         this.operator = ControllerRumble.getInstance(Ports.HID.OPERATOR);
         this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, driver, operator};
+
+        this.handleState(); // initialize subsystem setpoints
     }
 
     private Superduperstructure() {
@@ -107,10 +110,10 @@ public class Superduperstructure implements ISubsystem {
     public void neutralPosition() {
         this.tjf = null;
         if (intake.hasNote()){
-            this.state = RobotState.HOLDING_NOTE;
+            this.state = RobotState.MOVING_TO_HOLDING_NOTE;
             operator.setRumble(RumbleType.kBothRumble, 0.3);
         } else {
-            this.state = RobotState.NEUTRAL;
+            this.state = RobotState.MOVING_TO_NEUTRAL;
         }
     }
 
@@ -292,10 +295,14 @@ public class Superduperstructure implements ISubsystem {
                 intake.outake();
                 if (automateScoring && !intake.hasNote())
                     this.state = RobotState.NEUTRAL;
+                break;
 
-            case HOLDING_NOTE:
+            case MOVING_TO_HOLDING_NOTE:
                 arm.holdingPosition();
                 intake.off();
+                break;
+
+            case HOLDING_NOTE:
                 break;
 
             case MOVING_TO_AMP:
@@ -354,10 +361,13 @@ public class Superduperstructure implements ISubsystem {
             case HUNG:
                 arm.clumbPosition();
                 break;
-            case NEUTRAL:
+            case MOVING_TO_NEUTRAL:
                 arm.holdingPosition();
                 intake.off();
                 shooter.off();
+                this.state = RobotState.NEUTRAL;
+                break;
+            case NEUTRAL:
                 break;
             case KNOCKED_OVER:
                 //TODO
