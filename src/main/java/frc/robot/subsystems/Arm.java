@@ -54,6 +54,9 @@ public class Arm implements ISubsystem {
     public void setSetPoint(Rotation2d _setPoint) {
         this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
     }
+    public Rotation2d getSetPoint() {
+        return this.setPoint;
+    }
 
 
 
