@@ -249,9 +249,7 @@ public class Superduperstructure implements ISubsystem {
           }
     }
 
-    @Override
-    public void onLoop() {
-        handleInputs();
+    public void handleState() {
         switch (this.state) {
             case MOVING_TO_START:
                 arm.startPosition();
@@ -370,19 +368,31 @@ public class Superduperstructure implements ISubsystem {
             default:
                 break;
         }
+    }
 
+    @Override
+    public void onLoop() {
+        receiveOptions();
+        handleInputs();
+        handleState();
         handleDriving();
 
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : this.subsystems)
             s.onLoop();
+
+        submitTelemetry();
     }
 
     @Override
     public void submitTelemetry() {
-        // TODO Auto-generated method stub
+        for (ISubsystem s : this.subsystems)
+            s.submitTelemetry();
     }
 
     @Override
-    public void receiveOptions() {}
+    public void receiveOptions() {
+        for (ISubsystem s : this.subsystems)
+            s.receiveOptions();
+    }
 }
