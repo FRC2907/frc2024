@@ -64,7 +64,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
 
 
-    private Pose2d pose;
+    private Pose2d pose = new Pose2d(); // FIXME this might be bad. or maybe not
 
     public Pose2d getPose() {
         return this.pose;
