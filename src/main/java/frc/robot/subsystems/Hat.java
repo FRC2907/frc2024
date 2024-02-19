@@ -16,13 +16,6 @@ public class Hat implements ISubsystem {
         return instance;
     }
 
-    @Override
-    public void onLoop() {}
-
-    @Override
-    public void submitTelemetry() {}
-    @Override
-    public void receiveOptions() {}
 
     public TrajectoryFollower findPathToNote() {
         // TODO implement
@@ -37,5 +30,18 @@ public class Hat implements ISubsystem {
     public TrajectoryFollower findPathToAmp() {
         // TODO implement
         return null;
+    }
+
+
+    @Override
+    public void onLoop() {
+    }
+
+    @Override
+    public void submitTelemetry() {
+    }
+
+    @Override
+    public void receiveOptions() {
     }
 }

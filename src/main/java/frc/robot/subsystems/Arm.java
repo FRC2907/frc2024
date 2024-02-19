@@ -20,7 +20,6 @@ public class Arm implements ISubsystem {
     }
 
     private static Arm instance;
-
     public static Arm getInstance() {
         if (instance == null) {
             CANSparkMax leftMotor = Util.createSparkGroup(Ports.can.arm.LEFTS);
@@ -30,6 +29,74 @@ public class Arm implements ISubsystem {
         }
         return instance;
     }
+
+    public void setSetPoint(Rotation2d _setPoint) {
+        this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
+    }
+    public Rotation2d getSetPoint() {
+        return this.setPoint;
+    }
+    public Rotation2d getPosition() {
+        return Rotation2d.fromRotations(this.motor.getEncoder().getPosition());
+    }
+    /** Returns the velocity of the arm in Rotation2d-per-second. */
+    public Rotation2d getVelocity() {
+        return Rotation2d.fromRotations(this.motor.getEncoder().getVelocity());
+    }
+    public Rotation2d getPositionError() {
+        return getSetPoint().minus(getPosition());
+    }
+    public boolean reachedSetPoint() {
+        return Math.abs(setPoint.minus(getPosition()).getDegrees()) < Control.arm.kPositionHysteresis.getDegrees()
+                && Math.abs(getVelocity().getDegrees()) < Control.arm.kVelocityHysteresis.getDegrees();
+    }
+
+
+    public void up() {
+        this.setSetPoint(setPoint.plus(Control.arm.kManualControlDiff));
+    }
+
+    public void down() {
+        this.setSetPoint(setPoint.minus(Control.arm.kManualControlDiff));
+    }
+
+
+    // FIXME if we use this for position and velocity PD control
+    // we might need a way to differentiate controllers or something, idk
+    public void setPDGains(double P, double D) {
+        this.motor.getPIDController().setP(P);
+        this.motor.getPIDController().setD(D);
+    }
+
+
+    public void startPosition() {
+        this.setSetPoint(Control.arm.kStartPosition);
+    }
+
+    public void floorPosition() {
+        this.setSetPoint(Control.arm.kFloorPosition);
+    }
+
+    public void holdingPosition() {
+        this.setSetPoint(Control.arm.kHoldingPosition);
+    }
+
+    public void ampPosition() {
+        this.setSetPoint(Control.arm.kAmpPosition);
+    }
+
+    public void speakerPosition() {
+        this.setSetPoint(Control.arm.kSpeakerPosition);
+    }
+
+    public void climbReadyPosition() {
+        this.setSetPoint(Control.arm.kClimbReadyPosition);
+    }
+
+    public void clumbPosition() {
+        this.setSetPoint(Control.arm.kClimbClumbPosition);
+    }
+
 
     @Override
     public void onLoop() {
@@ -42,77 +109,6 @@ public class Arm implements ISubsystem {
         // TODO work on motion profiling this / using velocity -> position control
         this.motor.getPIDController().setReference(this.setPoint.getRotations(), CANSparkMax.ControlType.kPosition);
     }
-
-
-    
-    public void setSetPoint(Rotation2d _setPoint) {
-        this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
-    }
-    public Rotation2d getSetPoint() {
-        return this.setPoint;
-    }
-    public Rotation2d getPositionError() {
-        return getSetPoint().minus(getPosition());
-    }
-
-
-
-    public void up() {
-        this.setSetPoint(setPoint.plus(Control.arm.kManualControlDiff));
-    }
-    public void down() {
-        this.setSetPoint(setPoint.minus(Control.arm.kManualControlDiff));
-    }
-
-
-    
-    public boolean reachedSetPoint() {
-        return
-            Math.abs(setPoint.minus(getPosition()).getDegrees()) < Control.arm.kPositionHysteresis.getDegrees()
-         && Math.abs(               getVelocity() .getDegrees()) < Control.arm.kVelocityHysteresis.getDegrees();
-    }
-
-
-
-    // FIXME if we use this for position and velocity PD control
-    // we might need a way to differentiate controllers or something, idk
-    public void setPDGains(double P, double D) {
-        this.motor.getPIDController().setP(P);
-        this.motor.getPIDController().setD(D);
-    }
-    public void startPosition(){
-        this.setSetPoint(Control.arm.kStartPosition);
-    }
-    public void floorPosition(){
-        this.setSetPoint(Control.arm.kFloorPosition);
-    }
-    public void holdingPosition(){
-        this.setSetPoint(Control.arm.kHoldingPosition);
-    }
-    public void ampPosition(){
-        this.setSetPoint(Control.arm.kAmpPosition);
-    }
-    public void speakerPosition(){
-        this.setSetPoint(Control.arm.kSpeakerPosition);
-    }
-    public void climbReadyPosition(){
-        this.setSetPoint(Control.arm.kClimbReadyPosition);
-    }
-    public void clumbPosition(){
-        this.setSetPoint(Control.arm.kClimbClumbPosition);
-    }
-
-
-
-    public Rotation2d getPosition(){
-        return Rotation2d.fromRotations(this.motor.getEncoder().getPosition());
-    }
-    /** Returns the velocity of the arm in Rotation2d-per-second. */
-    public Rotation2d getVelocity(){
-        return Rotation2d.fromRotations(this.motor.getEncoder().getVelocity());
-    }
-
-
 
     @Override
     public void submitTelemetry() {
@@ -127,8 +123,7 @@ public class Arm implements ISubsystem {
     @Override
     public void receiveOptions() {
         setSetPoint(Rotation2d.fromDegrees(
-            SmartDashboard.getNumber("arm.ref.position.set", getSetPoint().getDegrees())
-        ));
+                SmartDashboard.getNumber("arm.ref.position.set", getSetPoint().getDegrees())));
         if (SmartDashboard.getBoolean("arm.up", false))
             this.up();
         if (SmartDashboard.getBoolean("arm.down", false))

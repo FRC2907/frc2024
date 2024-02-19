@@ -65,7 +65,6 @@ public class Superduperstructure implements ISubsystem {
     }
 
     private static Superduperstructure instance;
-
     public static Superduperstructure getInstance() {
         if (instance == null)
             instance = new Superduperstructure();
@@ -208,49 +207,45 @@ public class Superduperstructure implements ISubsystem {
         }
     }
 
-    public void handleInputs(){
+    public void handleInputs() {
         if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
-            cancelAction(); 
-          }
-      
-      
-          
-          if (operator.getCrossButtonPressed()){ //TODO automatic intake
+            cancelAction();
+        }
+
+        if (operator.getCrossButtonPressed()) { // TODO automatic intake
             outakeNote();
-          }
-          if (operator.getSquareButtonPressed()) {
+        }
+        if (operator.getSquareButtonPressed()) {
             autoScore();
-          }
-          if (operator.getTriangleButtonPressed()) {
+        }
+        if (operator.getTriangleButtonPressed()) {
             neutralPosition();
-          }
-          if (operator.getL2Button()) {
+        }
+        if (operator.getL2Button()) {
             moveToSpeaker(); // TODO gavin rawr
-          }
-          if (operator.getL1Button()) {
+        }
+        if (operator.getL1Button()) {
             moveToIntaking();
-          }
-          if (operator.getR1ButtonPressed()){
-              outakeNote();
-          }
-          if (operator.getR2ButtonPressed()){ //TODO manual intaking
-              intakeNote();
-          }
-      
-      
-      
-          if (driver.getR2Button()) {
-            moveToSpeaker(); 
-          }
-          if (driver.getR1Button()) {
-            moveToAmp(); 
-          }
-          if (driver.getCrossButtonPressed()) {
+        }
+        if (operator.getR1ButtonPressed()) {
+            outakeNote();
+        }
+        if (operator.getR2ButtonPressed()) { // TODO manual intaking
+            intakeNote();
+        }
+
+        if (driver.getR2Button()) {
+            moveToSpeaker();
+        }
+        if (driver.getR1Button()) {
+            moveToAmp();
+        }
+        if (driver.getCrossButtonPressed()) {
             prepareForClimb();
-          }
-          if (driver.getR3ButtonPressed()){
-            //TODO reverse
-          }
+        }
+        if (driver.getR3ButtonPressed()) {
+            // TODO reverse
+        }
     }
 
     public void handleState() {
@@ -320,7 +315,7 @@ public class Superduperstructure implements ISubsystem {
                     this.state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                shooter.ampRPM();
+                shooter.amp();
                 if (shooter.noteScored()){
                     this.state = RobotState.NEUTRAL;
                 }
@@ -340,7 +335,7 @@ public class Superduperstructure implements ISubsystem {
                     this.state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                shooter.shooterRPM();
+                shooter.shooter();
                 if (shooter.noteScored()) {
                     this.state = RobotState.NEUTRAL;
                 }

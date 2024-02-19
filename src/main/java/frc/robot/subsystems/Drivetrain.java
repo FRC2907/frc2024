@@ -17,20 +17,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     private double leftSpeed, rightSpeed, totalSpeed, turningness;
     private Rotation2d desiredHeading;
     private Field2d sb_field;
-
-
-
     private DriveMode mode;
-    public enum DriveMode {
-          AUTO
-
-        , FIELD_FORWARD, FIELD_REVERSED
-
-        , LOCAL_FORWARD, LOCAL_REVERSED
-    }
-   public void setDriveMode(DriveMode newMode) { this.mode = newMode; }
-   public DriveMode getDriveMode() { return this.mode; }
-
 
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
@@ -50,7 +37,6 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
     private static Drivetrain instance;
-
     public static Drivetrain getInstance() {
         CANSparkMax left, right;
         if (instance == null) {
@@ -63,17 +49,25 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
+    public enum DriveMode {
+        AUTO, FIELD_FORWARD, FIELD_REVERSED, LOCAL_FORWARD, LOCAL_REVERSED
+    }
+    public void setDriveMode(DriveMode newMode) {
+        this.mode = newMode;
+    }
+    public DriveMode getDriveMode() {
+        return this.mode;
+    }
+
 
     private Pose2d pose = new Pose2d(); // FIXME this might be bad. or maybe not
 
     public Pose2d getPose() {
         return this.pose;
     }
-
     private void setPose(Pose2d _pose) {
         this.pose = _pose;
     }
-
 
 
     // TODO revisit whether that turnInPlace parameter makes sense
@@ -89,46 +83,43 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     public void setTankInputs(double[] wheelSpeeds) {
         setTankInputs(wheelSpeeds[0], wheelSpeeds[1]);
     }
-
-   public void setLocalDriveInputs(double speed, double turn) {
+    public void setLocalDriveInputs(double speed, double turn) {
         this.totalSpeed = speed;
         this.turningness = turn;
-   }
+    }
+    public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
+        this.totalSpeed = magnitude;
+        this.desiredHeading = direction;
+    }
 
 
-   public void setFieldDriveInputs(double magnitude, Rotation2d direction) {
-    this.totalSpeed = magnitude;
-    this.desiredHeading = direction;
-   }
-
-   private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
-    return Control.drivetrain.kP_fieldRelativeHeading * desired.minus(current).getRadians(); // TODO verify
-   }
+    private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
+        return Control.drivetrain.kP_fieldRelativeHeading * desired.minus(current).getRadians(); // TODO verify
+    }
 
 
+    /**
+     * Other functions outside this class should interact by calling the helper
+     * functions to set these variables:
+     * <ul>
+     * <li>manualControl
+     * <li>local mode: speed, rotation
+     * <li>field mode: speed, heading
+     * <li>tank/follower mode: leftSpeed, rightSpeed
+     * </ul>
+     *
+     * This function decides which set of vars to use and how to use them. This
+     * model reduces the amount of Actual Stuff that Happens outside of the onLoop
+     * family.
+     */
 
-   /**
-    * Other functions outside this class should interact by calling the helper
-    * functions to set these variables:
-    * <ul>
-    * <li>manualControl
-    * <li>local mode: speed, rotation
-    * <li>field mode: speed, heading
-    * <li>tank/follower mode: leftSpeed, rightSpeed
-    * </ul>
-    *
-    * This function decides which set of vars to use and how to use them. This
-    * model reduces the amount of Actual Stuff that Happens outside of the onLoop
-    * family.
-    */
-
-   //reversed means basically changing direction rather than like a car reverse
+    // reversed means basically changing direction rather than like a car reverse
 
     @Override
     public void onLoop() {
         switch (this.mode) {
             case AUTO:
-                double[] speeds = new double[] {leftSpeed, rightSpeed};
+                double[] speeds = new double[] { leftSpeed, rightSpeed };
                 normalize(speeds);
                 this.tankDrive(speeds[0], speeds[1], false);
                 break;
@@ -145,12 +136,10 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 this.curvatureDrive(totalSpeed, convertHeadingToTurningness(this.getHeading(), desiredHeading));
                 break;
             case FIELD_REVERSED:
-                this.curvatureDrive(-totalSpeed
-                    , convertHeadingToTurningness(
-                        this.getHeading()
-                        , desiredHeading.minus(Rotation2d.fromRotations(0.5))
-                    )
-                ); // TODO verify but I think this is right?
+                this.curvatureDrive(-totalSpeed, convertHeadingToTurningness(
+                        this.getHeading(), desiredHeading.minus(Rotation2d.fromRotations(0.5)))); // TODO verify but I
+                                                                                                  // think this is
+                                                                                                  // right?
                 break;
             default:
                 break;
@@ -158,17 +147,16 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
-
     public double getVelocity() {
-        return (getVelocityL() + getVelocityR()) / 2; 
+        return (getVelocityL() + getVelocityR()) / 2;
     }
 
     public double getVelocityL() {
-        return this.leftMotor.getEncoder().getVelocity(); 
+        return this.leftMotor.getEncoder().getVelocity();
     }
 
     public double getVelocityR() {
-        return this.rightMotor.getEncoder().getVelocity(); 
+        return this.rightMotor.getEncoder().getVelocity();
     }
 
     public double getPositionX() {
@@ -183,11 +171,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return getPose().getRotation();
     }
 
-    public double getAngularVelocity() { //TODO
+    public double getAngularVelocity() { // TODO
         return 1;
     }
-
-
 
     @Override
     public void submitTelemetry() {
@@ -204,8 +190,8 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
     @Override
-    public void receiveOptions() {}
-
+    public void receiveOptions() {
+    }
 
     public void reverse() {
         if (mode == DriveMode.LOCAL_FORWARD)
