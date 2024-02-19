@@ -22,15 +22,15 @@ public class Control {
         public static final Rotation2d kPositionHysteresis =  Rotation2d.fromDegrees( 2);   /// TODO
         public static final Rotation2d kVelocityHysteresis =  Rotation2d.fromDegrees( 2); // rot/s /// TODO
 
-        public static final Rotation2d kStartPosition      = Rotation2d.fromDegrees(90);   /// TODO
-        public static final Rotation2d kFloorPosition      = Rotation2d.fromDegrees( 0);   /// TODO
-        public static final Rotation2d kAmpPosition        = Rotation2d.fromDegrees(91);   /// TODO
-        public static final Rotation2d kSpeakerPosition    = Rotation2d.fromDegrees(30);   /// TODO
-        public static final Rotation2d kHoldingPosition    = Rotation2d.fromDegrees( 0);   /// TODO
-        public static final Rotation2d kClimbReadyPosition = Rotation2d.fromDegrees( 0);   /// TODO
-        public static final Rotation2d kClimbClumbPosition = Rotation2d.fromDegrees( 0);   /// TODO
-        public static final Rotation2d kMinPosition        = Rotation2d.fromDegrees( 0);   /// TODO
-        public static final Rotation2d kMaxPosition        = Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kStartPosition      = Rotation2d.fromDegrees( 90);   /// TODO
+        public static final Rotation2d kFloorPosition      = Rotation2d.fromDegrees(  0);   /// TODO
+        public static final Rotation2d kAmpPosition        = Rotation2d.fromDegrees(100);   /// TODO
+        public static final Rotation2d kSpeakerPosition    = Rotation2d.fromDegrees( 30);   /// TODO
+        public static final Rotation2d kHoldingPosition    = Rotation2d.fromDegrees( 20);   /// TODO
+        public static final Rotation2d kClimbReadyPosition = Rotation2d.fromDegrees( 90);   /// TODO
+        public static final Rotation2d kClimbClumbPosition = Rotation2d.fromDegrees( 30);   /// TODO
+        public static final Rotation2d kMinPosition        = Rotation2d.fromDegrees(  0);   /// TODO
+        public static final Rotation2d kMaxPosition        = Rotation2d.fromDegrees(120);   /// TODO
 
         /**
          * manual control works by incrementing the arm's position setpoint every cycle.
