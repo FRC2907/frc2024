@@ -18,9 +18,7 @@ public class Intake implements ISubsystem {
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.intake.ENCODER_VEL_UNIT_PER_INTAKE_MPS);
-        NetworkTable NT = NetworkTableInstance.getDefault().getTable("intake");
-        this.p_velocity = NT.getDoubleTopic("velocity").publish();
+        this.motor.getEncoder().setVelocityConversionFactor(Control.intake.METER_PER_SECOND_PER_ENC_VEL_UNIT);
     }
 
 

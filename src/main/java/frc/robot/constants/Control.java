@@ -15,7 +15,19 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 public class Control {
 
     public static class arm {
-        public static final double ENCODER_REV_PER_ARM_REV = 1; /// TODO
+        public static final double ARM_REV_PER_ENC_REV = 1; /// TODO based on gear ratio
+        /**
+         * enc_rev   arm_rev   arm_rev
+         * ------- * ------- = -------
+         *    1      enc_rev      1   
+         */
+        public static final double ARM_REV_PER_ENC_POS_UNIT = ARM_REV_PER_ENC_REV;
+        /**
+         * enc_rev   1 min   60   arm_rev   arm_rev
+         * ------- * ----- * -- * ------- = -------
+         *  1 min    60 s    1    enc_rev      s   
+         */
+        public static final double ARM_REV_PER_SEC_PER_ENC_VEL_UNIT = ARM_REV_PER_ENC_REV * 60;
 
         public static final double kP_pos = 1;                        /// TODO
         public static final double kD_pos = 1;                        /// TODO
@@ -37,17 +49,33 @@ public class Control {
          * this might be a bad idea. TODO consider complexity of moving to a velocity
          * model?
          */
-        public static final Rotation2d kManualControlDiff  =  Rotation2d.fromDegrees( 0);   /// TODO
+        public static final Rotation2d kManualControlDiff  =  Rotation2d.fromDegrees( 2);   /// TODO
     }
 
     public static class drivetrain {
 
         public static final double TRACK_WIDTH = 0.5823458; // m 
-        public static final double ENCODER_REV_PER_WHEEL_REV = 1; /// TODO
+        public static final double WHEEL_DIAMETER = 0; // m  /// TODO
+        public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER; // m
+        public static final double WHEEL_REV_PER_ENC_REV = 1; // unitless  /// TODO based on gear ratio
+        /**
+         * enc_rev   whl_rev      m      m
+         * ------- * ------- * ------- = -
+         *    1      enc_rev   whl_rev   1
+         */
+        public static final double METER_PER_ENC_POS_UNIT = WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m / enc_rev
+        /**
+         * enc_rev   1 min   60   whl_rev      m      m
+         * ------- * ----- * -- * ------- * ------- = -
+         *  1 min    60 s    1    enc_rev   whl_rev   s
+         */
+        public static final double METER_PER_SEC_PER_ENC_VEL_UNIT
+            = 60.0 * WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m/s
 
 
         public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS
+            = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
 
         public static final double kP_fieldRelativeHeading = 0; // TODO
 
@@ -56,7 +84,16 @@ public class Control {
     }
 
     public static class intake {
-        public static final double ENCODER_VEL_UNIT_PER_INTAKE_MPS = 0; // m/s /// TODO calculate // use wheel dims to find linear speed
+        public static final double WHEEL_DIAMETER = 0; // m  /// TODO
+        public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER; // m
+        public static final double WHEEL_REV_PER_ENC_REV = 1; /// TODO based on gear ratio
+        /**
+         * enc_rev   1 min   60   whl_rev      m      m
+         * ------- * ----- * -- * ------- * ------- = -
+         *  1 min    60 s    1    enc_rev   whl_rev   s
+         */
+        public static final double METER_PER_SECOND_PER_ENC_VEL_UNIT
+            = 60.0 * WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m/s
 
         public static final double kP = 1;                            /// TODO
         public static final double kD = 1;                            /// TODO
@@ -67,7 +104,19 @@ public class Control {
     }
 
     public static class shooter {
-        public static final double ENCODER_VEL_UNIT_PER_SHOOTER_MPS = 0; // m/s  /// TODO
+        public static final double WHEEL_DIAMETER = 0; // m  /// TODO
+        public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER; // m
+        public static final double WHEEL_REV_PER_ENC_REV = 1; /// TODO based on gear ratio
+        /**
+         * enc_rev   1 min   60   whl_rev      m      m
+         * ------- * ----- * -- * ------- * ------- = -
+         *  1 min    60 s    1    enc_rev   whl_rev   s
+         */
+        public static final double METER_PER_SECOND_PER_ENC_VEL_UNIT
+            = 60.0 * WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m/s
+
+        public static final double kP = 1;                            /// TODO
+        public static final double kD = 1;                            /// TODO
 
         public static final double kAmpSpeed     = 0; // m/s          /// TODO calculate
         public static final double kSpeakerSpeed = 0; // m/s          /// TODO calculate

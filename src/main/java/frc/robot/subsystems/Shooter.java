@@ -20,9 +20,7 @@ public class Shooter implements ISubsystem {
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(1 / Control.shooter.ENCODER_VEL_UNIT_PER_SHOOTER_MPS);
-        NetworkTable NT = NetworkTableInstance.getDefault().getTable("shooter");
-        this.p_velocity = NT.getDoubleTopic("velocity").publish();
+        this.motor.getEncoder().setVelocityConversionFactor(Control.shooter.METER_PER_SECOND_PER_ENC_VEL_UNIT);
     }
 
     private static Shooter instance;
