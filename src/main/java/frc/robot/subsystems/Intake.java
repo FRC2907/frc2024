@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
@@ -13,7 +11,6 @@ public class Intake implements ISubsystem {
     private double setPoint; // wheel rpm
 
     private CANSparkMax motor;
-    private DoublePublisher p_velocity;
 
 
     private Intake(CANSparkMax _motor) {
@@ -37,6 +34,12 @@ public class Intake implements ISubsystem {
     /** Set the desired speed of the intake in wheel RPM. */
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
+    }
+    public double getSetPoint() {
+        return this.setPoint;
+    }
+    public double getError() {
+        return getSetPoint() - getVelocity();
     }
 
 
@@ -73,10 +76,15 @@ public class Intake implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        p_velocity.set(getVelocity());
+        SmartDashboard.putNumber("intake.velocity", getVelocity());
+        SmartDashboard.putNumber("intake.setpoint", getSetPoint());
+        SmartDashboard.putNumber("intake.setpoint.set", getSetPoint());
+        SmartDashboard.putNumber("intake.error", getError());
     }
 
     @Override
-    public void receiveOptions() {}
+    public void receiveOptions() {
+        setSetPoint(SmartDashboard.getNumber("intake.setpoint.set", getSetPoint()));
+    }
 
 }

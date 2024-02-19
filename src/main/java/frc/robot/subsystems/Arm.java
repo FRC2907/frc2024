@@ -3,9 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
@@ -13,16 +11,12 @@ import frc.robot.util.Util;
 public class Arm implements ISubsystem {
     private Rotation2d setPoint;
     private CANSparkMax motor;
-    private DoublePublisher p_position, p_velocity;
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
         this.motor.getEncoder().setPositionConversionFactor(Control.arm.ARM_REV_PER_ENC_POS_UNIT);
         this.motor.getEncoder().setVelocityConversionFactor(Control.arm.ARM_REV_PER_SEC_PER_ENC_VEL_UNIT);
         this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
-        NetworkTable NT = NetworkTableInstance.getDefault().getTable("arm");
-        this.p_position = NT.getDoubleTopic("position").publish();
-        this.p_velocity = NT.getDoubleTopic("velocity").publish();
     }
 
     private static Arm instance;
@@ -56,6 +50,9 @@ public class Arm implements ISubsystem {
     }
     public Rotation2d getSetPoint() {
         return this.setPoint;
+    }
+    public Rotation2d getPositionError() {
+        return getSetPoint().minus(getPosition());
     }
 
 
@@ -119,11 +116,22 @@ public class Arm implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        p_position.set(getPosition().getDegrees());
-        p_velocity.set(getVelocity().getDegrees());
+        SmartDashboard.putNumber("arm.ref.position", getSetPoint().getDegrees());
+        SmartDashboard.putNumber("arm.state.position", getPosition().getDegrees());
+        SmartDashboard.putNumber("arm.ref.position.set", getSetPoint().getDegrees());
+        SmartDashboard.putNumber("arm.err", getPositionError().getDegrees());
+        SmartDashboard.putBoolean("arm.up", false);
+        SmartDashboard.putBoolean("arm.down", false);
     }
 
     @Override
     public void receiveOptions() {
+        setSetPoint(Rotation2d.fromDegrees(
+            SmartDashboard.getNumber("arm.ref.position.set", getSetPoint().getDegrees())
+        ));
+        if (SmartDashboard.getBoolean("arm.up", false))
+            this.up();
+        if (SmartDashboard.getBoolean("arm.down", false))
+            this.down();
     }
 }

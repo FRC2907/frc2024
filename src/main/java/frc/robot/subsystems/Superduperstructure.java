@@ -6,6 +6,7 @@ import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Superduperstructure implements ISubsystem {
     private Drivetrain drivetrain;
@@ -396,6 +397,8 @@ public class Superduperstructure implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
+        SmartDashboard.putString("superduperstructure.state", getState().toString());
+
         for (ISubsystem s : this.subsystems)
             s.submitTelemetry();
     }

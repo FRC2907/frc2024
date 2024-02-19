@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.auto.routines.SampleRoutine;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.Control;
@@ -49,7 +49,8 @@ public class Robot extends TimedRobot {
     autoChooser = new SendableChooser<>();
     for (Routine r : Routine.getRoutines())
       autoChooser.addOption(r.getName(), r);
-    autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Sample"));
+    autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Empty"));
+    SmartDashboard.putData(autoChooser);
   }
 
   @Override
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // TODO implement NT autonomous chooser
     // TODO also write auto routines
-    auto = new SampleRoutine();
+    auto = autoChooser.getSelected();
   }
 
   @Override

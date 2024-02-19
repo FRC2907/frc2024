@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
@@ -16,7 +14,6 @@ public class Shooter implements ISubsystem {
     private double setPoint; // wheel m/s
 
     private CANSparkMax motor;
-    private DoublePublisher p_velocity;
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
@@ -57,13 +54,16 @@ public class Shooter implements ISubsystem {
     public void setSetPoint(double _setPoint) {
         this.setPoint = _setPoint;
     }
+    public double getSetPoint() {
+        return this.setPoint;
+    }
+    public double getError() {
+        return getSetPoint() - getVelocity();
+    }
 
 
     
     /** Return shooter speed in wheel RPM. */
-    public double getSpeed() {
-        return motor.getEncoder().getVelocity();
-    }
     public double getVelocity(){ 
         return this.motor.getEncoder().getVelocity();
     }
@@ -79,10 +79,15 @@ public class Shooter implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        p_velocity.set(getVelocity());
+        SmartDashboard.putNumber("shooter.velocity", getVelocity());
+        SmartDashboard.putNumber("shooter.setpoint", getSetPoint());
+        SmartDashboard.putNumber("shooter.setpoint.set", getSetPoint());
+        SmartDashboard.putNumber("shooter.error", getError());
     }
 
     @Override
-    public void receiveOptions() {}
+    public void receiveOptions() {
+        setSetPoint(SmartDashboard.getNumber("shooter.setpoint.set", getSetPoint()));
+    }
 
 }

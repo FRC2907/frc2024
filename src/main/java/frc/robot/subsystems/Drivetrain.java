@@ -4,10 +4,9 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.util.Util;
 
@@ -15,9 +14,9 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
-    private DoublePublisher p_positionX, p_positionY, p_velocity, p_velocityL, p_velocityR, p_angle, p_angVel;
-   private double leftSpeed, rightSpeed, totalSpeed, turningness;
-   private Rotation2d desiredHeading;
+    private double leftSpeed, rightSpeed, totalSpeed, turningness;
+    private Rotation2d desiredHeading;
+    private Field2d sb_field;
 
 
 
@@ -39,14 +38,15 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         this.leftMotor = left; // TODO add velocity conversion factor
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
-        NetworkTable NT = NetworkTableInstance.getDefault().getTable("drivetrain");
-        this.p_positionX = NT.getDoubleTopic("position").publish();
-        this.p_positionY = NT.getDoubleTopic("position").publish();
-        this.p_velocity  = NT.getDoubleTopic("velocity").publish();
-        this.p_velocityL = NT.getDoubleTopic("velocityL").publish();
-        this.p_velocityR = NT.getDoubleTopic("velocityR").publish();
-        this.p_angle     = NT.getDoubleTopic("angle").publish();
-        this.p_angVel    = NT.getDoubleTopic("angularVelocity").publish();
+
+        this.leftMotor.getEncoder().setPositionConversionFactor(Control.drivetrain.METER_PER_ENC_POS_UNIT);
+        this.rightMotor.getEncoder().setPositionConversionFactor(Control.drivetrain.METER_PER_ENC_POS_UNIT);
+        this.leftMotor.getEncoder().setVelocityConversionFactor(Control.drivetrain.METER_PER_SEC_PER_ENC_VEL_UNIT);
+        this.rightMotor.getEncoder().setVelocityConversionFactor(Control.drivetrain.METER_PER_SEC_PER_ENC_VEL_UNIT);
+
+        this.sb_field = new Field2d();
+        SmartDashboard.putData(this.sb_field);
+        SmartDashboard.putData(this);
     }
 
     private static Drivetrain instance;
@@ -142,12 +142,12 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 break;
 
             case FIELD_FORWARD:
-                this.curvatureDrive(totalSpeed, convertHeadingToTurningness(this.getAngle(), desiredHeading));
+                this.curvatureDrive(totalSpeed, convertHeadingToTurningness(this.getHeading(), desiredHeading));
                 break;
             case FIELD_REVERSED:
                 this.curvatureDrive(-totalSpeed
                     , convertHeadingToTurningness(
-                        this.getAngle()
+                        this.getHeading()
                         , desiredHeading.minus(Rotation2d.fromRotations(0.5))
                     )
                 ); // TODO verify but I think this is right?
@@ -179,7 +179,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
         return getPose().getY();
     }
 
-    public Rotation2d getAngle() {
+    public Rotation2d getHeading() {
         return getPose().getRotation();
     }
 
@@ -191,13 +191,16 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        p_positionX.set(getPositionX());
-        p_positionY.set(getPositionY());
-        p_velocity.set(getVelocity());
-        p_velocityL.set(getVelocityL());
-        p_velocityR.set(getVelocityR());
-        p_angle.set(getAngle().getDegrees());
-        p_angVel.set(getAngularVelocity());
+        SmartDashboard.putNumber("dt.positionX", getPositionX());
+        SmartDashboard.putNumber("dt.positionY", getPositionY());
+        SmartDashboard.putNumber("dt.velocity", getVelocity());
+        SmartDashboard.putNumber("dt.velocityL", getVelocityL());
+        SmartDashboard.putNumber("dt.velocityR", getVelocityR());
+        SmartDashboard.putNumber("dt.heading", getHeading().getDegrees());
+        SmartDashboard.putNumber("dt.angVel", getAngularVelocity());
+
+        // TODO verify
+        this.sb_field.setRobotPose(getPose());
     }
 
     @Override
