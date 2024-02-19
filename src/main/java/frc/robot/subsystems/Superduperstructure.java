@@ -5,7 +5,6 @@ import frc.robot.constants.Ports;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Superduperstructure implements ISubsystem {
@@ -111,7 +110,7 @@ public class Superduperstructure implements ISubsystem {
         this.tjf = null;
         if (intake.hasNote()){
             this.state = RobotState.MOVING_TO_HOLDING_NOTE;
-            operator.setRumble(RumbleType.kBothRumble, 0.3);
+            operator.rumble(0.5);
         } else {
             this.state = RobotState.MOVING_TO_NEUTRAL;
         }
@@ -141,11 +140,11 @@ public class Superduperstructure implements ISubsystem {
                 break;
             case NONE:
             // FIXME
-                operator.setRumble(RumbleType.kBothRumble, 1);
+                operator.rumble(1);
                 break;
             case TIED:
             // FIXME
-                operator.setRumble(RumbleType.kBothRumble, 0.5);
+                operator.rumble(0.5);
                 break;
             default:
                 break;
