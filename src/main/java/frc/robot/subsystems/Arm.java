@@ -107,12 +107,8 @@ public class Arm implements ISubsystem {
 
     @Override
     public void onLoop() {
-        // TODO(justincredible2508@gmail.com) let's look at adding a FF here if we can
+        // TODO let's look at adding a FF here if we can
         // maybe improve system step response
-        // TODO investigate whether it's helpful at all to cache the reference to reduce
-        // CAN traffic
-        // ^ actually if we were to generalize these classes, we could incorporate ref
-        // caching there
         // TODO work on motion profiling this / using velocity -> position control
         this.motor.getPIDController().setReference(this.setPoint.in(Units.Degrees), CANSparkMax.ControlType.kPosition);
     }

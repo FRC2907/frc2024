@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // TODO also write auto routines
+    // TODO write auto routines
     auto = autoChooser.getSelected();
   }
 

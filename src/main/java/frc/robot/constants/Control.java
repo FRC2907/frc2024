@@ -67,8 +67,17 @@ public class Control {
         public static final DifferentialDriveKinematics
             DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH.plus(kTrackWidthFudge));
 
-        public static final Measure<Per<Dimensionless, Angle>>
-            kP_fieldRelativeHeading = Units.Value.of(1).per(Units.Degrees); // TODO empirical
+        public static final Measure<Per<Velocity<Angle>, Angle>>
+            kP_fieldRelativeHeading = Units.DegreesPerSecond.of(2).per(Units.Degrees); // TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Distance>>>
+            kP_velocity = Units.Volts.of(1).per(Units.MetersPerSecond); // TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
+            kD_velocity = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); // TODO empirical
+
+        public static final Measure<Velocity<Distance>>
+            kMaxSpeed  = Units.MetersPerSecond .of( 3); // TODO empirical
+        public static final Measure<Velocity<Angle>>
+            kMaxAngVel = Units.DegreesPerSecond.of(60); // TODO empirical
 
         public static final DriveMode kDefaultDriveModeWithoutNote = DriveMode.FIELD_FORWARD;
         public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;

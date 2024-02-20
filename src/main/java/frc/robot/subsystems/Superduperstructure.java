@@ -107,7 +107,6 @@ public class Superduperstructure implements ISubsystem {
     }
 
     public void neutralPosition() {
-        this.tjf = null;
         if (intake.hasNote()){
             this.state = RobotState.MOVING_TO_HOLDING_NOTE;
             operator.rumble(0.5);
@@ -117,6 +116,7 @@ public class Superduperstructure implements ISubsystem {
     }
 
     public void cancelAction() {
+        this.tjf = null;
         neutralPosition();
     }
     public void automateScoring(boolean _automation) {
@@ -139,11 +139,9 @@ public class Superduperstructure implements ISubsystem {
                 this.moveToSpeaker();
                 break;
             case NONE:
-            // FIXME
                 operator.rumble(1);
                 break;
             case TIED:
-            // FIXME
                 operator.rumble(0.5);
                 break;
             default:
@@ -160,9 +158,12 @@ public class Superduperstructure implements ISubsystem {
         switch (this.state) {
             case MOVING_TO_START:
             case START:
+            case MOVING_TO_NEUTRAL:
             case NEUTRAL:
+            case MOVING_TO_HOLDING_NOTE:
             case HOLDING_NOTE:
             case OUTAKING:
+            // in these states, we drive manually
                 this.tjf = null;
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
                     drivetrain.setDriveMode(
@@ -172,26 +173,37 @@ public class Superduperstructure implements ISubsystem {
                     );
                 switch(drivetrain.getDriveMode()){
                     case FIELD_FORWARD:
-                    case FIELD_REVERSED:
-                        double magnitude = Math.pow(Math.pow(driver.getLeftY(), 2)
-                                                  + Math.pow(driver.getLeftX(), 2), 0.5);
-                        Rotation2d rotation = Rotation2d.fromRadians(
-                            Math.atan2(driver.getLeftY(), driver.getLeftX())
+                        drivetrain.setFieldDriveInputs(
+                            Control.drivetrain.kMaxSpeed.times(driver.getLeftMagnitude())
+                            , driver.getLeftAngle()
                         );
-                        drivetrain.setFieldDriveInputs(magnitude, rotation);
+                        break;
+                    case FIELD_REVERSED:
+                        drivetrain.setFieldDriveInputs(
+                            Control.drivetrain.kMaxSpeed.times(driver.getLeftMagnitude())
+                            , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
+                        );
                         break;
                     case LOCAL_FORWARD:
+                        drivetrain.setLocalDriveInputs(
+                            Control.drivetrain.kMaxSpeed.times(driver.getLeftY())
+                            , Control.drivetrain.kMaxAngVel.times(driver.getRightX())
+                        );
+                        break;
                     case LOCAL_REVERSED:
-                        drivetrain.setLocalDriveInputs(driver.getLeftY(), driver.getRightX());
+                        drivetrain.setLocalDriveInputs(
+                            Control.drivetrain.kMaxSpeed.times(driver.getLeftY()).negate()
+                            , Control.drivetrain.kMaxAngVel.times(driver.getRightX()).negate()
+                        );
                         break;
                     default:
                         System.err.println("[EE] Auto driving in non-auto robot state");
                         new Exception().printStackTrace();
                         break;
                 }
-                drivetrain.curvatureDrive(driver.getLeftY(), driver.getRightX());
                 break;
             default:
+            // in all other states, we follow a trajectory
                 drivetrain.setDriveMode(DriveMode.AUTO);
                 // NOTE so if we reach the end of the trajectory, but we haven't moved on to the next state...
                 // then what? should we have a timeout that auto-cancels if that happens? FIXME consider that
@@ -200,9 +212,9 @@ public class Superduperstructure implements ISubsystem {
                     operator.rumble(2);
                     System.err.println("[EE] Tried to self-drive without a trajectory to follow");
                     new Exception().printStackTrace();
-                    neutralPosition();
+                    cancelAction();
                 } else
-                drivetrain.setTankInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
+                drivetrain.setAutoDriveInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
         }
     }
 
