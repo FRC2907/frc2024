@@ -112,10 +112,10 @@ public class Arm implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("arm.ref.position"    , getSetPoint()     .in(Units.Degrees));
-        SmartDashboard.putNumber("arm.state.position"  , getPosition()     .in(Units.Degrees));
-        SmartDashboard.putNumber("arm.ref.position.set", getSetPoint()     .in(Units.Degrees));
-        SmartDashboard.putNumber("arm.err"             , getPositionError().in(Units.Degrees));
+        SmartDashboard.putNumber ("arm.ref.position"    , getSetPoint()     .in(Units.Degrees));
+        SmartDashboard.putNumber ("arm.state.position"  , getPosition()     .in(Units.Degrees));
+        SmartDashboard.putNumber ("arm.ref.position.set", getSetPoint()     .in(Units.Degrees));
+        SmartDashboard.putNumber ("arm.err"             , getPositionError().in(Units.Degrees));
         SmartDashboard.putBoolean("arm.up"  , false);
         SmartDashboard.putBoolean("arm.down", false);
     }
