@@ -37,18 +37,21 @@ public class ControllerRumble extends PS4Controller implements ISubsystem {
         this.rumble(duration, 1.0);
     }
 
-   public Rotation2d getLeftAngle() {
-    return Rotation2d.fromRadians(Math.atan2(getLeftY(), getLeftX()));
-   } 
-   public double getLeftMagnitude() {
-    return Math.sqrt(Math.pow(getLeftX(), 2) + Math.pow(getLeftY(), 2));
-   } 
-   public Rotation2d getRightAngle() {
-    return Rotation2d.fromRadians(Math.atan2(getRightY(), getRightX()));
-   } 
-   public double getRightMagnitude() {
-    return Math.sqrt(Math.pow(getRightX(), 2) + Math.pow(getRightY(), 2));
-   } 
+    public Rotation2d getLeftAngle() {
+        return Rotation2d.fromRadians(Math.atan2(getLeftY(), getLeftX()));
+    } 
+    public double getLeftMagnitude() {
+        return Math.sqrt(Math.pow(getLeftX(), 2) + Math.pow(getLeftY(), 2));
+    } 
+    public Rotation2d getRightAngle() {
+        return Rotation2d.fromRadians(Math.atan2(getRightY(), getRightX()));
+    } 
+    public double getRightMagnitude() {
+        return Math.sqrt(Math.pow(getRightX(), 2) + Math.pow(getRightY(), 2));
+    } 
+
+    /// TODO implement get<name>ButtonHeld(double duration) that returns true as long
+    /// as the button has been held down at least that long
 
     @Override
     public void onLoop() {
