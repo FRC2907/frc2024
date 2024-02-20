@@ -247,11 +247,11 @@ public class Drivetrain implements ISubsystem {
     public void submitTelemetry() {
         SmartDashboard.putNumber("dt.positionX", getPositionX());
         SmartDashboard.putNumber("dt.positionY", getPositionY());
-        SmartDashboard.putNumber("dt.velocity", getVelocity());
+        SmartDashboard.putNumber("dt.velocity",  getVelocity());
         SmartDashboard.putNumber("dt.velocityL", getVelocityL());
         SmartDashboard.putNumber("dt.velocityR", getVelocityR());
-        SmartDashboard.putNumber("dt.heading", getHeading().getDegrees());
-        SmartDashboard.putNumber("dt.angVel", getAngularVelocity());
+        SmartDashboard.putNumber("dt.heading",   getHeading().getDegrees());
+        SmartDashboard.putNumber("dt.angVel",    getAngularVelocity());
 
         // TODO verify
         this.sb_field.setRobotPose(getPose());
@@ -282,4 +282,3 @@ public class Drivetrain implements ISubsystem {
             mode = DriveMode.LOCAL_REVERSED;
     }
 }
-
