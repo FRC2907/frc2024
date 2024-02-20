@@ -271,4 +271,15 @@ public class Drivetrain implements ISubsystem {
         else if (mode == DriveMode.FIELD_REVERSED)
             mode = DriveMode.FIELD_FORWARD;
     }
+    public void localFieldSwitch() {
+        if (mode == DriveMode.LOCAL_FORWARD)
+            mode = DriveMode.FIELD_FORWARD;
+        else if (mode == DriveMode.LOCAL_REVERSED)
+            mode = DriveMode.FIELD_REVERSED;
+        else if (mode == DriveMode.FIELD_FORWARD)
+            mode = DriveMode.LOCAL_FORWARD;
+        else if (mode == DriveMode.FIELD_REVERSED)
+            mode = DriveMode.LOCAL_REVERSED;
+    }
 }
+
