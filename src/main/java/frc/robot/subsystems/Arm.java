@@ -2,21 +2,28 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
 public class Arm implements ISubsystem {
-    private Rotation2d setPoint;
+    private Measure<Angle> setPoint;
     private CANSparkMax motor;
 
     private Arm(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setPositionConversionFactor(Control.arm.ARM_REV_PER_ENC_POS_UNIT);
-        this.motor.getEncoder().setVelocityConversionFactor(Control.arm.ARM_REV_PER_SEC_PER_ENC_VEL_UNIT);
-        this.setPDGains(Control.arm.kP_pos, Control.arm.kD_pos);
+        this.motor.getEncoder().setPositionConversionFactor(
+            Control.arm.ARM_POS_PER_ENC_POS_UNIT.in(Units.Degrees.per(Units.Revolutions))
+        );
+        this.motor.getEncoder().setVelocityConversionFactor(
+            Control.arm.ARM_VEL_PER_ENC_VEL_UNIT.in(Units.DegreesPerSecond.per(Units.RPM))
+        );
+        this.setPDGains(
+            Control.arm.kP_pos.in(Units.Volts.per(Units.Degrees))
+            , Control.arm.kD_pos.in(Units.Volts.per(Units.DegreesPerSecond))
+        );
     }
 
     private static Arm instance;
@@ -30,25 +37,25 @@ public class Arm implements ISubsystem {
         return instance;
     }
 
-    public void setSetPoint(Rotation2d _setPoint) {
+    public void setSetPoint(Measure<Angle> _setPoint) {
         this.setPoint = Util.clamp(Control.arm.kMinPosition, _setPoint, Control.arm.kMaxPosition);
     }
-    public Rotation2d getSetPoint() {
+    public Measure<Angle> getSetPoint() {
         return this.setPoint;
     }
-    public Rotation2d getPosition() {
-        return Rotation2d.fromRotations(this.motor.getEncoder().getPosition());
+    public Measure<Angle> getPosition() {
+        return Units.Degrees.of(this.motor.getEncoder().getPosition());
     }
-    /** Returns the velocity of the arm in Rotation2d-per-second. */
-    public Rotation2d getVelocity() {
-        return Rotation2d.fromRotations(this.motor.getEncoder().getVelocity());
+    public Measure<Velocity<Angle>> getVelocity() {
+        return Units.DegreesPerSecond.of(this.motor.getEncoder().getVelocity());
     }
-    public Rotation2d getPositionError() {
+    public Measure<Angle> getPositionError() {
         return getSetPoint().minus(getPosition());
     }
     public boolean reachedSetPoint() {
-        return Math.abs(setPoint.minus(getPosition()).getDegrees()) < Control.arm.kPositionHysteresis.getDegrees()
-                && Math.abs(getVelocity().getDegrees()) < Control.arm.kVelocityHysteresis.getDegrees();
+        return Util.checkHysteresis(getPositionError(), Control.arm.kPositionHysteresis)
+            && Util.checkHysteresis(getVelocity(), Control.arm.kVelocityHysteresis)
+        ;
     }
 
 
@@ -107,23 +114,28 @@ public class Arm implements ISubsystem {
         // ^ actually if we were to generalize these classes, we could incorporate ref
         // caching there
         // TODO work on motion profiling this / using velocity -> position control
-        this.motor.getPIDController().setReference(this.setPoint.getRotations(), CANSparkMax.ControlType.kPosition);
+        this.motor.getPIDController().setReference(this.setPoint.in(Units.Degrees), CANSparkMax.ControlType.kPosition);
     }
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("arm.ref.position", getSetPoint().getDegrees());
-        SmartDashboard.putNumber("arm.state.position", getPosition().getDegrees());
-        SmartDashboard.putNumber("arm.ref.position.set", getSetPoint().getDegrees());
-        SmartDashboard.putNumber("arm.err", getPositionError().getDegrees());
-        SmartDashboard.putBoolean("arm.up", false);
+        SmartDashboard.putNumber("arm.ref.position"    , getSetPoint()     .in(Units.Degrees));
+        SmartDashboard.putNumber("arm.state.position"  , getPosition()     .in(Units.Degrees));
+        SmartDashboard.putNumber("arm.ref.position.set", getSetPoint()     .in(Units.Degrees));
+        SmartDashboard.putNumber("arm.err"             , getPositionError().in(Units.Degrees));
+        SmartDashboard.putBoolean("arm.up"  , false);
         SmartDashboard.putBoolean("arm.down", false);
     }
 
     @Override
     public void receiveOptions() {
-        setSetPoint(Rotation2d.fromDegrees(
-                SmartDashboard.getNumber("arm.ref.position.set", getSetPoint().getDegrees())));
+        setSetPoint(
+            Units.Degrees.of(
+                SmartDashboard.getNumber("arm.ref.position.set"
+                    , getSetPoint().in(Units.Degrees)
+                )
+            )
+        );
         if (SmartDashboard.getBoolean("arm.up", false))
             this.up();
         if (SmartDashboard.getBoolean("arm.down", false))

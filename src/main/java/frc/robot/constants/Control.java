@@ -1,8 +1,8 @@
 package frc.robot.constants;
 
 import org.opencv.core.Scalar;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.units.*;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
@@ -15,41 +15,39 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 public class Control {
 
     public static class arm {
-        public static final double ARM_REV_PER_ENC_REV = 1; /// TODO based on gear ratio
-        /**
-         * enc_rev   arm_rev   arm_rev
-         * ------- * ------- = -------
-         *    1      enc_rev      1   
-         */
-        public static final double ARM_REV_PER_ENC_POS_UNIT = ARM_REV_PER_ENC_REV;
-        /**
-         * enc_rev   1 min   60   arm_rev   arm_rev
-         * ------- * ----- * -- * ------- = -------
-         *  1 min    60 s    1    enc_rev      s   
-         */
-        public static final double ARM_REV_PER_SEC_PER_ENC_VEL_UNIT = ARM_REV_PER_ENC_REV * 60;
+        public static final double GEAR_RATIO = 1; /// TODO calculate
+        public static final Measure<Per<Angle, Angle>> ARM_POS_PER_ENC_POS_UNIT
+            = Units.Revolutions.of(GEAR_RATIO).per(Units.Revolutions);
+        // FIXME this might be wrong
+        public static final Measure<Per<Velocity<Angle>, Velocity<Angle>>> ARM_VEL_PER_ENC_VEL_UNIT
+            = Units.RPM.of(GEAR_RATIO).per(Units.RPM);
 
-        public static final double kP_pos = 1;                        /// TODO
-        public static final double kD_pos = 1;                        /// TODO
-        public static final Rotation2d kPositionHysteresis =  Rotation2d.fromDegrees( 2);   /// TODO
-        public static final Rotation2d kVelocityHysteresis =  Rotation2d.fromDegrees( 2); // rot/s /// TODO
+        public static final Measure<Per<Voltage,          Angle>>  kP_pos
+            = Units.Volts.of(1).per(Units.Rotations); /// TODO
+        public static final Measure<Per<Voltage, Velocity<Angle>>> kD_pos
+            = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO
 
-        public static final Rotation2d kStartPosition      = Rotation2d.fromDegrees( 90);   /// TODO
-        public static final Rotation2d kFloorPosition      = Rotation2d.fromDegrees(  0);   /// TODO
-        public static final Rotation2d kAmpPosition        = Rotation2d.fromDegrees(100);   /// TODO
-        public static final Rotation2d kSpeakerPosition    = Rotation2d.fromDegrees( 30);   /// TODO
-        public static final Rotation2d kHoldingPosition    = Rotation2d.fromDegrees( 20);   /// TODO
-        public static final Rotation2d kClimbReadyPosition = Rotation2d.fromDegrees( 90);   /// TODO
-        public static final Rotation2d kClimbClumbPosition = Rotation2d.fromDegrees( 30);   /// TODO
-        public static final Rotation2d kMinPosition        = Rotation2d.fromDegrees(  0);   /// TODO
-        public static final Rotation2d kMaxPosition        = Rotation2d.fromDegrees(120);   /// TODO
+        public static final Measure<         Angle>  kPositionHysteresis
+            =  Units.Degrees         .of( 2);   /// TODO
+        public static final Measure<Velocity<Angle>> kVelocityHysteresis
+            =  Units.DegreesPerSecond.of( 2);  /// TODO
+
+        public static final Measure<Angle> kStartPosition      = Units.Degrees.of( 90);   /// TODO
+        public static final Measure<Angle> kFloorPosition      = Units.Degrees.of(  0);   /// TODO
+        public static final Measure<Angle> kAmpPosition        = Units.Degrees.of(100);   /// TODO
+        public static final Measure<Angle> kSpeakerPosition    = Units.Degrees.of( 30);   /// TODO
+        public static final Measure<Angle> kHoldingPosition    = Units.Degrees.of( 20);   /// TODO
+        public static final Measure<Angle> kClimbReadyPosition = Units.Degrees.of( 90);   /// TODO
+        public static final Measure<Angle> kClimbClumbPosition = Units.Degrees.of( 30);   /// TODO
+        public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0);   /// TODO
+        public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120);   /// TODO
 
         /**
          * manual control works by incrementing the arm's position setpoint every cycle.
          * this might be a bad idea. TODO consider complexity of moving to a velocity
          * model?
          */
-        public static final Rotation2d kManualControlDiff  =  Rotation2d.fromDegrees( 2);   /// TODO
+        public static final Measure<Angle> kManualControlDiff  = Units.Degrees.of(  2);   /// TODO
     }
 
     public static class drivetrain {
