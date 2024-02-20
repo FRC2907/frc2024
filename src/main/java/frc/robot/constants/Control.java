@@ -51,31 +51,24 @@ public class Control {
     }
 
     public static class drivetrain {
-
-        public static final double TRACK_WIDTH = 0.5823458; // m 
-        public static final double WHEEL_DIAMETER = 0; // m  /// TODO
-        public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER; // m
-        public static final double WHEEL_REV_PER_ENC_REV = 1; // unitless  /// TODO based on gear ratio
-        /**
-         * enc_rev   whl_rev      m      m
-         * ------- * ------- * ------- = -
-         *    1      enc_rev   whl_rev   1
-         */
-        public static final double METER_PER_ENC_POS_UNIT = WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m / enc_rev
-        /**
-         * enc_rev   1 min   60   whl_rev      m      m
-         * ------- * ----- * -- * ------- * ------- = -
-         *  1 min    60 s    1    enc_rev   whl_rev   s
-         */
-        public static final double METER_PER_SEC_PER_ENC_VEL_UNIT
-            = 60.0 * WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m/s
+        public static final double GEAR_RATIO = 1;  /// TODO calculate
+        public static final Measure<Distance> TRACK_WIDTH = Units.Meters.of(0.5823458);
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(6);
+        public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
+        public static final Measure<Per<Distance, Angle>> FLOOR_POS_PER_ENC_POS_UNIT
+            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Revolutions);
+        // FIXME this might be wrong
+        public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>> FLOOR_VEL_PER_ENC_VEL_UNIT
+            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
 
-        public static final double kTrackWidthFudge = 0; // m  /// TODO this is just Extra Number to account for wheel scrub
+        /** Extra Number for padding track width to compensate for wheel scrub. */
+        public static final Measure<Distance> kTrackWidthFudge = Units.Meters.of(0);  /// TODO
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS
-            = new DifferentialDriveKinematics(TRACK_WIDTH + kTrackWidthFudge);
+            = new DifferentialDriveKinematics(TRACK_WIDTH.plus(kTrackWidthFudge));
 
-        public static final double kP_fieldRelativeHeading = 0; // TODO
+        public static final Measure<Per<Dimensionless, Angle>> kP_fieldRelativeHeading
+            = Units.Value.of(1).per(Units.Degrees); // TODO
 
         public static final DriveMode kDefaultDriveModeWithoutNote = DriveMode.FIELD_FORWARD;
         public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;

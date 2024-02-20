@@ -4,6 +4,9 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,14 +25,22 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     private Drivetrain(CANSparkMax left, CANSparkMax right) {
         super(left, right);
-        this.leftMotor = left; // TODO add velocity conversion factor
+        this.leftMotor = left;
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
 
-        this.leftMotor.getEncoder().setPositionConversionFactor(Control.drivetrain.METER_PER_ENC_POS_UNIT);
-        this.rightMotor.getEncoder().setPositionConversionFactor(Control.drivetrain.METER_PER_ENC_POS_UNIT);
-        this.leftMotor.getEncoder().setVelocityConversionFactor(Control.drivetrain.METER_PER_SEC_PER_ENC_VEL_UNIT);
-        this.rightMotor.getEncoder().setVelocityConversionFactor(Control.drivetrain.METER_PER_SEC_PER_ENC_VEL_UNIT);
+        this.leftMotor .getEncoder().setPositionConversionFactor(
+            Control.drivetrain.FLOOR_POS_PER_ENC_POS_UNIT.in(
+            Units.Meters.per(Units.Revolutions)));
+        this.rightMotor.getEncoder().setPositionConversionFactor(
+            Control.drivetrain.FLOOR_POS_PER_ENC_POS_UNIT.in(
+            Units.Meters.per(Units.Revolutions)));
+        this.leftMotor .getEncoder().setVelocityConversionFactor(
+            Control.drivetrain.FLOOR_VEL_PER_ENC_VEL_UNIT.in(
+            Units.MetersPerSecond.per(Units.RPM)));
+        this.rightMotor.getEncoder().setVelocityConversionFactor(
+            Control.drivetrain.FLOOR_VEL_PER_ENC_VEL_UNIT.in(
+            Units.MetersPerSecond.per(Units.RPM)));
 
         this.sb_field = new Field2d();
         SmartDashboard.putData(this.sb_field);
@@ -93,8 +104,19 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
     }
 
 
+    // FIXME we're gonna have to handle the wrapping problem eventually
+    private double convertHeadingToTurningness(Rotation2d error) {
+        return Control.drivetrain.kP_fieldRelativeHeading.in(Units.Value.per(Units.Degrees))
+            * error.getDegrees();
+    }
     private double convertHeadingToTurningness(Rotation2d current, Rotation2d desired) {
-        return Control.drivetrain.kP_fieldRelativeHeading * desired.minus(current).getRadians(); // TODO verify
+        return convertHeadingToTurningness(desired.minus(current));
+    }
+    private double convertHeadingToTurningness(Measure<Angle> error) {
+        return convertHeadingToTurningness(new Rotation2d(error));
+    }
+    private double convertHeadingToTurningness(Measure<Angle> current, Measure<Angle> desired) {
+        return convertHeadingToTurningness(new Rotation2d(current), new Rotation2d(desired));
     }
 
 
@@ -117,6 +139,7 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
 
     @Override
     public void onLoop() {
+        updatePoseFromSensors();
         switch (this.mode) {
             case AUTO:
                 double[] speeds = new double[] { leftSpeed, rightSpeed };
@@ -137,13 +160,20 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
                 break;
             case FIELD_REVERSED:
                 this.curvatureDrive(-totalSpeed, convertHeadingToTurningness(
-                        this.getHeading(), desiredHeading.minus(Rotation2d.fromRotations(0.5)))); // TODO verify but I
-                                                                                                  // think this is
-                                                                                                  // right?
+                    this.getHeading(), desiredHeading.minus(Rotation2d.fromRotations(0.5)))
+                );
                 break;
             default:
                 break;
         }
+    }
+
+    private void updatePoseFromSensors() {
+        // TODO(justinho) implement
+        // if we have April Tag info
+        //   then overwrite this.pose with what the limelight thinks
+        // otherwise
+        //   use the last pose, drivetrain speeds, and gyro to set the new pose
     }
 
 
