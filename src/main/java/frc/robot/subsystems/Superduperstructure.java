@@ -211,6 +211,7 @@ public class Superduperstructure implements ISubsystem {
             cancelAction();
         }
 
+
         if (operator.getCrossButtonPressed()) { // TODO automatic intake
             outakeNote();
         }
@@ -233,6 +234,7 @@ public class Superduperstructure implements ISubsystem {
             intakeNote();
         }
 
+
         if (driver.getR2Button()) {
             moveToSpeaker();
         }
@@ -243,7 +245,13 @@ public class Superduperstructure implements ISubsystem {
             prepareForClimb();
         }
         if (driver.getR3ButtonPressed()) {
-            // TODO reverse
+            // TODO finish
+            if (/* DriveMode == LOCAL_FORWARD */8 == 8){
+                /*setDriveMode(LOCAL_REVERSED) */;
+            }
+            //and then copy and paste it a few more times
+            //i tried
+            //it's probably something stupid i didn't get
         }
     }
 

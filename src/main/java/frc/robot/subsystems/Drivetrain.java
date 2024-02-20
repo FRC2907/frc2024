@@ -138,12 +138,25 @@ public class Drivetrain extends DifferentialDrive implements ISubsystem {
             case FIELD_REVERSED:
                 this.curvatureDrive(-totalSpeed, convertHeadingToTurningness(
                         this.getHeading(), desiredHeading.minus(Rotation2d.fromRotations(0.5)))); // TODO verify but I
-                                                                                                  // think this is
-                                                                                                  // right?
+                                                                                                            // think this is
+                                                                                                            // right?
                 break;
             default:
                 break;
         }
+    }
+
+    public void localForward(){
+        this.mode = DriveMode.LOCAL_FORWARD;
+    }
+    public void localReversed(){
+        this.mode = DriveMode.LOCAL_REVERSED;
+    }
+    public void fieldForward(){
+        this.mode = DriveMode.FIELD_FORWARD;
+    }
+    public void fieldReversed(){
+        this.mode = DriveMode.FIELD_REVERSED;
     }
 
 
