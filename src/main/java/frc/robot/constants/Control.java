@@ -15,116 +15,114 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 public class Control {
 
     public static class arm {
-        public static final double GEAR_RATIO = 1; /// TODO calculate
-        public static final Measure<Per<Angle, Angle>> ARM_POS_PER_ENC_POS_UNIT
-            = Units.Revolutions.of(GEAR_RATIO).per(Units.Revolutions);
+        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final Measure<Per<Angle, Angle>>
+            ARM_POS_PER_ENC_POS_UNIT = Units.Revolutions.of(GEAR_RATIO).per(Units.Revolutions);
         // FIXME this might be wrong
-        public static final Measure<Per<Velocity<Angle>, Velocity<Angle>>> ARM_VEL_PER_ENC_VEL_UNIT
-            = Units.RPM.of(GEAR_RATIO).per(Units.RPM);
+        public static final Measure<Per<Velocity<Angle>, Velocity<Angle>>>
+            ARM_VEL_PER_ENC_VEL_UNIT = Units.RPM        .of(GEAR_RATIO).per(Units.RPM        );
 
-        public static final Measure<Per<Voltage,          Angle>>  kP_pos
-            = Units.Volts.of(1).per(Units.Rotations); /// TODO
-        public static final Measure<Per<Voltage, Velocity<Angle>>> kD_pos
-            = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO
+        public static final Measure<Per<Voltage,          Angle>>
+            kP_pos = Units.Volts.of(1).per(Units.Rotations); /// TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Angle>>>
+            kD_pos = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO empirical
 
-        public static final Measure<         Angle>  kPositionHysteresis
-            =  Units.Degrees         .of( 2);   /// TODO
-        public static final Measure<Velocity<Angle>> kVelocityHysteresis
-            =  Units.DegreesPerSecond.of( 2);  /// TODO
+        public static final Measure<         Angle>
+            kPositionHysteresis =  Units.Degrees         .of( 2); /// TODO empirical
+        public static final Measure<Velocity<Angle>>
+            kVelocityHysteresis =  Units.DegreesPerSecond.of( 2); /// TODO empirical
 
-        public static final Measure<Angle> kStartPosition      = Units.Degrees.of( 90);   /// TODO
-        public static final Measure<Angle> kFloorPosition      = Units.Degrees.of(  0);   /// TODO
-        public static final Measure<Angle> kAmpPosition        = Units.Degrees.of(100);   /// TODO
-        public static final Measure<Angle> kSpeakerPosition    = Units.Degrees.of( 30);   /// TODO
-        public static final Measure<Angle> kHoldingPosition    = Units.Degrees.of( 20);   /// TODO
-        public static final Measure<Angle> kClimbReadyPosition = Units.Degrees.of( 90);   /// TODO
-        public static final Measure<Angle> kClimbClumbPosition = Units.Degrees.of( 30);   /// TODO
-        public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0);   /// TODO
-        public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120);   /// TODO
+        public static final Measure<Angle> kStartPosition      = Units.Degrees.of( 90); /// TODO empirical
+        public static final Measure<Angle> kFloorPosition      = Units.Degrees.of(  0); /// TODO empirical
+        public static final Measure<Angle> kAmpPosition        = Units.Degrees.of(100); /// TODO empirical
+        public static final Measure<Angle> kSpeakerPosition    = Units.Degrees.of( 30); /// TODO empirical
+        public static final Measure<Angle> kHoldingPosition    = Units.Degrees.of( 20); /// TODO empirical
+        public static final Measure<Angle> kClimbReadyPosition = Units.Degrees.of( 90); /// TODO empirical
+        public static final Measure<Angle> kClimbClumbPosition = Units.Degrees.of( 30); /// TODO empirical
+        public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0); /// TODO empirical
+        public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120); /// TODO empirical
 
         /**
          * manual control works by incrementing the arm's position setpoint every cycle.
          * this might be a bad idea. TODO consider complexity of moving to a velocity
          * model?
          */
-        public static final Measure<Angle> kManualControlDiff  = Units.Degrees.of(  2);   /// TODO
+        public static final Measure<Angle> kManualControlDiff  = Units.Degrees.of(  2); /// TODO empirical
     }
 
     public static class drivetrain {
-        public static final double GEAR_RATIO = 1;  /// TODO calculate
-        public static final Measure<Distance> TRACK_WIDTH = Units.Meters.of(0.5823458);
-        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(6);
+        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final Measure<Distance> TRACK_WIDTH         = Units.Meters.of(0.5823458);
+        public static final Measure<Distance> WHEEL_DIAMETER      = Units.Inches.of(6);
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
-        public static final Measure<Per<Distance, Angle>> FLOOR_POS_PER_ENC_POS_UNIT
-            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Revolutions);
+        public static final Measure<Per<Distance, Angle>>
+            FLOOR_POS_PER_ENC_POS_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Revolutions);
         // FIXME this might be wrong
-        public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>> FLOOR_VEL_PER_ENC_VEL_UNIT
-            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
+        public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
+            FLOOR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
 
         /** Extra Number for padding track width to compensate for wheel scrub. */
-        public static final Measure<Distance> kTrackWidthFudge = Units.Meters.of(0);  /// TODO
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS
-            = new DifferentialDriveKinematics(TRACK_WIDTH.plus(kTrackWidthFudge));
+        public static final Measure<Distance> kTrackWidthFudge = Units.Meters.of(0); /// TODO empirical
+        public static final DifferentialDriveKinematics
+            DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH.plus(kTrackWidthFudge));
 
-        public static final Measure<Per<Dimensionless, Angle>> kP_fieldRelativeHeading
-            = Units.Value.of(1).per(Units.Degrees); // TODO
+        public static final Measure<Per<Dimensionless, Angle>>
+            kP_fieldRelativeHeading = Units.Value.of(1).per(Units.Degrees); // TODO empirical
 
         public static final DriveMode kDefaultDriveModeWithoutNote = DriveMode.FIELD_FORWARD;
         public static final DriveMode kDefaultDriveModeWithNote = DriveMode.FIELD_REVERSED;
     }
 
     public static class intake {
-        public static final double GEAR_RATIO = 1;  /// TODO calculate
-        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2);  /// TODO
+        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2); /// TODO verify with Build
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
         // FIXME this might be wrong
         public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
-            LINEAR_VEL_PER_ENC_VEL_UNIT
-            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
+            LINEAR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
-        public static final Measure<Per<Voltage, Velocity<Distance>>> kP
-            = Units.Volts.of(1).per(Units.MetersPerSecond);  /// TODO
-        public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>> kD
-            = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond);  /// TODO
+        public static final Measure<Per<Voltage, Velocity<Distance>>>
+            kP = Units.Volts.of(1).per(Units.MetersPerSecond);          /// TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
+            kD = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); /// TODO empirical
 
         public static final Measure<Velocity<Distance>>
-            kIntakingSpeed = Units.MetersPerSecond.of(0);  /// TODO
+            kIntakingSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>>
-            kOutakingSpeed = Units.MetersPerSecond.of(0);  /// TODO 
+            kOutakingSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>>
-            kOff           = Units.MetersPerSecond.of(0);  /// TODO
+            kOff           = Units.MetersPerSecond.of(0); /// TODO empirical
     }
 
     public static class shooter {
-        public static final double GEAR_RATIO = 1;  /// TODO calculate
-        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2);  /// TODO
+        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2); /// TODO get from Build
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
         // FIXME this might be wrong
         public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
-            LINEAR_VEL_PER_ENC_VEL_UNIT
-            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
+            LINEAR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
         public static final Measure<Per<Voltage, Velocity<Distance>>>
-            kP = Units.Volts.of(1).per(Units.MetersPerSecond);  /// TODO
+            kP = Units.Volts.of(1).per(Units.MetersPerSecond);          /// TODO empirical
         public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
-            kD = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond);  /// TODO
+            kD = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); /// TODO empirical
 
         public static final Measure<Velocity<Distance>>
-            kAmpSpeed = Units.MetersPerSecond.of(0);  /// TODO
+            kAmpSpeed      = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>>
-            kSpeakerSpeed = Units.MetersPerSecond.of(0);  /// TODO 
+            kSpeakerSpeed  = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>>
-            kOff           = Units.MetersPerSecond.of(0);  /// TODO
+            kOff           = Units.MetersPerSecond.of(0); /// TODO empirical
     }
 
     public static class camera {
-        public static final int WIDTH = 320;
+        public static final int WIDTH  = 320;
         public static final int HEIGHT = 240;
-        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
+        public static final Scalar kOrangeLow  = new Scalar( 4, 127, 127);
         public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
         public static final double kAreaFilterFactor = 0.075;
-        public static final boolean kEnabled = true;
+        public static final boolean kEnabled             = true;
         public static final boolean kNoteTrackingEnabled = false;
     }
 }

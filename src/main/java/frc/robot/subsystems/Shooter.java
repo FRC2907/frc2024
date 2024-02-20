@@ -40,7 +40,6 @@ public class Shooter implements ISubsystem {
     public Measure<Velocity<Distance>> getSetPoint() {
         return this.setPoint;
     }
-    /** Return shooter speed in wheel m/s. */
     public Measure<Velocity<Distance>> getVelocity() {
         return Units.MetersPerSecond.of(this.motor.getEncoder().getVelocity());
     }

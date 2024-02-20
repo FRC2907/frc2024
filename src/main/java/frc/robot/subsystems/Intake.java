@@ -79,7 +79,8 @@ public class Intake implements ISubsystem {
     public void receiveOptions() {
         setSetPoint(
             Units.MetersPerSecond.of(
-                SmartDashboard.getNumber("intake.setpoint.set", getSetPoint().in(Units.MetersPerSecond))
+                SmartDashboard.getNumber("intake.setpoint.set"
+                , getSetPoint().in(Units.MetersPerSecond))
             )
         );
     }
