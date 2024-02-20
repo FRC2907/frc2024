@@ -257,13 +257,10 @@ public class Superduperstructure implements ISubsystem {
             prepareForClimb();
         }
         if (driver.getR3ButtonPressed()) {
-            // TODO finish
-            if (/* DriveMode == LOCAL_FORWARD */8 == 8){
-                /*setDriveMode(LOCAL_REVERSED) */;
-            }
-            //and then copy and paste it a few more times
-            //i tried
-            //it's probably something stupid i didn't get
+            drivetrain.reverse();
+        }
+        if (driver.getL3ButtonPressed()) {
+            drivetrain.localFieldSwitch();
         }
     }
 
