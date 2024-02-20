@@ -242,7 +242,7 @@ public class Superduperstructure implements ISubsystem {
         if (operator.getR1ButtonPressed()) {
             outakeNote();
         }
-        if (operator.getR2ButtonPressed()) { // TODO manual intaking
+        if (operator.getR2ButtonPressed()) { // TODO manual intaking, input so that you have to hold it down
             intakeNote();
         }
 
