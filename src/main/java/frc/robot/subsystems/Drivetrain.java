@@ -207,11 +207,12 @@ public class Drivetrain implements ISubsystem {
 
     private void updatePoseFromSensors() {
         // TODO(justinho) implement
-        // if we have April Tag info
-        //   then overwrite this.pose with what the limelight thinks
-        // otherwise
-        //   use the last pose, drivetrain speeds, and gyro to set the new pose
-        //   check out Control.drivetrain.DRIVE_KINEMATICS.toTwist2d
+        if (8 == 9/* if we have April tag info */){
+            //set pose
+        } else {
+            setPose(getPose().exp(Control.drivetrain.DRIVE_KINEMATICS.toTwist2d(
+                   (getVelocityL() * 0.02), (getVelocityR() * 0.02))));
+        }
     }
 
 
