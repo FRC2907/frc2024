@@ -48,7 +48,7 @@ public class Shooter implements ISubsystem {
     public void amp() {
         this.setSetPoint(Control.shooter.kAmpSpeed);
     }
-    public void shooter() {
+    public void speaker() {
         this.setSetPoint(Control.shooter.kSpeakerSpeed);
     }
     public void off() {

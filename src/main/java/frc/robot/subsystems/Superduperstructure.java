@@ -225,7 +225,7 @@ public class Superduperstructure implements ISubsystem {
 
 
         if (operator.getCrossButtonPressed()) { // TODO automatic intake
-            outakeNote();
+            moveToIntaking();
         }
         if (operator.getSquareButtonPressed()) {
             autoScore();
@@ -233,17 +233,21 @@ public class Superduperstructure implements ISubsystem {
         if (operator.getTriangleButtonPressed()) {
             neutralPosition();
         }
-        if (operator.getL2Button()) {
-            moveToSpeaker(); // TODO gavin rawr
-        }
-        if (operator.getL1Button()) {
-            moveToIntaking();
+        if (operator.getR2ButtonPressed()) {
+            shooter.speaker(); // TODO gavin rawr
         }
         if (operator.getR1ButtonPressed()) {
             outakeNote();
         }
-        if (operator.getR2ButtonPressed()) { // TODO manual intaking, input so that you have to hold it down
-            intakeNote();
+        if (operator.getL1ButtonPressed()) {
+            shooter.amp();
+        }
+        if (operator.getL2ButtonPressed()) { 
+            arm.floorPosition();
+            intake.intake();
+            if (operator.getR2ButtonReleased()){
+                neutralPosition();
+            }
         }
 
 
@@ -351,7 +355,7 @@ public class Superduperstructure implements ISubsystem {
                     this.state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                shooter.shooter();
+                shooter.speaker();
                 if (shooter.noteScored()) {
                     this.state = RobotState.NEUTRAL;
                 }
