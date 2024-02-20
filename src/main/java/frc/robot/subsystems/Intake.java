@@ -2,18 +2,21 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
 import frc.robot.util.Util;
 
 public class Intake implements ISubsystem {
-    private double setPoint; // m/s
+    private Measure<Velocity<Distance>> setPoint;
     private CANSparkMax motor;
 
     private Intake(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(Control.intake.METER_PER_SECOND_PER_ENC_VEL_UNIT);
+        this.motor.getEncoder().setVelocityConversionFactor(
+            Control.intake.LINEAR_VEL_PER_ENC_VEL_UNIT.in(Units.MetersPerSecond.per(Units.RPM))
+        );
     }
 
     private static Intake instance;
@@ -26,19 +29,17 @@ public class Intake implements ISubsystem {
     }
 
 
-    /** Set the desired speed of the intake in m/s. */
-    public void setSetPoint(double _setPoint) {
+    public void setSetPoint(Measure<Velocity<Distance>> _setPoint) {
         this.setPoint = _setPoint;
     }
-    public double getSetPoint() {
+    public Measure<Velocity<Distance>> getSetPoint() {
         return this.setPoint;
     }
-    /** Return intake speed in m/s. */
-    public double getVelocity() {
-        return this.motor.getEncoder().getVelocity();
+    public Measure<Velocity<Distance>> getVelocity() {
+        return Units.MetersPerSecond.of(this.motor.getEncoder().getVelocity());
     }
-    public double getError() {
-        return getSetPoint() - getVelocity();
+    public Measure<Velocity<Distance>> getError() {
+        return getSetPoint().minus(getVelocity());
     }
 
 
@@ -63,20 +64,24 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
+        this.motor.getPIDController().setReference(this.setPoint.in(Units.MetersPerSecond), CANSparkMax.ControlType.kVelocity);
     }
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("intake.velocity", getVelocity());
-        SmartDashboard.putNumber("intake.setpoint", getSetPoint());
-        SmartDashboard.putNumber("intake.setpoint.set", getSetPoint());
-        SmartDashboard.putNumber("intake.error", getError());
+        SmartDashboard.putNumber("intake.velocity"    , getVelocity().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("intake.setpoint"    , getSetPoint().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("intake.setpoint.set", getSetPoint().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("intake.error"       , getError()   .in(Units.MetersPerSecond));
     }
 
     @Override
     public void receiveOptions() {
-        setSetPoint(SmartDashboard.getNumber("intake.setpoint.set", getSetPoint()));
+        setSetPoint(
+            Units.MetersPerSecond.of(
+                SmartDashboard.getNumber("intake.setpoint.set", getSetPoint().in(Units.MetersPerSecond))
+            )
+        );
     }
 
 }

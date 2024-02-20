@@ -75,23 +75,25 @@ public class Control {
     }
 
     public static class intake {
-        public static final double WHEEL_DIAMETER = 0; // m  /// TODO
-        public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER; // m
-        public static final double WHEEL_REV_PER_ENC_REV = 1; /// TODO based on gear ratio
-        /**
-         * enc_rev   1 min   60   whl_rev      m      m
-         * ------- * ----- * -- * ------- * ------- = -
-         *  1 min    60 s    1    enc_rev   whl_rev   s
-         */
-        public static final double METER_PER_SECOND_PER_ENC_VEL_UNIT
-            = 60.0 * WHEEL_REV_PER_ENC_REV * WHEEL_CIRCUMFERENCE; // m/s
+        public static final double GEAR_RATIO = 1;  /// TODO calculate
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2);  /// TODO
+        public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
+        // FIXME this might be wrong
+        public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
+            LINEAR_VEL_PER_ENC_VEL_UNIT
+            = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
-        public static final double kP = 1;                            /// TODO
-        public static final double kD = 1;                            /// TODO
+        public static final Measure<Per<Voltage, Velocity<Distance>>> kP
+            = Units.Volts.of(1).per(Units.MetersPerSecond);  /// TODO
+        public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>> kD
+            = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond);  /// TODO
 
-        public static final double kIntakingSpeed = 0; // m/s         /// TODO guess
-        public static final double kOutakingSpeed = 0; // m/s         /// TODO 
-        public static final double kOff           = 0; // m/s         /// TODO be sure
+        public static final Measure<Velocity<Distance>>
+            kIntakingSpeed = Units.MetersPerSecond.of(0);  /// TODO
+        public static final Measure<Velocity<Distance>>
+            kOutakingSpeed = Units.MetersPerSecond.of(0);  /// TODO 
+        public static final Measure<Velocity<Distance>>
+            kOff           = Units.MetersPerSecond.of(0);  /// TODO
     }
 
     public static class shooter {
