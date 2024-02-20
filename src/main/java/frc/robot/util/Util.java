@@ -1,6 +1,8 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.CANSparkMax;
@@ -31,13 +33,9 @@ public class Util {
 	}
 
 	public static double clamp(double min, double value, double max) {
-		if (max < min) { 
-			return clamp(max, value, min);
-		}
-		if (value < min)
-			return min;
-		if (max < value)
-			return max;
+		if (max < min) return clamp(max, value, min);
+		if (value < min) return min;
+		if (max < value) return max;
 		return value;
 	}
 
@@ -47,5 +45,16 @@ public class Util {
 
 	public static Rotation2d clamp(Rotation2d min, Rotation2d value, Rotation2d max) {
 		return Rotation2d.fromRotations(clamp(min.getRotations(), value.getRotations(), max.getRotations()));
+	}
+
+	public static <U extends Unit<U>> Measure<U> clamp(Measure<U> min, Measure<U> value, Measure<U> max) {
+		if (max.lt(min)) return clamp(max, value, min);
+		if (value.lt(min)) return min;
+		if (max.lt(value)) return max;
+		return value;
+	}
+
+	public static <U extends Unit<U>> boolean checkHysteresis(Measure<U> error, Measure<U> hysteresis) {
+		return hysteresis.negate().lt(error) && error.lt(hysteresis);
 	}
 }

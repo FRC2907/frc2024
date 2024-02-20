@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Control;
 import frc.robot.constants.Ports;
@@ -11,12 +12,14 @@ import frc.robot.util.Util;
 // TODO further consider generalizing flywheels, arms, and elevators into generic classes
 // and then extending them for whatever (summer stuff probs)
 public class Shooter implements ISubsystem {
-    private double setPoint; // wheel m/s
+    private Measure<Velocity<Distance>> setPoint;
     private CANSparkMax motor;
 
     private Shooter(CANSparkMax _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(Control.shooter.METER_PER_SECOND_PER_ENC_VEL_UNIT);
+        this.motor.getEncoder().setVelocityConversionFactor(
+            Control.shooter.LINEAR_VEL_PER_ENC_VEL_UNIT.in(Units.MetersPerSecond.per(Units.RPM))
+        );
     }
 
     private static Shooter instance;
@@ -30,15 +33,31 @@ public class Shooter implements ISubsystem {
         return instance;
     }
 
-    public void off() {
-        this.setSetPoint(Control.shooter.kOff);
+
+    public void setSetPoint(Measure<Velocity<Distance>> _setPoint) {
+        this.setPoint = _setPoint;
     }
+    public Measure<Velocity<Distance>> getSetPoint() {
+        return this.setPoint;
+    }
+    public Measure<Velocity<Distance>> getVelocity() {
+        return Units.MetersPerSecond.of(this.motor.getEncoder().getVelocity());
+    }
+    public Measure<Velocity<Distance>> getError() {
+        return getSetPoint().minus(getVelocity());
+    }
+
+
     public void amp() {
         this.setSetPoint(Control.shooter.kAmpSpeed);
     }
     public void shooter() {
         this.setSetPoint(Control.shooter.kSpeakerSpeed);
     }
+    public void off() {
+        this.setSetPoint(Control.shooter.kOff);
+    }
+
 
     public boolean noteScored() {
         return false;
@@ -46,40 +65,29 @@ public class Shooter implements ISubsystem {
     }
 
 
-    /** Set the desired speed of the shooter in wheel m/s. */
-    public void setSetPoint(double _setPoint) {
-        this.setPoint = _setPoint;
-    }
-    public double getSetPoint() {
-        return this.setPoint;
-    }
-    /** Return shooter speed in wheel m/s. */
-    public double getVelocity() {
-        return this.motor.getEncoder().getVelocity();
-    }
-    public double getError() {
-        return getSetPoint() - getVelocity();
-    }
-
-
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        this.motor.getPIDController().setReference(this.setPoint, CANSparkMax.ControlType.kVelocity);
+        this.motor.getPIDController().setReference(this.setPoint.in(Units.MetersPerSecond), CANSparkMax.ControlType.kVelocity);
 
     }
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("shooter.velocity", getVelocity());
-        SmartDashboard.putNumber("shooter.setpoint", getSetPoint());
-        SmartDashboard.putNumber("shooter.setpoint.set", getSetPoint());
-        SmartDashboard.putNumber("shooter.error", getError());
+        SmartDashboard.putNumber("shooter.velocity"    , getVelocity().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("shooter.setpoint"    , getSetPoint().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("shooter.setpoint.set", getSetPoint().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("shooter.error"       , getError()   .in(Units.MetersPerSecond));
     }
 
     @Override
     public void receiveOptions() {
-        setSetPoint(SmartDashboard.getNumber("shooter.setpoint.set", getSetPoint()));
+        setSetPoint(
+            Units.MetersPerSecond.of(
+                SmartDashboard.getNumber("shooter.setpoint.set"
+                    , getSetPoint().in(Units.MetersPerSecond))
+            )
+        );
     }
 
 }
