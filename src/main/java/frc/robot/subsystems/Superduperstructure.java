@@ -385,7 +385,8 @@ public class Superduperstructure implements ISubsystem {
                 //TODO
                 break;
             case SELF_RIGHTING:
-                //TODO
+                arm.selfRightingPosition();
+                //TODO confirm
                 break;
             default:
                 break;
