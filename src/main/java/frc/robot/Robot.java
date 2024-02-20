@@ -33,16 +33,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    if (Control.camera.kEnabled) {
     noteTargetingThread = new Thread(
-      new NoteTargetingPipeline(
-        Control.camera.WIDTH
-        , Control.camera.HEIGHT
-        , Control.camera.kOrangeLow
-        , Control.camera.kOrangeHigh
-        )
-    );
-    noteTargetingThread.setDaemon(true);
-    noteTargetingThread.start();
+        new NoteTargetingPipeline(
+          Control.camera.WIDTH
+          , Control.camera.HEIGHT
+          , Control.camera.kOrangeLow
+          , Control.camera.kOrangeHigh
+          )
+      );
+      noteTargetingThread.setDaemon(true);
+      noteTargetingThread.start();
+    }
     superduperstructure = Superduperstructure.getInstance();
 
     RoutineInstantiator.go();

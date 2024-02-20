@@ -44,37 +44,40 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
         CameraServer
                 .startAutomaticCapture()
                 .setResolution(w, h);
-        this.cvSink = CameraServer.getVideo();
-        this.outputStream = CameraServer.putVideo("Note Targeting", w, h);
-        this.i_color = new Mat();
-        this.i_mask = new Mat();
-        this.pts = new ArrayList<>();
-        this.m_tmp = new Mat();
-        this.drawColor = new Scalar(0, 255, 0);
-        this.sizeSorter = (a, b) -> {
-            double aa = Imgproc.contourArea(a);
-            double bb = Imgproc.contourArea(b);
-            if (aa == bb)
-                return 0;
-            if (aa > bb)
-                return -1; // sort descending
-            return 1;
-        };
-        this.sizeFilter = (contour) -> {
-            // stuff at the bottom should be bigger to pass the filter
-            double y = Imgproc.boundingRect(contour).y;
+        if (Control.camera.kNoteTrackingEnabled) {
+            this.cvSink = CameraServer.getVideo();
+            this.outputStream = CameraServer.putVideo("Note Targeting", w, h);
+            this.i_color = new Mat();
+            this.i_mask = new Mat();
+            this.pts = new ArrayList<>();
+            this.m_tmp = new Mat();
+            this.drawColor = new Scalar(0, 255, 0);
+            this.sizeSorter = (a, b) -> {
+                double aa = Imgproc.contourArea(a);
+                double bb = Imgproc.contourArea(b);
+                if (aa == bb)
+                    return 0;
+                if (aa > bb)
+                    return -1; // sort descending
+                return 1;
+            };
             // true means "remove this item from consideration"
-            return Imgproc.contourArea(contour) < w * y * Control.camera.kAreaFilterFactor;
-        };
+            // stuff at the bottom should be bigger to pass the filter
+            this.sizeFilter = (contour) -> {
+                return false; // for now let's just allow everything
+                //double y = Imgproc.boundingRect(contour).y;
+                //return Imgproc.contourArea(contour) < w * y * Control.camera.kAreaFilterFactor;
+            };
 
-        this.orangeLow = orangeLow;
-        this.orangeHigh = orangeHigh;
+            this.orangeLow = orangeLow;
+            this.orangeHigh = orangeHigh;
 
-        this.dx = 0;
-        this.y = 0;
-        NetworkTable nt = NetworkTableInstance.getDefault().getTable("note-tracking");
-        this.p_dx = nt.getDoubleTopic("dx").publish();
-        this.p_y = nt.getDoubleTopic("y").publish();
+            this.dx = 0;
+            this.y = 0;
+            NetworkTable nt = NetworkTableInstance.getDefault().getTable("note-tracking");
+            this.p_dx = nt.getDoubleTopic("dx").publish();
+            this.p_y = nt.getDoubleTopic("y").publish();
+        }
     }
 
     @Override
@@ -86,6 +89,11 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     @Override
     public void onLoop() {
+        if (Control.camera.kNoteTrackingEnabled)
+            runNoteTracking();
+    }
+
+    private void runNoteTracking() {
         if (this.cvSink.grabFrame(i_color) == 0) {
             outputStream.notifyError(cvSink.getError());
             return;
@@ -127,8 +135,10 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        this.p_dx.set(this.dx);
-        this.p_y.set(this.y);
+        if (Control.camera.kNoteTrackingEnabled) {
+            this.p_dx.set(this.dx);
+            this.p_y.set(this.y);
+        }
     }
 
     @Override
