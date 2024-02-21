@@ -3,6 +3,8 @@ package frc.robot.constants;
 import org.opencv.core.Scalar;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
+import frc.robot.bodges.PIDF;
+import frc.robot.bodges.SmartMotorControllerConfiguration_Linear;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**
@@ -121,6 +123,11 @@ public class Control {
             kP = Units.Volts.of(1).per(Units.MetersPerSecond);          /// TODO empirical
         public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
             kD = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); /// TODO empirical
+
+        public static final PIDF<Velocity<Distance>> kPD = new PIDF<>(kP, null, kD, null);
+        public static final SmartMotorControllerConfiguration_Linear kMotorConf
+            = new SmartMotorControllerConfiguration_Linear(null, LINEAR_VEL_PER_ENC_VEL_UNIT, null, kPD, false);
+        public static final boolean[] MOTORS_REVERSED = {false, true};
 
         public static final Measure<Velocity<Distance>>
             kAmpSpeed      = Units.MetersPerSecond.of(0); /// TODO empirical

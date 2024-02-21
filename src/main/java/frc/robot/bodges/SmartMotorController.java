@@ -36,6 +36,8 @@ public class SmartMotorController {
 
     public enum DownstreamControllerType { SPARK_MAX_BRUSHLESS, TALON_FX }
     private final DownstreamControllerType type;
+    private enum ProcessVariable { POSITION, VELOCITY }
+    private ProcessVariable mode;
 
     /* Supported downstream motor controllers */
     private final CANSparkMax spark;
@@ -182,22 +184,26 @@ public class SmartMotorController {
         switch(type) {
             case SPARK_MAX_BRUSHLESS:
                 spark.setInverted(config.reversed);
-                spark.getEncoder().setPositionConversionFactor(
-                    config.mechanismPositionPerEncoderAngularPosition.in(Units.Meters.per(Units.Revolutions))
-                );
-                spark.getEncoder().setVelocityConversionFactor(
-                    config.mechanismVelocityPerEncoderAngularVelocity.in(Units.MetersPerSecond.per(Units.RPM))
-                );
+                if (config.mechanismPositionPerEncoderAngularPosition != null)
+                    spark.getEncoder().setPositionConversionFactor(
+                        config.mechanismPositionPerEncoderAngularPosition.in(Units.Meters.per(Units.Revolutions))
+                    );
+                if (config.mechanismVelocityPerEncoderAngularVelocity != null)
+                    spark.getEncoder().setVelocityConversionFactor(
+                        config.mechanismVelocityPerEncoderAngularVelocity.in(Units.MetersPerSecond.per(Units.RPM))
+                    );
                 break;
             case TALON_FX:
                 talon.setInverted(config.reversed);
                 // FIXME does this actually translate reported feedback numbers? who knows!
-                FeedbackConfigs conversions = new FeedbackConfigs()
-                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
-                    .withSensorToMechanismRatio(
-                        1.0/config.mechanismPositionPerEncoderAngularPosition.in(Units.Meters.per(Units.Revolutions))
-                    );
-                talon.getConfigurator().apply(conversions);
+                if (config.mechanismPositionPerEncoderAngularPosition != null) {
+                    FeedbackConfigs conversions = new FeedbackConfigs()
+                        .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
+                        .withSensorToMechanismRatio(
+                            1.0/config.mechanismPositionPerEncoderAngularPosition.in(Units.Meters.per(Units.Revolutions))
+                        );
+                    talon.getConfigurator().apply(conversions);
+                }
                 break;
         }
 
@@ -243,10 +249,10 @@ public class SmartMotorController {
         config.pidf_position = pidf;
         positionControlConfigured = true;
         setPIDF_raw(
-            pidf.kP.in(Units.Volts.per(Units.Meters))
-            , pidf.kI.in(Units.Volts.mult(Units.Seconds).per(Units.Meters))
-            , pidf.kD.in(Units.Volts.per(Units.MetersPerSecond))
-            , pidf.kF.in(Units.Volts)
+            pidf.kP == null ? 0 : pidf.kP.in(Units.Volts.per(Units.Meters))
+            , pidf.kI == null ? 0 : pidf.kI.in(Units.Volts.mult(Units.Seconds).per(Units.Meters))
+            , pidf.kD == null ? 0 : pidf.kD.in(Units.Volts.per(Units.MetersPerSecond))
+            , pidf.kF == null ? 0 : pidf.kF.in(Units.Volts)
         );
     }
 
@@ -271,10 +277,10 @@ public class SmartMotorController {
         config.pidf_velocity = pidf;
         velocityControlConfigured = true;
         setPIDF_raw(
-            pidf.kP.in(Units.Volts.per(Units.MetersPerSecond))
-            , pidf.kI.in(Units.Volts.mult(Units.Seconds).per(Units.MetersPerSecond))
-            , pidf.kD.in(Units.Volts.per(Units.MetersPerSecondPerSecond))
-            , pidf.kF.in(Units.Volts)
+            pidf.kP == null ? 0 : pidf.kP.in(Units.Volts.per(Units.MetersPerSecond))
+            , pidf.kI == null ? 0 : pidf.kI.in(Units.Volts.mult(Units.Seconds).per(Units.MetersPerSecond))
+            , pidf.kD == null ? 0 : pidf.kD.in(Units.Volts.per(Units.MetersPerSecondPerSecond))
+            , pidf.kF == null ? 0 : pidf.kF.in(Units.Volts)
         );
     }
     
@@ -301,7 +307,10 @@ public class SmartMotorController {
             new Exception().printStackTrace();
             return;
         }
-        setPIDF_position(config.pidf_position);
+        if (mode != ProcessVariable.POSITION) {
+            setPIDF_position(config.pidf_position);
+            mode = ProcessVariable.POSITION;
+        }
         switch (type) {
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.Meters), ControlType.kPosition);
@@ -324,7 +333,10 @@ public class SmartMotorController {
             new Exception().printStackTrace();
             return;
         }
-        setPIDF_velocity(config.pidf_velocity);
+        if (mode != ProcessVariable.VELOCITY) {
+            setPIDF_velocity(config.pidf_velocity);
+            mode = ProcessVariable.VELOCITY;
+        }
         switch (type) {
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.MetersPerSecond), ControlType.kVelocity);
