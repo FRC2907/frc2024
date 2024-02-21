@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LimelightHelpers;
-import frc.robot.bodges.SmartMotorController_Linear;
+import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
 import frc.robot.constants.Control;
 import frc.robot.constants.MotorControllers;
 import com.kauailabs.navx.frc.AHRS;

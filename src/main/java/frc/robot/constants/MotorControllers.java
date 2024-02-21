@@ -1,6 +1,9 @@
 package frc.robot.constants;
 
 import frc.robot.bodges.*;
+import frc.robot.bodges.sillycontroller.DownstreamControllerType;
+import frc.robot.bodges.sillycontroller.SmartMotorController_Angular;
+import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
 
 public class MotorControllers {
     public static final SmartMotorController_Angular arm = new SmartMotorController_Angular(

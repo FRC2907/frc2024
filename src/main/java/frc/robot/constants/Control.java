@@ -3,9 +3,9 @@ package frc.robot.constants;
 import org.opencv.core.Scalar;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
-import frc.robot.bodges.PIDF;
-import frc.robot.bodges.SmartMotorControllerConfiguration_Angular;
-import frc.robot.bodges.SmartMotorControllerConfiguration_Linear;
+import frc.robot.bodges.sillycontroller.PIDF;
+import frc.robot.bodges.sillycontroller.SmartMotorControllerConfiguration_Angular;
+import frc.robot.bodges.sillycontroller.SmartMotorControllerConfiguration_Linear;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
 /**

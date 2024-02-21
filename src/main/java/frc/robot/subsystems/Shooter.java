@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.SmartMotorController_Linear;
+import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
 import frc.robot.constants.Control;
 import frc.robot.constants.MotorControllers;
 
