@@ -15,4 +15,14 @@ public class MotorControllers {
         , Ports.can.intake.MOTORS
         , Control.shooter.kMotorConf
     );
+    public static final SmartMotorController drivetrainLeft = new SmartMotorController(
+        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        , Ports.can.drivetrain.LEFTS
+        , Control.drivetrain.kLeftMotorConf
+    );
+    public static final SmartMotorController drivetrainRight = new SmartMotorController(
+        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        , Ports.can.drivetrain.RIGHTS
+        , Control.drivetrain.kRightMotorConf
+    );
 }

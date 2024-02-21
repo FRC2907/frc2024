@@ -77,6 +77,24 @@ public class Control {
         public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
             kD_velocity = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); // TODO empirical
 
+        public static final PIDF<Velocity<Distance>> kPD_velocity = new PIDF<>(kP_velocity, null, kD_velocity, null);
+        public static final SmartMotorControllerConfiguration_Linear kLeftMotorConf
+            = new SmartMotorControllerConfiguration_Linear(
+                FLOOR_POS_PER_ENC_POS_UNIT
+                , FLOOR_VEL_PER_ENC_VEL_UNIT
+                , null
+                , kPD_velocity
+                , false
+            );
+        public static final SmartMotorControllerConfiguration_Linear kRightMotorConf
+            = new SmartMotorControllerConfiguration_Linear(
+                FLOOR_POS_PER_ENC_POS_UNIT
+                , FLOOR_VEL_PER_ENC_VEL_UNIT
+                , null
+                , kPD_velocity
+                , true
+            );
+
         public static final Measure<Velocity<Distance>>
             kMaxSpeed  = Units.MetersPerSecond .of( 3); // TODO empirical
         public static final Measure<Velocity<Angle>>

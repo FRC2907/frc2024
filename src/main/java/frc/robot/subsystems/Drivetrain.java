@@ -2,78 +2,50 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.revrobotics.CANSparkMax;
-
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LimelightHelpers;
+import frc.robot.bodges.SmartMotorController;
 import frc.robot.constants.Control;
-import frc.robot.util.Util;
+import frc.robot.constants.MotorControllers;
+import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain implements ISubsystem {
 
-    private CANSparkMax leftMotor, rightMotor;
+    private SmartMotorController leftMotor, rightMotor;
     private Measure<Velocity<Distance>> leftSpeed, rightSpeed;
     private Field2d sb_field;
     private DriveMode mode;
+    private Timer timer;
+    private AHRS gyro;
 
 
-    private Drivetrain(CANSparkMax left, CANSparkMax right) {
-        //super(left, right);
+    private Drivetrain(SmartMotorController left, SmartMotorController right) {
         this.leftMotor = left;
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
+        this.timer = new Timer();
+        this.gyro = new AHRS(SPI.Port.kMXP);
 
-        this.leftMotor .getEncoder().setPositionConversionFactor(
-            Control.drivetrain.FLOOR_POS_PER_ENC_POS_UNIT.in(
-            Units.Meters.per(Units.Revolutions)));
-        this.rightMotor.getEncoder().setPositionConversionFactor(
-            Control.drivetrain.FLOOR_POS_PER_ENC_POS_UNIT.in(
-            Units.Meters.per(Units.Revolutions)));
-        this.leftMotor .getEncoder().setVelocityConversionFactor(
-            Control.drivetrain.FLOOR_VEL_PER_ENC_VEL_UNIT.in(
-            Units.MetersPerSecond.per(Units.RPM)));
-        this.rightMotor.getEncoder().setVelocityConversionFactor(
-            Control.drivetrain.FLOOR_VEL_PER_ENC_VEL_UNIT.in(
-            Units.MetersPerSecond.per(Units.RPM)));
-
-        // Velocity PD control
-        this.leftMotor.getPIDController().setP(
-            Control.drivetrain.kP_velocity.in(
-            Units.Volts.per(Units.MetersPerSecond)));
-        this.leftMotor.getPIDController().setD(
-            Control.drivetrain.kD_velocity.in(
-            Units.Volts.per(Units.MetersPerSecondPerSecond)));
-        this.rightMotor.getPIDController().setP(
-            Control.drivetrain.kP_velocity.in(
-            Units.Volts.per(Units.MetersPerSecond)));
-        this.rightMotor.getPIDController().setD(
-            Control.drivetrain.kD_velocity.in(
-            Units.Volts.per(Units.MetersPerSecondPerSecond)));
-
-        // Report pose and drivetrain stats to Shuffleboard
+        // Report pose to Shuffleboard
         this.sb_field = new Field2d();
         SmartDashboard.putData(this.sb_field);
-        //SmartDashboard.putData(this);
+
+        this.timer.restart();
     }
 
     private static Drivetrain instance;
     public static Drivetrain getInstance() {
-        CANSparkMax left, right;
         if (instance == null) {
-            left = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.LEFTS, true);
-            right = Util.createSparkGroup(frc.robot.constants.Ports.can.drivetrain.RIGHTS, false);
-            instance = new Drivetrain(left, right);
-
+            instance = new Drivetrain(MotorControllers.drivetrainLeft, MotorControllers.drivetrainRight);
         }
         return instance;
     }
@@ -155,17 +127,8 @@ public class Drivetrain implements ISubsystem {
 
 
     private void sendMotorInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
-        sendMotorInputs(left.in(Units.MetersPerSecond), right.in(Units.MetersPerSecond));
-    }
-    /**
-     * Send motor inputs in m/s.
-     */
-    private void sendMotorInputs(double left, double right) {
-        double[] normalSpeeds = Util.normalizeSymmetrical(
-            Control.drivetrain.kMaxSpeed.in(Units.MetersPerSecond)
-            , left, right);
-        leftMotor .getPIDController().setReference(normalSpeeds[0], CANSparkMax.ControlType.kVelocity);
-        rightMotor.getPIDController().setReference(normalSpeeds[1], CANSparkMax.ControlType.kVelocity);
+        leftMotor.setVelocity(left);
+        rightMotor.setVelocity(right);
     }
 
 
@@ -206,35 +169,44 @@ public class Drivetrain implements ISubsystem {
     }
     
 
+    // TODO look into wpilib PoseEstimator
     private void updatePoseFromSensors() {
+        Measure<Time> elapsed = Units.Seconds.of(timer.get());
+        timer.restart();
         if (LimelightHelpers.getLatestResults("").
             targetingResults.targets_Fiducials.length >= 1) {
             setPose(LimelightHelpers.getBotPose2d(""));
         } else {
-            setPose(getPose().exp(Control.drivetrain.DRIVE_KINEMATICS.toTwist2d(
-                   (getVelocityL() * 0.02), (getVelocityR() * 0.02))));
+            setPose(
+                getPose().exp(
+                    Control.drivetrain.DRIVE_KINEMATICS.toTwist2d(
+                        getVelocityL().in(Units.MetersPerSecond) * elapsed.in(Units.Seconds)
+                        , getVelocityR().in(Units.MetersPerSecond) * elapsed.in(Units.Seconds)
+                    )
+                )
+            );
         }
     }
 
 
-    public double getVelocity() {
-        return (getVelocityL() + getVelocityR()) / 2;
+    public Measure<Velocity<Distance>> getVelocity() {
+        return getVelocityL().plus(getVelocityR()).divide(2.0);
     }
 
-    public double getVelocityL() {
-        return this.leftMotor.getEncoder().getVelocity();
+    public Measure<Velocity<Distance>> getVelocityL() {
+        return this.leftMotor.getVelocity();
     }
 
-    public double getVelocityR() {
-        return this.rightMotor.getEncoder().getVelocity();
+    public Measure<Velocity<Distance>> getVelocityR() {
+        return this.rightMotor.getVelocity();
     }
 
-    public double getPositionX() {
-        return getPose().getX();
+    public Measure<Distance> getPositionX() {
+        return Units.Meters.of(getPose().getX());
     }
 
-    public double getPositionY() {
-        return getPose().getY();
+    public Measure<Distance> getPositionY() {
+        return Units.Meters.of(getPose().getY());
     }
 
     public Rotation2d getHeading() {
@@ -247,11 +219,11 @@ public class Drivetrain implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("dt.positionX", getPositionX());
-        SmartDashboard.putNumber("dt.positionY", getPositionY());
-        SmartDashboard.putNumber("dt.velocity",  getVelocity());
-        SmartDashboard.putNumber("dt.velocityL", getVelocityL());
-        SmartDashboard.putNumber("dt.velocityR", getVelocityR());
+        SmartDashboard.putNumber("dt.positionX", getPositionX().in(Units.Meters));
+        SmartDashboard.putNumber("dt.positionY", getPositionY().in(Units.Meters));
+        SmartDashboard.putNumber("dt.velocity",  getVelocity() .in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("dt.velocityL", getVelocityL().in(Units.MetersPerSecond));
+        SmartDashboard.putNumber("dt.velocityR", getVelocityR().in(Units.MetersPerSecond));
         SmartDashboard.putNumber("dt.heading",   getHeading().getDegrees());
         SmartDashboard.putNumber("dt.angVel",    getAngularVelocity());
 
