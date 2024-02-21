@@ -18,7 +18,6 @@ public class Control {
         public static final double GEAR_RATIO = 1; /// TODO get from Build
         public static final Measure<Per<Angle, Angle>>
             ARM_POS_PER_ENC_POS_UNIT = Units.Revolutions.of(GEAR_RATIO).per(Units.Revolutions);
-        // FIXME this might be wrong
         public static final Measure<Per<Velocity<Angle>, Velocity<Angle>>>
             ARM_VEL_PER_ENC_VEL_UNIT = Units.RPM        .of(GEAR_RATIO).per(Units.RPM        );
 
@@ -57,7 +56,9 @@ public class Control {
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
         public static final Measure<Per<Distance, Angle>>
             FLOOR_POS_PER_ENC_POS_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Revolutions);
-        // FIXME this might be wrong
+        /**
+         * Linear distance per encoder rotation.
+         */
         public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
             FLOOR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
@@ -87,7 +88,9 @@ public class Control {
         public static final double GEAR_RATIO = 1; /// TODO get from Build
         public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2); /// TODO verify with Build
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
-        // FIXME this might be wrong
+        /**
+         * Linear distance per encoder rotation.
+         */
         public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
             LINEAR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
@@ -106,9 +109,11 @@ public class Control {
 
     public static class shooter {
         public static final double GEAR_RATIO = 1; /// TODO get from Build
-        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2); /// TODO get from Build
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(4);
         public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.times(Math.PI);
-        // FIXME this might be wrong
+        /**
+         * Linear distance per encoder rotation.
+         */
         public static final Measure<Per<Velocity<Distance>, Velocity<Angle>>>
             LINEAR_VEL_PER_ENC_VEL_UNIT = WHEEL_CIRCUMFERENCE.times(GEAR_RATIO).per(Units.Minute).per(Units.RPM);
 
