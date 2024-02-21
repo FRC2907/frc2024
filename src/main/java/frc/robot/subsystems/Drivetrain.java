@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LimelightHelpers;
-import frc.robot.bodges.SmartMotorController;
+import frc.robot.bodges.SmartMotorController_Linear;
 import frc.robot.constants.Control;
 import frc.robot.constants.MotorControllers;
 import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain implements ISubsystem {
 
-    private SmartMotorController leftMotor, rightMotor;
+    private SmartMotorController_Linear leftMotor, rightMotor;
     private Measure<Velocity<Distance>> leftSpeed, rightSpeed;
     private Field2d sb_field;
     private DriveMode mode;
@@ -28,7 +28,7 @@ public class Drivetrain implements ISubsystem {
     private AHRS gyro;
 
 
-    private Drivetrain(SmartMotorController left, SmartMotorController right) {
+    private Drivetrain(SmartMotorController_Linear left, SmartMotorController_Linear right) {
         this.leftMotor = left;
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;

@@ -13,26 +13,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.units.*;
 
-/**
- * TODO(jtreed)
- * + set P
- * + set D
- * + clear I, F
- * + set conversion factors
- * + return metrics
- * + rename to something like "GenericUnitfulMotorController"
- * - set up follower mode
- * + set up reversing
- */
-
  /**
   * You can overwrite PIDF gains for each mode after instantiation by calling the
-  * setPD/setPIDF_*() methods.
+  * setPD/setPIDF_*() methods. Unidentified linear units are probably meters.
   */
-public class SmartMotorController {
-
-    // This class will use meters and revolutions where necessary, but try to stick
-    // to the units library.
+public class SmartMotorController_Linear {
 
     public enum DownstreamControllerType { SPARK_MAX_BRUSHLESS, TALON_FX }
     private final DownstreamControllerType type;
@@ -56,7 +41,7 @@ public class SmartMotorController {
      * @param reversies
      * @param _config
      */
-    public SmartMotorController(DownstreamControllerType _type, int[] can_ids, boolean[] reversies, SmartMotorControllerConfiguration_Linear _config) {
+    public SmartMotorController_Linear(DownstreamControllerType _type, int[] can_ids, boolean[] reversies, SmartMotorControllerConfiguration_Linear _config) {
         if (can_ids.length < 1) {
 			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
 			new Exception().printStackTrace();
@@ -109,7 +94,7 @@ public class SmartMotorController {
      * @param can_ids
      * @param _config
      */
-    public SmartMotorController(DownstreamControllerType _type, int[] can_ids, SmartMotorControllerConfiguration_Linear _config) {
+    public SmartMotorController_Linear(DownstreamControllerType _type, int[] can_ids, SmartMotorControllerConfiguration_Linear _config) {
         if (can_ids.length < 1) {
 			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
 			new Exception().printStackTrace();
@@ -143,7 +128,7 @@ public class SmartMotorController {
                 break;
         }
     }
-    public SmartMotorController(DownstreamControllerType _type, int can_id, SmartMotorControllerConfiguration_Linear _config) {
+    public SmartMotorController_Linear(DownstreamControllerType _type, int can_id, SmartMotorControllerConfiguration_Linear _config) {
         this.type = _type;
         this.config = _config;
         switch (type) {
@@ -165,14 +150,14 @@ public class SmartMotorController {
         }
         ctor_SetupConfig();
     }
-    public SmartMotorController(CANSparkMax downstream, SmartMotorControllerConfiguration_Linear _config) {
+    public SmartMotorController_Linear(CANSparkMax downstream, SmartMotorControllerConfiguration_Linear _config) {
         this.type = DownstreamControllerType.SPARK_MAX_BRUSHLESS;
         this.config = _config;
         this.spark = downstream;
         this.talon = null;
         ctor_SetupConfig();
     }
-    public SmartMotorController(TalonFX downstream, SmartMotorControllerConfiguration_Linear _config) {
+    public SmartMotorController_Linear(TalonFX downstream, SmartMotorControllerConfiguration_Linear _config) {
         this.type = DownstreamControllerType.TALON_FX;
         this.config = _config;
         this.spark = null;

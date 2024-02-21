@@ -19,16 +19,21 @@ public class Hat implements ISubsystem {
 
     public TrajectoryFollower findPathToNote() {
         // TODO implement
+        // basically we need to be able to map a pixel (X,Y) in the camera feed to a
+        // translation on the field, then feed that to the trajectory generator
         return null;
     }
 
     public TrajectoryFollower findPathToSpeaker() {
         // TODO implement
+        // this one is a challenge: we have a region we want to be in
         return null;
     }
 
     public TrajectoryFollower findPathToAmp() {
         // TODO implement
+        // this one's pretty simple, we know where the amp is, we know where we are, we
+        // just ask for a path to connect them
         return null;
     }
 

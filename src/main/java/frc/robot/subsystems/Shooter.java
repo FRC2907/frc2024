@@ -2,15 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.SmartMotorController;
+import frc.robot.bodges.SmartMotorController_Linear;
 import frc.robot.constants.Control;
 import frc.robot.constants.MotorControllers;
 
 public class Shooter implements ISubsystem {
     private Measure<Velocity<Distance>> setPoint;
-    private SmartMotorController motor;
+    private SmartMotorController_Linear motor;
 
-    private Shooter(SmartMotorController _motor) {
+    private Shooter(SmartMotorController_Linear _motor) {
         this.motor = _motor;
     }
 
