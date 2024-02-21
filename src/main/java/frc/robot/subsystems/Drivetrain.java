@@ -213,8 +213,8 @@ public class Drivetrain implements ISubsystem {
         return getPose().getRotation();
     }
 
-    public double getAngularVelocity() { // TODO
-        return 1;
+    public Measure<Velocity<Angle>> getAngularVelocity() {
+        return Units.DegreesPerSecond.of(gyro.getRate());
     }
 
     @Override
@@ -225,7 +225,7 @@ public class Drivetrain implements ISubsystem {
         SmartDashboard.putNumber("dt.velocityL", getVelocityL().in(Units.MetersPerSecond));
         SmartDashboard.putNumber("dt.velocityR", getVelocityR().in(Units.MetersPerSecond));
         SmartDashboard.putNumber("dt.heading",   getHeading().getDegrees());
-        SmartDashboard.putNumber("dt.angVel",    getAngularVelocity());
+        SmartDashboard.putNumber("dt.angVel",    getAngularVelocity().in(Units.DegreesPerSecond));
 
         // TODO verify
         this.sb_field.setRobotPose(getPose());
