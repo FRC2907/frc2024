@@ -70,60 +70,60 @@ public class Superduperstructure implements ISubsystem {
         return instance;
     }
 
-    public RobotState getState() { return this.state; }
+    public RobotState getState() { return state; }
 
     public void moveToIntaking() {
-        this.state = RobotState.MOVING_TO_INTAKING;
+        state = RobotState.MOVING_TO_INTAKING;
     }
     public void intakeNote() {
-        this.state = RobotState.INTAKING;
+        state = RobotState.INTAKING;
     }
     public void outakeNote(){
-        this.state = RobotState.OUTAKING;
+        state = RobotState.OUTAKING;
     }
     public void moveToAmp() {
-        this.state = RobotState.MOVING_TO_AMP;
+        state = RobotState.MOVING_TO_AMP;
     }
     public void scoreInAmp() {
-        this.state = RobotState.SCORING_AMP;
+        state = RobotState.SCORING_AMP;
     }
     public void moveToSpeaker() {
-        this.state = RobotState.MOVING_TO_SPEAKER;
+        state = RobotState.MOVING_TO_SPEAKER;
     }
     public void scoreInSpeaker() {
-        this.state = RobotState.SCORING_SPEAKER;
+        state = RobotState.SCORING_SPEAKER;
     }
     public void prepareForClimb() {
-        this.state = RobotState.PREPARING_FOR_CLIMB;
+        state = RobotState.PREPARING_FOR_CLIMB;
     }
     public void startClimb() {
-        this.state = RobotState.CLIMBING;
+        state = RobotState.CLIMBING;
     }
     public void knockedOver(){
-        this.state = RobotState.KNOCKED_OVER;
+        state = RobotState.KNOCKED_OVER;
     }
     public void selfRighting(){
-        this.state = RobotState.SELF_RIGHTING;
+        state = RobotState.SELF_RIGHTING;
     }
 
     public void neutralPosition() {
         if (intake.hasNote()){
-            this.state = RobotState.MOVING_TO_HOLDING_NOTE;
+            state = RobotState.MOVING_TO_HOLDING_NOTE;
             operator.rumble(0.5);
         } else {
-            this.state = RobotState.MOVING_TO_NEUTRAL;
+            state = RobotState.MOVING_TO_NEUTRAL;
         }
     }
 
     public void cancelAction() {
-        this.tjf = null;
+        tjf = null;
         neutralPosition();
     }
     public void automateScoring(boolean _automation) {
-        this.automateScoring = _automation;
+        automateScoring = _automation;
     }
     public boolean isScoringAutomated() {
-        return this.automateScoring;
+        return automateScoring;
     }
     public BestTarget chooseBestTarget() {
         //TODO implement limelight sensor stuff
@@ -131,12 +131,12 @@ public class Superduperstructure implements ISubsystem {
     }
 
     public void autoScore() {
-        switch (this.chooseBestTarget()) {
+        switch (chooseBestTarget()) {
             case AMP:
-                this.moveToAmp();
+                moveToAmp();
                 break;
             case SPEAKER:
-                this.moveToSpeaker();
+                moveToSpeaker();
                 break;
             case NONE:
                 operator.rumble(1);
@@ -155,7 +155,7 @@ public class Superduperstructure implements ISubsystem {
      * If we're in a self-driving state, tell the drivetrain that and let it do its thing.
      */
     public void handleDriving() {
-        switch (this.state) {
+        switch (state) {
             case MOVING_TO_START:
             case START:
             case MOVING_TO_NEUTRAL:
@@ -164,7 +164,7 @@ public class Superduperstructure implements ISubsystem {
             case HOLDING_NOTE:
             case OUTAKING:
             // in these states, we drive manually
-                this.tjf = null;
+                tjf = null;
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
                     drivetrain.setDriveMode(
                         intake.hasNote()
@@ -269,13 +269,13 @@ public class Superduperstructure implements ISubsystem {
     }
 
     public void handleState() {
-        switch (this.state) {
+        switch (state) {
             case MOVING_TO_START:
                 arm.startPosition();
                 intake.off();
                 shooter.off();
                 if (arm.reachedSetPoint())
-                    this.state = RobotState.START;
+                    state = RobotState.START;
                 break;
             case START:
                 arm.startPosition();
@@ -292,25 +292,25 @@ public class Superduperstructure implements ISubsystem {
                 // then the handleDriving function will follow it each cycle
                 // for intaking i guess we don't really need to check whether we've finished the trajectory
                 // since having the note is all that matters
-                if (this.tjf == null){
-                    this.tjf = hat.findPathToNote();
+                if (tjf == null){
+                    tjf = hat.findPathToNote();
                 }
                 if (arm.reachedSetPoint()){
-                    this.state = RobotState.INTAKING;
+                    state = RobotState.INTAKING;
                 }
                 break;
             case INTAKING:
                 arm.floorPosition();
                 intake.intake();
                 if (intake.hasNote()){
-                    this.state = RobotState.HOLDING_NOTE;
+                    state = RobotState.HOLDING_NOTE;
                 }
                 break;
 
             case OUTAKING:
                 intake.outake();
                 if (automateScoring && !intake.hasNote())
-                    this.state = RobotState.NEUTRAL;
+                    state = RobotState.NEUTRAL;
                 break;
 
             case MOVING_TO_HOLDING_NOTE:
@@ -323,55 +323,55 @@ public class Superduperstructure implements ISubsystem {
 
             case MOVING_TO_AMP:
                 arm.ampPosition();
-                if (this.tjf == null){
-                    this.tjf = hat.findPathToAmp();
+                if (tjf == null){
+                    tjf = hat.findPathToAmp();
                 }
                 if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
-                    this.state = RobotState.READY_TO_SCORE_AMP;
+                    state = RobotState.READY_TO_SCORE_AMP;
                 }
                 break;
             case READY_TO_SCORE_AMP:
-                if (this.isScoringAutomated())
-                    this.state = RobotState.SCORING_AMP;
+                if (isScoringAutomated())
+                    state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
                 shooter.amp();
                 if (shooter.noteScored()){
-                    this.state = RobotState.NEUTRAL;
+                    state = RobotState.NEUTRAL;
                 }
                 break;
 
             case MOVING_TO_SPEAKER:
                 arm.speakerPosition();
-                if (this.tjf == null)
-                    this.tjf = hat.findPathToSpeaker();
+                if (tjf == null)
+                    tjf = hat.findPathToSpeaker();
                 if (arm.reachedSetPoint() && tjf.isDone()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
-                    this.state = RobotState.READY_TO_SCORE_SPEAKER;
+                    state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
                 break;
             case READY_TO_SCORE_SPEAKER:
-                if (this.isScoringAutomated())
-                    this.state = RobotState.SCORING_SPEAKER;
+                if (isScoringAutomated())
+                    state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
                 shooter.speaker();
                 if (shooter.noteScored()) {
-                    this.state = RobotState.NEUTRAL;
+                    state = RobotState.NEUTRAL;
                 }
                 break;
 
             case PREPARING_FOR_CLIMB:
                 arm.climbReadyPosition();
                 // TODO automatically drive up to the Stage
-                if (this.isScoringAutomated() && arm.reachedSetPoint()) {
-                    this.state = RobotState.CLIMBING;
+                if (isScoringAutomated() && arm.reachedSetPoint()) {
+                    state = RobotState.CLIMBING;
                 }
                 break;
             case CLIMBING:
                 arm.clumbPosition();
                 if (arm.reachedSetPoint()) {
-                    this.state = RobotState.HUNG;
+                    state = RobotState.HUNG;
                 }
                 break;
             case HUNG:
@@ -381,7 +381,7 @@ public class Superduperstructure implements ISubsystem {
                 arm.holdingPosition();
                 intake.off();
                 shooter.off();
-                this.state = RobotState.NEUTRAL;
+                state = RobotState.NEUTRAL;
                 break;
             case NEUTRAL:
                 break;
@@ -405,7 +405,7 @@ public class Superduperstructure implements ISubsystem {
         handleDriving();
 
         // Tell all the subsystems to do their thing for this cycle
-        for (ISubsystem s : this.subsystems)
+        for (ISubsystem s : subsystems)
             s.onLoop();
 
         submitTelemetry();
@@ -415,13 +415,13 @@ public class Superduperstructure implements ISubsystem {
     public void submitTelemetry() {
         SmartDashboard.putString("superduperstructure.state", getState().toString());
 
-        for (ISubsystem s : this.subsystems)
+        for (ISubsystem s : subsystems)
             s.submitTelemetry();
     }
 
     @Override
     public void receiveOptions() {
-        for (ISubsystem s : this.subsystems)
+        for (ISubsystem s : subsystems)
             s.receiveOptions();
     }
 }

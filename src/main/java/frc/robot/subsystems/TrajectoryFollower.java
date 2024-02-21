@@ -46,14 +46,14 @@ public class TrajectoryFollower extends Action {
     @Override
     public void onStart() {
         timer.restart();
-        this.started = true;
-        this.running = true;
+        started = true;
+        running = true;
     }
 
     @Override
     public void whileRunning() {
-        this.finished = trajectory.getTotalTimeSeconds() < timer.get();
-        this.running = !this.finished;
+        finished = trajectory.getTotalTimeSeconds() < timer.get();
+        running = !finished;
     }
 
     @Override

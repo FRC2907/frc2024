@@ -24,13 +24,13 @@ public class Shooter implements ISubsystem {
 
 
     public void setSetPoint(Measure<Velocity<Distance>> _setPoint) {
-        this.setPoint = _setPoint;
+        setPoint = _setPoint;
     }
     public Measure<Velocity<Distance>> getSetPoint() {
-        return this.setPoint;
+        return setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return this.motor.getVelocity();
+        return motor.getVelocity();
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -38,13 +38,13 @@ public class Shooter implements ISubsystem {
 
 
     public void amp() {
-        this.setSetPoint(Control.shooter.kAmpSpeed);
+        setSetPoint(Control.shooter.kAmpSpeed);
     }
     public void speaker() {
-        this.setSetPoint(Control.shooter.kSpeakerSpeed);
+        setSetPoint(Control.shooter.kSpeakerSpeed);
     }
     public void off() {
-        this.setSetPoint(Control.shooter.kOff);
+        setSetPoint(Control.shooter.kOff);
     }
 
 
@@ -58,7 +58,7 @@ public class Shooter implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        this.motor.setVelocity(setPoint);
+        motor.setVelocity(setPoint);
     }
 
     @Override

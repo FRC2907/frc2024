@@ -24,13 +24,13 @@ public class Intake implements ISubsystem {
 
 
     public void setSetPoint(Measure<Velocity<Distance>> _setPoint) {
-        this.setPoint = _setPoint;
+        setPoint = _setPoint;
     }
     public Measure<Velocity<Distance>> getSetPoint() {
-        return this.setPoint;
+        return setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return this.motor.getVelocity();
+        return motor.getVelocity();
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -38,13 +38,13 @@ public class Intake implements ISubsystem {
 
 
     public void intake() {
-        this.setSetPoint(Control.intake.kIntakingSpeed);
+        setSetPoint(Control.intake.kIntakingSpeed);
     }
     public void outake() {
-        this.setSetPoint(Control.intake.kOutakingSpeed);
+        setSetPoint(Control.intake.kOutakingSpeed);
     }
     public void off() {
-        this.setSetPoint(Control.intake.kOff);
+        setSetPoint(Control.intake.kOff);
     }
 
 
@@ -58,7 +58,7 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        this.motor.setVelocity(setPoint);
+        motor.setVelocity(setPoint);
     }
 
     @Override

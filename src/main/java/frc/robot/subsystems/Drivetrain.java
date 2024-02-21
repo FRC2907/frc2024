@@ -55,20 +55,20 @@ public class Drivetrain implements ISubsystem {
         AUTO, FIELD_FORWARD, FIELD_REVERSED, LOCAL_FORWARD, LOCAL_REVERSED
     }
     public void setDriveMode(DriveMode newMode) {
-        this.mode = newMode;
+        mode = newMode;
     }
     public DriveMode getDriveMode() {
-        return this.mode;
+        return mode;
     }
 
 
     private Pose2d pose = new Pose2d(); // FIXME this might be bad. or maybe not
 
     public Pose2d getPose() {
-        return this.pose;
+        return pose;
     }
     private void setPose(Pose2d _pose) {
-        this.pose = _pose;
+        pose = _pose;
     }
 
     public Rotation2d getHeadingError(Rotation2d reference) {
@@ -90,13 +90,13 @@ public class Drivetrain implements ISubsystem {
             , rotation.in(Units.RadiansPerSecond)
         );
         DifferentialDriveWheelSpeeds wheelSpeeds = Control.drivetrain.DRIVE_KINEMATICS.toWheelSpeeds(chassisSpeeds);
-        this.leftSpeed  = Units.MetersPerSecond.of(wheelSpeeds. leftMetersPerSecond);
-        this.rightSpeed = Units.MetersPerSecond.of(wheelSpeeds.rightMetersPerSecond);
+        leftSpeed  = Units.MetersPerSecond.of(wheelSpeeds. leftMetersPerSecond);
+        rightSpeed = Units.MetersPerSecond.of(wheelSpeeds.rightMetersPerSecond);
     }
 
     private void setTankInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
-        this.leftSpeed  = left ;
-        this.rightSpeed = right;
+        leftSpeed  = left ;
+        rightSpeed = right;
     }
     
 
@@ -156,16 +156,16 @@ public class Drivetrain implements ISubsystem {
 
     
     public void localForward(){
-        this.mode = DriveMode.LOCAL_FORWARD;
+        mode = DriveMode.LOCAL_FORWARD;
     }
     public void localReversed(){
-        this.mode = DriveMode.LOCAL_REVERSED;
+        mode = DriveMode.LOCAL_REVERSED;
     }
     public void fieldForward(){
-        this.mode = DriveMode.FIELD_FORWARD;
+        mode = DriveMode.FIELD_FORWARD;
     }
     public void fieldReversed(){
-        this.mode = DriveMode.FIELD_REVERSED;
+        mode = DriveMode.FIELD_REVERSED;
     }
     
 
@@ -194,11 +194,11 @@ public class Drivetrain implements ISubsystem {
     }
 
     public Measure<Velocity<Distance>> getVelocityL() {
-        return this.leftMotor.getVelocity();
+        return leftMotor.getVelocity();
     }
 
     public Measure<Velocity<Distance>> getVelocityR() {
-        return this.rightMotor.getVelocity();
+        return rightMotor.getVelocity();
     }
 
     public Measure<Distance> getPositionX() {
@@ -228,7 +228,7 @@ public class Drivetrain implements ISubsystem {
         SmartDashboard.putNumber("dt.angVel",    getAngularVelocity().in(Units.DegreesPerSecond));
 
         // TODO verify
-        this.sb_field.setRobotPose(getPose());
+        sb_field.setRobotPose(getPose());
     }
 
     @Override

@@ -94,7 +94,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     }
 
     private void runNoteTracking() {
-        if (this.cvSink.grabFrame(i_color) == 0) {
+        if (cvSink.grabFrame(i_color) == 0) {
             outputStream.notifyError(cvSink.getError());
             return;
         }
@@ -115,7 +115,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             double line_y = bound.y + bound.height / 2;
             double line_x = bound.x + bound.width / 2;
             Point note_ctr = new Point(line_x, line_y);
-            Point screen_ctr = new Point(this.w / 2, line_y);
+            Point screen_ctr = new Point(w / 2, line_y);
             Imgproc.line(i_color, note_ctr, screen_ctr, drawColor, 3);
 
             //RotatedRect ell = Imgproc.fitEllipseDirect(i_mask);
@@ -125,8 +125,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             //for (int i = 0; i < 4; i++)
             //    Imgproc.line(i_color, verts[i], verts[(i + 1) % 4], drawColor);
 
-            this.dx = (line_x / this.w) - 0.5;
-            this.y = line_y / this.h;
+            dx = (line_x / w) - 0.5;
+            y = line_y / h;
             submitTelemetry();
         }
 
@@ -136,8 +136,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     @Override
     public void submitTelemetry() {
         if (Control.camera.kNoteTrackingEnabled) {
-            this.p_dx.set(this.dx);
-            this.p_y.set(this.y);
+            p_dx.set(dx);
+            p_y.set(y);
         }
     }
 
