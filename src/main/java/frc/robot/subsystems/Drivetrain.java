@@ -15,6 +15,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.Control;
 import frc.robot.util.Util;
 
@@ -206,9 +207,9 @@ public class Drivetrain implements ISubsystem {
     
 
     private void updatePoseFromSensors() {
-        // TODO(justinho) implement
-        if (8 == 9/* if we have April tag info */){
-            //set pose
+        if (LimelightHelpers.getLatestResults("").
+            targetingResults.targets_Fiducials.length >= 1) {
+            setPose(LimelightHelpers.getBotPose2d(""));
         } else {
             setPose(getPose().exp(Control.drivetrain.DRIVE_KINEMATICS.toTwist2d(
                    (getVelocityL() * 0.02), (getVelocityR() * 0.02))));
