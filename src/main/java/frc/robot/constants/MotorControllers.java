@@ -1,6 +1,5 @@
 package frc.robot.constants;
 
-import frc.robot.bodges.*;
 import frc.robot.bodges.sillycontroller.DownstreamControllerType;
 import frc.robot.bodges.sillycontroller.SmartMotorController_Angular;
 import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
@@ -24,12 +23,12 @@ public class MotorControllers {
         , Control.shooter.kMotorConf
     );
     public static final SmartMotorController_Linear drivetrainLeft = new SmartMotorController_Linear(
-        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        Misc.robot == Misc.Robot.COMP ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.TALON_FX
         , Ports.can.drivetrain.LEFTS
         , Control.drivetrain.kLeftMotorConf
     );
     public static final SmartMotorController_Linear drivetrainRight = new SmartMotorController_Linear(
-        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        Misc.robot == Misc.Robot.COMP ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.TALON_FX
         , Ports.can.drivetrain.RIGHTS
         , Control.drivetrain.kRightMotorConf
     );

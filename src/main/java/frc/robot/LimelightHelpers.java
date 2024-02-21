@@ -765,7 +765,9 @@ public class LimelightHelpers {
         try {
             results = mapper.readValue(getJSONDump(limelightName), LimelightResults.class);
         } catch (JsonProcessingException e) {
-            System.err.println("lljson error: " + e.getMessage());
+            // kate was here
+            if (!e.getMessage().contains("No content to map due to end-of-input"))
+                System.err.println("lljson error: " + e.getMessage());
         }
 
         long end = System.nanoTime();
