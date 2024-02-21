@@ -10,4 +10,9 @@ public class MotorControllers {
         , Control.shooter.MOTORS_REVERSED
         , Control.shooter.kMotorConf
     );
+    public static final SmartMotorController intake = new SmartMotorController(
+        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        , Ports.can.intake.MOTORS
+        , Control.shooter.kMotorConf
+    );
 }

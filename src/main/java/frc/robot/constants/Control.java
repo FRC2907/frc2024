@@ -101,6 +101,16 @@ public class Control {
         public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>>
             kD = Units.Volts.of(1).per(Units.MetersPerSecondPerSecond); /// TODO empirical
 
+        public static final PIDF<Velocity<Distance>> kPD = new PIDF<>(kP, null, kD, null);
+        public static final SmartMotorControllerConfiguration_Linear kMotorConf
+            = new SmartMotorControllerConfiguration_Linear(
+                null
+                , LINEAR_VEL_PER_ENC_VEL_UNIT
+                , null
+                , kPD
+                , false
+            );
+
         public static final Measure<Velocity<Distance>>
             kIntakingSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>>
@@ -126,7 +136,13 @@ public class Control {
 
         public static final PIDF<Velocity<Distance>> kPD = new PIDF<>(kP, null, kD, null);
         public static final SmartMotorControllerConfiguration_Linear kMotorConf
-            = new SmartMotorControllerConfiguration_Linear(null, LINEAR_VEL_PER_ENC_VEL_UNIT, null, kPD, false);
+            = new SmartMotorControllerConfiguration_Linear(
+                null
+                , LINEAR_VEL_PER_ENC_VEL_UNIT
+                , null
+                , kPD
+                , false
+            );
         public static final boolean[] MOTORS_REVERSED = {false, true};
 
         public static final Measure<Velocity<Distance>>

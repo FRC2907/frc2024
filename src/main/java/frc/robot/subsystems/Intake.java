@@ -1,29 +1,23 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.bodges.SmartMotorController;
 import frc.robot.constants.Control;
-import frc.robot.constants.Ports;
-import frc.robot.util.Util;
+import frc.robot.constants.MotorControllers;
 
 public class Intake implements ISubsystem {
     private Measure<Velocity<Distance>> setPoint;
-    private CANSparkMax motor;
+    private SmartMotorController motor;
 
-    private Intake(CANSparkMax _motor) {
+    private Intake(SmartMotorController _motor) {
         this.motor = _motor;
-        this.motor.getEncoder().setVelocityConversionFactor(
-            Control.intake.LINEAR_VEL_PER_ENC_VEL_UNIT.in(Units.MetersPerSecond.per(Units.RPM))
-        );
     }
 
     private static Intake instance;
     public static Intake getInstance() {
         if (instance == null) {
-            CANSparkMax motor = Util.createSparkGroup(Ports.can.intake.MOTORS);
-            instance = new Intake(motor);
+            instance = new Intake(MotorControllers.intake);
         }
         return instance;
     }
@@ -36,7 +30,7 @@ public class Intake implements ISubsystem {
         return this.setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return Units.MetersPerSecond.of(this.motor.getEncoder().getVelocity());
+        return this.motor.getVelocity();
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -64,7 +58,7 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        this.motor.getPIDController().setReference(this.setPoint.in(Units.MetersPerSecond), CANSparkMax.ControlType.kVelocity);
+        this.motor.setVelocity(setPoint);
     }
 
     @Override
