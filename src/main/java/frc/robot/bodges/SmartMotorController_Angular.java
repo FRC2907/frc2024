@@ -17,11 +17,10 @@ import edu.wpi.first.units.*;
   * You can overwrite PIDF gains for each mode after instantiation by calling the
   * setPD/setPIDF_*() methods. Unidentified angular units are probably degrees.
   */
+  // TODO braking
 public class SmartMotorController_Angular {
 
-    public enum DownstreamControllerType { SPARK_MAX_BRUSHLESS, TALON_FX }
     private final DownstreamControllerType type;
-    private enum ProcessVariable { POSITION, VELOCITY }
     private ProcessVariable mode;
 
     /* Supported downstream motor controllers */

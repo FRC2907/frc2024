@@ -9,8 +9,7 @@ public class Ports {
         }
 
         public static class arm {
-            public static final int[] LEFTS = { 5 };
-            public static final int[] RIGHTS = { 6 };
+            public static final int[] MOTORS = { 5, 6 };
         }
 
         public static class shooter {

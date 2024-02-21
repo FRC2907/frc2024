@@ -4,6 +4,7 @@ import org.opencv.core.Scalar;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
 import frc.robot.bodges.PIDF;
+import frc.robot.bodges.SmartMotorControllerConfiguration_Angular;
 import frc.robot.bodges.SmartMotorControllerConfiguration_Linear;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 
@@ -24,9 +25,26 @@ public class Control {
             ARM_VEL_PER_ENC_VEL_UNIT = Units.RPM        .of(GEAR_RATIO).per(Units.RPM        );
 
         public static final Measure<Per<Voltage,          Angle>>
-            kP_pos = Units.Volts.of(1).per(Units.Rotations); /// TODO empirical
+            kP_position = Units.Volts.of(1).per(Units.Rotations); /// TODO empirical
         public static final Measure<Per<Voltage, Velocity<Angle>>>
-            kD_pos = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO empirical
+            kD_position = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Angle>>>
+            kP_velocity = Units.Volts.of(1).per(Units.RotationsPerSecond); /// TODO empirical
+        public static final Measure<Per<Voltage, Velocity<Velocity<Angle>>>>
+            kD_velocity = Units.Volts.of(1).per(Units.RotationsPerSecond.per(Units.Second)); /// TODO empirical
+
+        public static final PIDF<Angle> kPD_position = new PIDF<>(kP_position, null, kD_position, null);
+        public static final PIDF<Velocity<Angle>> kPD_velocity = new PIDF<>(kP_velocity, null, kD_velocity, null);
+        public static final SmartMotorControllerConfiguration_Angular kMotorConf
+            = new SmartMotorControllerConfiguration_Angular(
+                ARM_POS_PER_ENC_POS_UNIT
+                , ARM_VEL_PER_ENC_VEL_UNIT
+                , kPD_position
+                , kPD_velocity
+                , false
+            );
+        public static final boolean[] MOTORS_REVERSED = {false, true};
+
 
         public static final Measure<         Angle>
             kPositionHysteresis =  Units.Degrees         .of( 2); /// TODO empirical
@@ -49,6 +67,7 @@ public class Control {
          * model?
          */
         public static final Measure<Angle> kManualControlDiff  = Units.Degrees.of(  2); /// TODO empirical
+        public static final Measure<Velocity<Angle>> kMaxVelocity = Units.DegreesPerSecond.of(60); /// TODO empirical
     }
 
     public static class drivetrain {

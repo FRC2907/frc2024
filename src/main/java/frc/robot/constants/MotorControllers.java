@@ -1,9 +1,14 @@
 package frc.robot.constants;
 
-import frc.robot.bodges.SmartMotorController_Linear;
-import frc.robot.bodges.SmartMotorController_Linear.DownstreamControllerType;
+import frc.robot.bodges.*;
 
 public class MotorControllers {
+    public static final SmartMotorController_Angular arm = new SmartMotorController_Angular(
+        DownstreamControllerType.SPARK_MAX_BRUSHLESS
+        , Ports.can.arm.MOTORS
+        , Control.arm.MOTORS_REVERSED
+        , Control.arm.kMotorConf
+    );
     public static final SmartMotorController_Linear shooter = new SmartMotorController_Linear(
         DownstreamControllerType.SPARK_MAX_BRUSHLESS
         , Ports.can.shooter.MOTORS
