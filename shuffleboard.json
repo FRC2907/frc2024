@@ -182,7 +182,7 @@
               "_showGlyph": false
             }
           },
-          "4,3": {
+          "4,4": {
             "size": [
               4,
               4
@@ -366,7 +366,47 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PWMSparkMax[0]/Value",
+              "_title": "Ungrouped/PWMSparkMax[0]/Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon FX [12]/Value",
+              "_title": "Ungrouped/Talon FX [12]/Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PWMSparkMax[13]/Value",
+              "_title": "Ungrouped/PWMSparkMax[13]/Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
       }
     },
     {
