@@ -6,6 +6,7 @@ import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.Misc;
 
 public class Superduperstructure implements ISubsystem {
     private Drivetrain drivetrain;
@@ -197,8 +198,10 @@ public class Superduperstructure implements ISubsystem {
                         );
                         break;
                     default:
+            if (Misc.debug) {
                         System.err.println("[EE] Auto driving in non-auto robot state");
                         new Exception().printStackTrace();
+            }
                         break;
                 }
                 break;
@@ -210,8 +213,10 @@ public class Superduperstructure implements ISubsystem {
                 if (tjf == null) {
                     driver.rumble(2);
                     operator.rumble(2);
+            if (Misc.debug) {
                     System.err.println("[EE] Tried to self-drive without a trajectory to follow");
                     new Exception().printStackTrace();
+            }
                     cancelAction();
                 } else
                 drivetrain.setAutoDriveInputs(tjf.getWheelSpeeds(drivetrain.getPose()));

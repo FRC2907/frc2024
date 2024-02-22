@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.units.*;
+import frc.robot.constants.Misc;
 
  /**
   * You can overwrite PIDF gains for each mode after instantiation by calling the
@@ -41,18 +42,26 @@ public class SmartMotorController_Angular {
      * @param _config
      */
     public SmartMotorController_Angular(DownstreamControllerType _type, int[] can_ids, boolean[] reversies, SmartMotorControllerConfiguration_Angular _config) {
-        if (can_ids.length < 1) {
-			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
-			new Exception().printStackTrace();
-        }
-        if (can_ids.length != reversies.length) {
-			System.err.println("[WW] Attempted to create group of SmartMotorController with mismatched number of controllers and reversednesses. Leftovers will cycle back through from the start of the reversies array");
-			new Exception().printStackTrace();
-            // i'm going to hell
-        }
         this.type = _type;
         this.config = _config;
+        if (can_ids.length != reversies.length) {
+            if (Misc.debug) {
+                System.err.println(
+                        "[WW] Attempted to create group of SmartMotorController with mismatched number of controllers and reversednesses. Leftovers will cycle back through from the start of the reversies array");
+                new Exception().printStackTrace();
+            }
+        }
+        if (can_ids.length < 1) {
+            if (Misc.debug) {
+                System.err.println("[EE] Attempted to create empty group of SmartMotorController");
+                new Exception().printStackTrace();
+            }
+        }
         switch (type) {
+            case NONE:
+                this.spark = null;
+                this.talon = null;
+                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_ids[0], MotorType.kBrushless);
                 this.talon = null;
@@ -76,8 +85,11 @@ public class SmartMotorController_Angular {
                 break;
             default:
             // FIXME we should probably perish
-                System.err.println("[EE] Attempted to create group of SmartMotorController for unsupported downstream controller type");
+            if (Misc.debug) {
+                System.err.println(
+                        "[EE] Attempted to create group of SmartMotorController for unsupported downstream controller type");
                 new Exception().printStackTrace();
+            }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -94,14 +106,20 @@ public class SmartMotorController_Angular {
      * @param _config
      */
     public SmartMotorController_Angular(DownstreamControllerType _type, int[] can_ids, SmartMotorControllerConfiguration_Angular _config) {
-        if (can_ids.length < 1) {
-			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
-			new Exception().printStackTrace();
-            // but we stay silly :3
-        }
         this.type = _type;
         this.config = _config;
+        if (can_ids.length < 1) {
+            if (Misc.debug) {
+			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
+			new Exception().printStackTrace();
+            }
+            // but we stay silly :3
+        }
         switch (type) {
+            case NONE:
+                this.spark = null;
+                this.talon = null;
+                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_ids[0], MotorType.kBrushless);
                 this.talon = null;
@@ -120,8 +138,10 @@ public class SmartMotorController_Angular {
                 break;
             default:
             // FIXME we should probably perish
+            if (Misc.debug) {
                 System.err.println("[EE] Attempted to create group of SmartMotorController for unsupported downstream controller type");
                 new Exception().printStackTrace();
+            }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -131,6 +151,10 @@ public class SmartMotorController_Angular {
         this.type = _type;
         this.config = _config;
         switch (type) {
+            case NONE:
+                this.spark = null;
+                this.talon = null;
+                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_id, MotorType.kBrushless);
                 this.talon = null;
@@ -141,8 +165,10 @@ public class SmartMotorController_Angular {
                 break;
             default:
             // FIXME we should probably perish
-                System.err.println("[EE] Attempted to create SmartMotorController for unsupported downstream controller type");
-                new Exception().printStackTrace();
+                if (Misc.debug) {
+                    System.err.println("[EE] Attempted to create SmartMotorController for unsupported downstream controller type");
+                    new Exception().printStackTrace();
+                }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -166,6 +192,8 @@ public class SmartMotorController_Angular {
 
     private void ctor_SetupConfig() {
         switch(type) {
+            case NONE:
+                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.setInverted(config.reversed);
                 if (config.mechanismPositionPerEncoderAngularPosition != null)
@@ -197,13 +225,17 @@ public class SmartMotorController_Angular {
             this.setPIDF_velocity(config.pidf_velocity);
         this.setPIDF_raw(0,0,0,0);
         if (!this.positionControlConfigured && !this.velocityControlConfigured) {
+            if (Misc.debug) {
             System.err.println("[WW] Created a SmartMotorController with no PIDF gains for any mode! This motor will not function until you assign gains.");
             new Exception().printStackTrace();
+            }
         }
     }
 
     public void setPIDF_raw(double P, double I, double D, double F) {
         switch (type) {
+            case NONE:
+                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setP (P);
                 spark.getPIDController().setI (I);
@@ -287,8 +319,10 @@ public class SmartMotorController_Angular {
      */
     public void setPosition(Measure<Angle> r) {
         if (!positionControlConfigured) {
+            if (Misc.debug) {
             System.err.println("[EE] Attempted to use position control on a SmartMotorController with no position gains!");
             new Exception().printStackTrace();
+            }
             return;
         }
         if (mode != ProcessVariable.POSITION) {
@@ -296,6 +330,8 @@ public class SmartMotorController_Angular {
             mode = ProcessVariable.POSITION;
         }
         switch (type) {
+            case NONE:
+                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.Degrees), ControlType.kPosition);
                 break;
@@ -313,8 +349,10 @@ public class SmartMotorController_Angular {
      */
     public void setVelocity(Measure<Velocity<Angle>> r) {
         if (!velocityControlConfigured) {
+            if (Misc.debug) {
             System.err.println("[EE] Attempted to use velocity control on a SmartMotorController with no velocity gains!");
             new Exception().printStackTrace();
+            }
             return;
         }
         if (mode != ProcessVariable.VELOCITY) {
@@ -322,6 +360,8 @@ public class SmartMotorController_Angular {
             mode = ProcessVariable.VELOCITY;
         }
         switch (type) {
+            case NONE:
+                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.DegreesPerSecond), ControlType.kVelocity);
                 break;
@@ -334,6 +374,8 @@ public class SmartMotorController_Angular {
 
     public Measure<Angle> getPosition() {
         switch (type) {
+            case NONE:
+                return Units.Rotations.of(0);
             case SPARK_MAX_BRUSHLESS:
                 return Units.Degrees.of(spark.getEncoder().getPosition());
             case TALON_FX:
@@ -343,6 +385,8 @@ public class SmartMotorController_Angular {
     }
     public Measure<Velocity<Angle>> getVelocity() {
         switch (type) {
+            case NONE:
+                return Units.RotationsPerSecond.of(0);
             case SPARK_MAX_BRUSHLESS:
                 return Units.DegreesPerSecond.of(spark.getEncoder().getVelocity());
             case TALON_FX:

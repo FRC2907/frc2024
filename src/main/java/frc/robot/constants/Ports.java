@@ -4,20 +4,20 @@ package frc.robot.constants;
 public class Ports {
     public static class can {
         public static class drivetrain {
-            public static final int[] LEFTS = { 1, 2 };
-            public static final int[] RIGHTS = { 3, 4 };
+            public static final int[] LEFTS = { 1 };
+            public static final int[] RIGHTS = {  };
         }
 
         public static class arm {
-            public static final int[] MOTORS = { 5, 6 };
+            public static final int[] MOTORS = {  };
         }
 
         public static class shooter {
-            public static final int[] MOTORS = { 7, 8 };
+            public static final int[] MOTORS = {  };
         }
 
         public static class intake {
-            public static final int[] MOTORS = { 9 };
+            public static final int[] MOTORS = {  };
         }
     }
 
