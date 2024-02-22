@@ -146,7 +146,6 @@ public class Drivetrain implements ISubsystem {
      * we assign to the motors in onLoop().
      */
 
-    // reversed means basically changing direction rather than like a car reverse
 
     @Override
     public void onLoop() {
