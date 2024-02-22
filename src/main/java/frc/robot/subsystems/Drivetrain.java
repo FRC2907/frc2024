@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +28,7 @@ public class Drivetrain implements ISubsystem {
     private DriveMode mode;
     private Timer timer;
     private AHRS gyro;
+    private final DifferentialDrivePoseEstimator poseEstimator;
 
 
     private Drivetrain(SmartMotorController_Linear left, SmartMotorController_Linear right) {
@@ -40,6 +43,15 @@ public class Drivetrain implements ISubsystem {
         SmartDashboard.putData(this.sb_field);
 
         this.timer.restart();
+
+        this.poseEstimator = new DifferentialDrivePoseEstimator(
+            Control.drivetrain.DRIVE_KINEMATICS,
+            gyro.getRotation2d(),
+            leftMotor.getPosition().in(Units.Meters),
+            rightMotor.getPosition().in(Units.Meters),
+            new Pose2d(),
+            VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5).in(Units.Radians)),
+            VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
     }
 
     private static Drivetrain instance;
@@ -170,7 +182,18 @@ public class Drivetrain implements ISubsystem {
 
     // TODO look into wpilib PoseEstimator
     private void updatePoseFromSensors() {
-        Measure<Time> elapsed = Units.Seconds.of(timer.get());
+        poseEstimator.update(
+            gyro.getRotation2d(), 
+            leftMotor.getPosition().in(Units.Meters), 
+            rightMotor.getPosition().in(Units.Meters));
+        
+        poseEstimator.addVisionMeasurement(
+        LimelightHelpers.getBotPose2d(""), 
+        Timer.getFPGATimestamp());
+
+        setPose(poseEstimator.getEstimatedPosition());
+
+        /*Measure<Time> elapsed = Units.Seconds.of(timer.get());
         timer.restart();
         if (LimelightHelpers.getLatestResults("").
             targetingResults.targets_Fiducials.length >= 1) {
@@ -184,7 +207,8 @@ public class Drivetrain implements ISubsystem {
                     )
                 )
             );
-        }
+        }*/
+        //probably don't 
     }
 
 
