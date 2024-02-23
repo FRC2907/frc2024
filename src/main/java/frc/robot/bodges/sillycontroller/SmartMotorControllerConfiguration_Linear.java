@@ -12,7 +12,7 @@ public class SmartMotorControllerConfiguration_Linear {
     public PIDF<         Distance > pidf_position;
     public PIDF<Velocity<Distance>> pidf_velocity;
 
-    public final boolean reversed;
+    public final boolean reversed, brake;
 
     public SmartMotorControllerConfiguration_Linear(
       Measure<Per<         Distance,           Angle >>
@@ -22,12 +22,14 @@ public class SmartMotorControllerConfiguration_Linear {
     , PIDF<         Distance > _pidf_position
     , PIDF<Velocity<Distance>> _pidf_velocity
     , boolean _reversed
+    , boolean _brake
     ) {
         this.mechanismPositionPerEncoderAngularPosition = _mechanismPositionPerEncoderAngularPosition;
         this.mechanismVelocityPerEncoderAngularVelocity = _mechanismVelocityPerEncoderAngularVelocity;
         this.pidf_position = _pidf_position;
         this.pidf_velocity = _pidf_velocity;
         this.reversed = _reversed;
+        this.brake = _brake;
     }
 
 }

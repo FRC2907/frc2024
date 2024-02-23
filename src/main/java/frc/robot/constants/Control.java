@@ -42,6 +42,7 @@ public class Control {
                 , kPD_position
                 , kPD_velocity
                 , false
+                , true
             );
         public static final boolean[] MOTORS_REVERSED = {false, true};
 
@@ -104,6 +105,7 @@ public class Control {
                 , null
                 , kPD_velocity
                 , false
+                , false // FIXME
             );
         public static final SmartMotorControllerConfiguration_Linear kRightMotorConf
             = new SmartMotorControllerConfiguration_Linear(
@@ -112,6 +114,7 @@ public class Control {
                 , null
                 , kPD_velocity
                 , true
+                , false // FIXME
             );
 
         public static final Measure<Velocity<Distance>>
@@ -146,6 +149,7 @@ public class Control {
                 , null
                 , kPD
                 , false
+                , false
             );
 
         public static final Measure<Velocity<Distance>>
@@ -178,6 +182,7 @@ public class Control {
                 , LINEAR_VEL_PER_ENC_VEL_UNIT
                 , null
                 , kPD
+                , false
                 , false
             );
         public static final boolean[] MOTORS_REVERSED = {false, true};

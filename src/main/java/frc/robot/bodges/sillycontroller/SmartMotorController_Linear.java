@@ -2,6 +2,7 @@ package frc.robot.bodges.sillycontroller;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.SlotConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -27,6 +28,8 @@ public class SmartMotorController_Linear {
     /* Supported downstream motor controllers */
     private final CANSparkMax spark;
     private final TalonFX talon;
+    private final PositionVoltage talon_position = new PositionVoltage(0, 0, false, 0, 0, false, false, false);
+    private final VelocityVoltage talon_velocity = new VelocityVoltage(0, 0, false, 0, 1, false, false, false);
 
     private SmartMotorControllerConfiguration_Linear config;
     private boolean positionControlConfigured = false, velocityControlConfigured = false;
@@ -44,50 +47,34 @@ public class SmartMotorController_Linear {
     public SmartMotorController_Linear(DownstreamControllerType _type, int[] can_ids, boolean[] reversies, SmartMotorControllerConfiguration_Linear _config) {
         this.type = _type;
         this.config = _config;
-        if (can_ids.length != reversies.length) {
-            if (Misc.debug) {
-			System.err.println("[WW] Attempted to create group of SmartMotorController with mismatched number of controllers and reversednesses. Leftovers will cycle back through from the start of the reversies array");
-			new Exception().printStackTrace();
-            }
-        }
-        if (can_ids.length < 1) {
-            if (Misc.debug) {
-			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
-			new Exception().printStackTrace();
-            }
-        }
+        if (can_ids.length != reversies.length)
+            if (Misc.debug)
+                System.err.println(
+                        "[WW] Attempted to create group of SmartMotorController with mismatched number of controllers and reversednesses. Leftovers will cycle back through from the start of the reversies array");
+
         switch (type) {
-            case NONE:
-                this.spark = null;
-                this.talon = null;
-                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_ids[0], MotorType.kBrushless);
                 this.talon = null;
                 ctor_SetupConfig();
                 this.spark.setInverted(reversies[0]);
-
                 for (int i = 1; i < can_ids.length; i++) {
                     @SuppressWarnings({"resource"})
                     CANSparkMax c = new CANSparkMax(can_ids[i], MotorType.kBrushless);
                     c.follow(this.spark, reversies[0] ^ reversies[i]);
                 }
                 break;
+
             case TALON_FX:
                 this.spark = null;
                 this.talon = new TalonFX(can_ids[0]);
                 ctor_SetupConfig();
                 this.talon.setInverted(reversies[0]);
-                for (int i = 1; i < can_ids.length; i++) {
+                for (int i = 1; i < can_ids.length; i++)
                     new TalonFX(can_ids[i]).setControl(new Follower(can_ids[0], reversies[0] ^ reversies[i]));
-                }
                 break;
+
             default:
-            // FIXME we should probably perish
-            if (Misc.debug) {
-                System.err.println("[EE] Attempted to create group of SmartMotorController for unsupported downstream controller type");
-                new Exception().printStackTrace();
-            }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -106,40 +93,25 @@ public class SmartMotorController_Linear {
     public SmartMotorController_Linear(DownstreamControllerType _type, int[] can_ids, SmartMotorControllerConfiguration_Linear _config) {
         this.type = _type;
         this.config = _config;
-        if (can_ids.length < 1) {
-            if (Misc.debug) {
-			System.err.println("[EE] Attempted to create empty group of SmartMotorController");
-			new Exception().printStackTrace();
-            }
-            // but we stay silly :3
-        }
+
         switch (type) {
-            case NONE:
-                this.spark = null;
-                this.talon = null;
-                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_ids[0], MotorType.kBrushless);
                 this.talon = null;
                 ctor_SetupConfig(); // set up reversies before followies
-                for (int i = 1; i < can_ids.length; i++) {
+                for (int i = 1; i < can_ids.length; i++)
                     new CANSparkMax(can_ids[i], MotorType.kBrushless).follow(this.spark);
-                }
                 break;
+
             case TALON_FX:
                 this.spark = null;
                 this.talon = new TalonFX(can_ids[0]);
                 ctor_SetupConfig();
-                for (int i = 1; i < can_ids.length; i++) {
+                for (int i = 1; i < can_ids.length; i++)
                     new TalonFX(can_ids[i]).setControl(new Follower(can_ids[0], false));
-                }
                 break;
+
             default:
-            // FIXME we should probably perish
-            if (Misc.debug) {
-                System.err.println("[EE] Attempted to create group of SmartMotorController for unsupported downstream controller type");
-                new Exception().printStackTrace();
-            }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -148,25 +120,19 @@ public class SmartMotorController_Linear {
     public SmartMotorController_Linear(DownstreamControllerType _type, int can_id, SmartMotorControllerConfiguration_Linear _config) {
         this.type = _type;
         this.config = _config;
+
         switch (type) {
-            case NONE:
-                this.spark = null;
-                this.talon = null;
-                break;
             case SPARK_MAX_BRUSHLESS:
                 this.spark = new CANSparkMax(can_id, MotorType.kBrushless);
                 this.talon = null;
                 break;
+
             case TALON_FX:
                 this.spark = null;
                 this.talon = new TalonFX(can_id);
                 break;
+
             default:
-            // FIXME we should probably perish
-            if (Misc.debug) {
-                System.err.println("[EE] Attempted to create SmartMotorController for unsupported downstream controller type");
-                new Exception().printStackTrace();
-            }
                 this.spark = null;
                 this.talon = null;
                 break;
@@ -190,8 +156,6 @@ public class SmartMotorController_Linear {
 
     private void ctor_SetupConfig() {
         switch(type) {
-            case NONE:
-                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.setInverted(config.reversed);
                 if (config.mechanismPositionPerEncoderAngularPosition != null)
@@ -203,17 +167,21 @@ public class SmartMotorController_Linear {
                         config.mechanismVelocityPerEncoderAngularVelocity.in(Units.MetersPerSecond.per(Units.RPM))
                     );
                 break;
+
             case TALON_FX:
                 talon.setInverted(config.reversed);
                 // FIXME does this actually translate reported feedback numbers? who knows!
                 if (config.mechanismPositionPerEncoderAngularPosition != null) {
-                    FeedbackConfigs conversions = new FeedbackConfigs()
+                    FeedbackConfigs feedbackConfigs = new FeedbackConfigs()
                         .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
                         .withSensorToMechanismRatio(
                             1.0/config.mechanismPositionPerEncoderAngularPosition.in(Units.Meters.per(Units.Revolutions))
                         );
-                    talon.getConfigurator().apply(conversions);
+                    talon.getConfigurator().apply(feedbackConfigs);
                 }
+                break;
+
+            default:
                 break;
         }
 
@@ -232,8 +200,6 @@ public class SmartMotorController_Linear {
 
     public void setPIDF_raw(double P, double I, double D, double F) {
         switch (type) {
-            case NONE:
-                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setP (P);
                 spark.getPIDController().setI (I);
@@ -241,12 +207,14 @@ public class SmartMotorController_Linear {
                 spark.getPIDController().setFF(F);
                 break;
             case TALON_FX:
-                var slotConfig = new SlotConfigs();
-                slotConfig.kP = P;
-                slotConfig.kI = I;
-                slotConfig.kD = D;
-                slotConfig.kS = F;
-                talon.getConfigurator().apply(slotConfig);
+                TalonFXConfiguration talon_config = new TalonFXConfiguration();
+                talon_config.Slot0.kP = P;
+                talon_config.Slot0.kI = I;
+                talon_config.Slot0.kD = D;
+                talon_config.Slot0.kV = F;
+                talon.getConfigurator().apply(talon_config);
+                break;
+            default:
                 break;
         }
     }
@@ -328,14 +296,14 @@ public class SmartMotorController_Linear {
             mode = ProcessVariable.POSITION;
         }
         switch (type) {
-            case NONE:
-                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.Meters), ControlType.kPosition);
                 break;
             case TALON_FX:
             // TODO verify units?
-                talon.setControl(new PositionVoltage(r.in(Units.Meters)));
+                talon.setControl(talon_position.withPosition(r.in(Units.Meters)));
+                break;
+            default:
                 break;
         }
     }
@@ -358,38 +326,36 @@ public class SmartMotorController_Linear {
             mode = ProcessVariable.VELOCITY;
         }
         switch (type) {
-            case NONE:
-                break;
             case SPARK_MAX_BRUSHLESS:
                 spark.getPIDController().setReference(r.in(Units.MetersPerSecond), ControlType.kVelocity);
                 break;
             case TALON_FX:
             // TODO verify units?
-                talon.setControl(new VelocityVoltage(r.in(Units.MetersPerSecond)));
+                talon.setControl(talon_velocity.withVelocity(r.in(Units.MetersPerSecond)));
+                break;
+            default:
                 break;
         }
     }
 
     public Measure<Distance> getPosition() {
         switch (type) {
-            case NONE:
-                return Units.Meters.of(0);
             case SPARK_MAX_BRUSHLESS:
                 return Units.Meters.of(spark.getEncoder().getPosition());
             case TALON_FX:
                 return Units.Meters.of(talon.getPosition().getValueAsDouble());
-            default: return null;
+            default:
+                return Units.Meters.of(0);
         }
     }
     public Measure<Velocity<Distance>> getVelocity() {
         switch (type) {
-            case NONE:
-                return Units.MetersPerSecond.of(0);
             case SPARK_MAX_BRUSHLESS:
                 return Units.MetersPerSecond.of(spark.getEncoder().getVelocity());
             case TALON_FX:
                 return Units.MetersPerSecond.of(talon.getVelocity().getValueAsDouble());
-            default: return null;
+            default:
+                return Units.MetersPerSecond.of(0);
         }
     }
 }
