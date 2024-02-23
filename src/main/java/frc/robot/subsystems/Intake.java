@@ -2,15 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
-import frc.robot.constants.Control;
+import frc.robot.bodges.FeedbackMotor;
+import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MotorControllers;
 
 public class Intake implements ISubsystem {
     private Measure<Velocity<Distance>> setPoint;
-    private SmartMotorController_Linear motor;
+    private FeedbackMotor motor;
 
-    private Intake(SmartMotorController_Linear _motor) {
+    private Intake(FeedbackMotor _motor) {
         this.motor = _motor;
     }
 
@@ -30,7 +30,7 @@ public class Intake implements ISubsystem {
         return setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return motor.getVelocity();
+        return Units.MetersPerSecond.of(motor.get_velocity());
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -38,13 +38,13 @@ public class Intake implements ISubsystem {
 
 
     public void intake() {
-        setSetPoint(Control.intake.kIntakingSpeed);
+        setSetPoint(GameInteractions.intake.kIntakingSpeed);
     }
     public void outake() {
-        setSetPoint(Control.intake.kOutakingSpeed);
+        setSetPoint(GameInteractions.intake.kOutakingSpeed);
     }
     public void off() {
-        setSetPoint(Control.intake.kOff);
+        setSetPoint(GameInteractions.intake.kOff);
     }
 
 
@@ -58,7 +58,7 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        motor.setVelocity(setPoint);
+        motor.set_velocity(setPoint.in(Units.MetersPerSecond));
     }
 
     @Override

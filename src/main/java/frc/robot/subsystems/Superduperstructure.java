@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.constants.Control;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Ports;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
@@ -169,32 +169,32 @@ public class Superduperstructure implements ISubsystem {
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
                     drivetrain.setDriveMode(
                         intake.hasNote()
-                        ? Control.drivetrain.kDefaultDriveModeWithNote
-                        : Control.drivetrain.kDefaultDriveModeWithoutNote
+                        ? Misc.kDefaultDriveModeWithNote
+                        : Misc.kDefaultDriveModeWithoutNote
                     );
                 switch(drivetrain.getDriveMode()){
                     case FIELD_FORWARD:
                         drivetrain.setFieldDriveInputs(
-                            Control.drivetrain.kMaxSpeed.times(driver.getLeftMagnitude())
+                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
                             , driver.getLeftAngle()
                         );
                         break;
                     case FIELD_REVERSED:
                         drivetrain.setFieldDriveInputs(
-                            Control.drivetrain.kMaxSpeed.times(driver.getLeftMagnitude())
+                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
                             , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
                         );
                         break;
                     case LOCAL_FORWARD:
                         drivetrain.setLocalDriveInputs(
-                            Control.drivetrain.kMaxSpeed.times(driver.getLeftY())
-                            , Control.drivetrain.kMaxAngVel.times(driver.getRightX())
+                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftY())
+                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX())
                         );
                         break;
                     case LOCAL_REVERSED:
                         drivetrain.setLocalDriveInputs(
-                            Control.drivetrain.kMaxSpeed.times(driver.getLeftY()).negate()
-                            , Control.drivetrain.kMaxAngVel.times(driver.getRightX()).negate()
+                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftY()).negate()
+                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate()
                         );
                         break;
                     default:

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,14 +14,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LimelightHelpers;
-import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
-import frc.robot.constants.Control;
+import frc.robot.bodges.FeedbackMotor;
+import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
+import frc.robot.constants.PIDGains;
+
 import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain implements ISubsystem {
 
-    private SmartMotorController_Linear leftMotor, rightMotor;
+    private FeedbackMotor leftMotor, rightMotor;
     private Measure<Velocity<Distance>> leftSpeed, rightSpeed;
     private Field2d sb_field;
     private DriveMode mode;
@@ -31,7 +32,7 @@ public class Drivetrain implements ISubsystem {
     private final DifferentialDrivePoseEstimator poseEstimator;
 
 
-    private Drivetrain(SmartMotorController_Linear left, SmartMotorController_Linear right) {
+    private Drivetrain(FeedbackMotor left, FeedbackMotor right) {
         this.leftMotor = left;
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
@@ -45,10 +46,10 @@ public class Drivetrain implements ISubsystem {
         this.timer.restart();
 
         this.poseEstimator = new DifferentialDrivePoseEstimator(
-            Control.drivetrain.DRIVE_KINEMATICS,
+            MechanismDimensions.drivetrain.DRIVE_KINEMATICS,
             gyro.getRotation2d(),
-            leftMotor.getPosition().in(Units.Meters),
-            rightMotor.getPosition().in(Units.Meters),
+            leftMotor.get_position(),
+            rightMotor.get_position(),
             new Pose2d(),
             VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5).in(Units.Radians)),
             VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
@@ -101,7 +102,7 @@ public class Drivetrain implements ISubsystem {
             , 0.0
             , rotation.in(Units.RadiansPerSecond)
         );
-        DifferentialDriveWheelSpeeds wheelSpeeds = Control.drivetrain.DRIVE_KINEMATICS.toWheelSpeeds(chassisSpeeds);
+        DifferentialDriveWheelSpeeds wheelSpeeds = MechanismDimensions.drivetrain.DRIVE_KINEMATICS.toWheelSpeeds(chassisSpeeds);
         leftSpeed  = Units.MetersPerSecond.of(wheelSpeeds. leftMetersPerSecond);
         rightSpeed = Units.MetersPerSecond.of(wheelSpeeds.rightMetersPerSecond);
     }
@@ -126,7 +127,7 @@ public class Drivetrain implements ISubsystem {
             Units.DegreesPerSecond.of(
                 // this is goofy
                 // we're just fighting the type system
-                Control.drivetrain.kP_fieldRelativeHeading
+                PIDGains.drivetrain.heading.kP
                 // deg/s / deg => 1/s
                 .in(Units.DegreesPerSecond.per(Units.Degrees))
                 // then (1/s) * deg => deg/s
@@ -139,8 +140,8 @@ public class Drivetrain implements ISubsystem {
 
 
     private void sendMotorInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
-        leftMotor.setVelocity(left);
-        rightMotor.setVelocity(right);
+        leftMotor.set_velocity(left.in(Units.MetersPerSecond));
+        rightMotor.set_velocity(right.in(Units.MetersPerSecond));
     }
 
 
@@ -184,8 +185,9 @@ public class Drivetrain implements ISubsystem {
     private void updatePoseFromSensors() {
         poseEstimator.update(
             gyro.getRotation2d(), 
-            leftMotor.getPosition().in(Units.Meters), 
-            rightMotor.getPosition().in(Units.Meters));
+            leftMotor.get_position(), 
+            rightMotor.get_position()
+        );
         
         poseEstimator.addVisionMeasurement(
         LimelightHelpers.getBotPose2d(""), 
@@ -217,11 +219,11 @@ public class Drivetrain implements ISubsystem {
     }
 
     public Measure<Velocity<Distance>> getVelocityL() {
-        return leftMotor.getVelocity();
+        return Units.MetersPerSecond.of(leftMotor.get_velocity());
     }
 
     public Measure<Velocity<Distance>> getVelocityR() {
-        return rightMotor.getVelocity();
+        return Units.MetersPerSecond.of(rightMotor.get_velocity());
     }
 
     public Measure<Distance> getPositionX() {

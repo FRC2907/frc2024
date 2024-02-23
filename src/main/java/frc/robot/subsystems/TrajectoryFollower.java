@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.auto.actions.templates.Action;
-import frc.robot.constants.Control;
+import frc.robot.constants.MechanismDimensions;
 
 public class TrajectoryFollower extends Action {
     private Trajectory trajectory;
@@ -29,7 +29,7 @@ public class TrajectoryFollower extends Action {
     }
 
     public TrajectoryFollower(Trajectory t) {
-        this(t, Control.drivetrain.DRIVE_KINEMATICS);
+        this(t, MechanismDimensions.drivetrain.DRIVE_KINEMATICS);
     }
 
 

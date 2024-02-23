@@ -19,7 +19,7 @@ import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.constants.Control;
+import frc.robot.constants.MechanismDimensions;
 
 // https://docs.wpilib.org/en/stable/docs/software/vision-processing/roborio/using-the-cameraserver-on-the-roborio.html
 
@@ -44,7 +44,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
         CameraServer
                 .startAutomaticCapture()
                 .setResolution(w, h);
-        if (Control.camera.kNoteTrackingEnabled) {
+        if (MechanismDimensions.camera.kNoteTrackingEnabled) {
             this.cvSink = CameraServer.getVideo();
             this.outputStream = CameraServer.putVideo("Note Targeting", w, h);
             this.i_color = new Mat();
@@ -89,7 +89,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     @Override
     public void onLoop() {
-        if (Control.camera.kNoteTrackingEnabled)
+        if (MechanismDimensions.camera.kNoteTrackingEnabled)
             runNoteTracking();
     }
 
@@ -135,7 +135,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        if (Control.camera.kNoteTrackingEnabled) {
+        if (MechanismDimensions.camera.kNoteTrackingEnabled) {
             p_dx.set(dx);
             p_y.set(y);
         }
