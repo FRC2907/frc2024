@@ -49,4 +49,7 @@ public class MotorControllers {
 					.setVelocityController(PIDControllers.shooter.kVelocity)
 			: new FakeMotor();
 
+
+	public static final FeedbackMotor[] list = {arm, drivetrainLeft, drivetrainRight, intake, shooter};
+
 }
