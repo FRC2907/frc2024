@@ -352,6 +352,58 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "1,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/State: ",
+              "_title": "State: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Acked ref: ",
+              "_title": "Acked ref: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Error: ",
+              "_title": "Error: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/dt.velocityL.ref",
+              "_title": "dt.velocityL.ref",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -420,34 +472,68 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "2,0": {
+          "5,1": {
             "size": [
-              4,
-              3
+              2,
+              2
             ],
             "content": {
-              "_type": "Differential Drivebase",
-              "_title": "Differential Drivebase",
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/Acked ref: ",
+              "_title": "SmartDashboard/Acked ref: ",
               "_glyph": 148,
               "_showGlyph": false,
-              "Wheels/Number of wheels": 6,
-              "Wheels/Wheel diameter": 58.0,
-              "Visuals/Show velocity vectors": true
+              "Range/Min": 0.0,
+              "Range/Max": 100.0,
+              "Visuals/Show value": true
             }
           },
-          "6,0": {
+          "9,1": {
             "size": [
-              7,
-              5
+              2,
+              2
             ],
             "content": {
-              "_type": "Field",
-              "_title": "Field",
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/Error: ",
+              "_title": "SmartDashboard/Error: ",
               "_glyph": 148,
               "_showGlyph": false,
-              "Game/Game": "k2024Crescendo",
-              "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false
+              "Range/Min": 0.0,
+              "Range/Max": 100.0,
+              "Visuals/Show value": true
+            }
+          },
+          "7,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/State: ",
+              "_title": "SmartDashboard/State: ",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Range/Min": 0.0,
+              "Range/Max": 100.0,
+              "Visuals/Show value": true
+            }
+          },
+          "3,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/dt.velocityL.ref",
+              "_title": "SmartDashboard/dt.velocityL.ref",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Range/Min": 0.0,
+              "Range/Max": 100.0,
+              "Visuals/Show value": true
             }
           }
         }
@@ -455,9 +541,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1382.0,
-    "height": 736.0
+    "x": 0.0,
+    "y": -0.88970947265625,
+    "width": 1920.0,
+    "height": 1080.0
   }
 }

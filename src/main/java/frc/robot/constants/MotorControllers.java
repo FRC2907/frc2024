@@ -22,7 +22,7 @@ public class MotorControllers {
 					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
 							.in(Units.Meters.per(Units.Rotations)))
 					.setVelocityController(PIDControllers.drivetrain.kVelocity)
-			: Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS)
+			: Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS)
 					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
 							.in(Units.Meters.per(Units.Rotations)))
 					.setVelocityController(PIDControllers.drivetrain.kVelocity);
@@ -32,10 +32,11 @@ public class MotorControllers {
 					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
 							.in(Units.Meters.per(Units.Rotations)))
 					.setVelocityController(PIDControllers.drivetrain.kVelocity)
-			: Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS)
-					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
-							.in(Units.Meters.per(Units.Rotations)))
-					.setVelocityController(PIDControllers.drivetrain.kVelocity);
+			: new FakeMotor();
+			//: Motors.talonfx.createGroup(Ports.can.drivetrain.RIGHTS)
+			//		.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
+			//				.in(Units.Meters.per(Units.Rotations)))
+			//		.setVelocityController(PIDControllers.drivetrain.kVelocity);
 
 	public static final FeedbackMotor intake = Misc.isCompBot
 			? Motors.sparkmax.createGroup(false, Ports.can.intake.MOTORS)
