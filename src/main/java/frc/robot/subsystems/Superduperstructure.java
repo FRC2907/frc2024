@@ -38,7 +38,8 @@ public class Superduperstructure implements ISubsystem {
         , PREPARING_FOR_CLIMB, CLIMBING, HUNG
 
         , KNOCKED_OVER, SELF_RIGHTING
-        // TODO self-righting
+
+        , FOLLOWING_TRAJECTORY
     }
 
     public enum BestTarget {
@@ -106,6 +107,9 @@ public class Superduperstructure implements ISubsystem {
     }
     public void selfRighting(){
         state = RobotState.SELF_RIGHTING;
+    }
+    public void followingTrajectory(){
+        state = RobotState.FOLLOWING_TRAJECTORY;
     }
 
     public void neutralPosition() {
@@ -397,6 +401,11 @@ public class Superduperstructure implements ISubsystem {
             case SELF_RIGHTING:
                 arm.selfRightingPosition();
                 //TODO check if we need to push back max
+                break;
+            case FOLLOWING_TRAJECTORY:
+                if (tjf.isDone()){
+                    neutralPosition();
+                }
                 break;
             default:
                 break;
