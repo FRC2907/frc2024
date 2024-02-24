@@ -1,6 +1,6 @@
 //LimelightHelpers v1.2.1 (March 1, 2023)
 
-package frc.robot;
+package frc.robot.util;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -397,7 +397,8 @@ public class LimelightHelpers {
     private static Pose2d toPose2D(double[] inData){
         if(inData.length < 6)
         {
-            System.err.println("Bad LL 2D Pose Data!");
+            // kate was here
+            //System.err.println("Bad LL 2D Pose Data!");
             return new Pose2d();
         }
         Translation2d tran2d = new Translation2d(inData[0], inData[1]);

@@ -4,12 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
-import frc.robot.constants.Control;
+import frc.robot.constants.MechanismDimensions;
+import frc.robot.constants.Misc;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
 
@@ -25,6 +27,13 @@ import frc.robot.subsystems.Superduperstructure;
 
 public class Robot extends TimedRobot {
 
+  /**
+   * Configure the loop rate for periodic methods.
+   */
+  public Robot() {
+    super(Misc.kPeriod.in(Units.Seconds));
+  }
+
   private Superduperstructure superduperstructure;
   private Thread noteTargetingThread;
 
@@ -33,13 +42,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    if (Control.camera.kEnabled) {
+    if (MechanismDimensions.camera.kEnabled) {
     noteTargetingThread = new Thread(
         new NoteTargetingPipeline(
-          Control.camera.WIDTH
-          , Control.camera.HEIGHT
-          , Control.camera.kOrangeLow
-          , Control.camera.kOrangeHigh
+          MechanismDimensions.camera.WIDTH
+          , MechanismDimensions.camera.HEIGHT
+          , MechanismDimensions.camera.kOrangeLow
+          , MechanismDimensions.camera.kOrangeHigh
           )
       );
       noteTargetingThread.setDaemon(true);

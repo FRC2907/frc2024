@@ -1,35 +1,55 @@
 package frc.robot.constants;
 
-import frc.robot.bodges.sillycontroller.DownstreamControllerType;
-import frc.robot.bodges.sillycontroller.SmartMotorController_Angular;
-import frc.robot.bodges.sillycontroller.SmartMotorController_Linear;
+import edu.wpi.first.units.*;
+import frc.robot.bodges.FakeMotor;
+import frc.robot.bodges.FeedbackMotor;
+import frc.robot.util.Motors;
 
 public class MotorControllers {
-    public static final SmartMotorController_Angular arm = new SmartMotorController_Angular(
-        Misc.isCompBot ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.NONE
-        , Ports.can.arm.MOTORS
-        , Control.arm.MOTORS_REVERSED
-        , Control.arm.kMotorConf
-    );
-    public static final SmartMotorController_Linear shooter = new SmartMotorController_Linear(
-        Misc.isCompBot ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.NONE
-        , Ports.can.shooter.MOTORS
-        , Control.shooter.MOTORS_REVERSED
-        , Control.shooter.kMotorConf
-    );
-    public static final SmartMotorController_Linear intake = new SmartMotorController_Linear(
-        Misc.isCompBot ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.NONE
-        , Ports.can.intake.MOTORS
-        , Control.shooter.kMotorConf
-    );
-    public static final SmartMotorController_Linear drivetrainLeft = new SmartMotorController_Linear(
-        Misc.isCompBot ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.TALON_FX
-        , Ports.can.drivetrain.LEFTS
-        , Control.drivetrain.kLeftMotorConf
-    );
-    public static final SmartMotorController_Linear drivetrainRight = new SmartMotorController_Linear(
-        Misc.isCompBot ? DownstreamControllerType.SPARK_MAX_BRUSHLESS : DownstreamControllerType.NONE
-        , Ports.can.drivetrain.RIGHTS
-        , Control.drivetrain.kRightMotorConf
-    );
+	public static final FeedbackMotor arm = Misc.isCompBot
+			? Motors.sparkmax.createOpposedPair(false, Ports.can.arm.MOTORS)
+					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL
+							.in(Units.Degrees.per(Units.Rotations)))
+					.setPositionController(PIDControllers.arm.kPosition)
+					.setVelocityController(PIDControllers.arm.kVelocity)
+					.setPositionHysteresis(PIDGains.arm.position.kH.in(Units.Degrees),
+							PIDGains.arm.velocity.kH.in(Units.DegreesPerSecond))
+					.setVelocityHysteresis(PIDGains.arm.velocity.kH.in(Units.DegreesPerSecond))
+			: new FakeMotor();
+
+	public static final FeedbackMotor drivetrainLeft = Misc.isCompBot
+			? Motors.sparkmax.createGroup(false, Ports.can.drivetrain.LEFTS)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
+							.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.drivetrain.kVelocity)
+			: Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
+							.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.drivetrain.kVelocity);
+
+	public static final FeedbackMotor drivetrainRight = Misc.isCompBot
+			? Motors.sparkmax.createGroup(true, Ports.can.drivetrain.RIGHTS)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
+							.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.drivetrain.kVelocity)
+			: Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
+							.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.drivetrain.kVelocity);
+
+	public static final FeedbackMotor intake = Misc.isCompBot
+			? Motors.sparkmax.createGroup(false, Ports.can.intake.MOTORS)
+					.setFactor(MechanismDimensions.intake.LINEAR_TRAVEL_PER_ENCODER_TRAVEL.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.intake.kVelocity)
+			: new FakeMotor();
+
+	public static final FeedbackMotor shooter = Misc.isCompBot
+			? Motors.sparkmax.createOpposedPair(false, Ports.can.shooter.MOTORS)
+					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL.in(Units.Meters.per(Units.Rotations)))
+					.setVelocityController(PIDControllers.shooter.kVelocity)
+			: new FakeMotor();
+
+
+	public static final FeedbackMotor[] list = {arm, drivetrainLeft, drivetrainRight, intake, shooter};
+
 }
