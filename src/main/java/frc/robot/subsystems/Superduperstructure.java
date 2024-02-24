@@ -392,11 +392,11 @@ public class Superduperstructure implements ISubsystem {
             case NEUTRAL:
                 break;
             case KNOCKED_OVER:
-                //TODO
+                state = RobotState.SELF_RIGHTING;
                 break;
             case SELF_RIGHTING:
                 arm.selfRightingPosition();
-                //TODO confirm
+                //TODO check if we need to push back max
                 break;
             default:
                 break;
