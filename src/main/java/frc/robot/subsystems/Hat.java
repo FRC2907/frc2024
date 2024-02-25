@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import frc.robot.util.Geometry;
+import frc.robot.constants.FieldElements;
 
 /**
  * The Hat generates trajectories in real time based on
@@ -10,12 +13,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 public class Hat implements ISubsystem {
 
     private static Hat instance;
+
     public static Hat getInstance() {
         if (instance == null)
             instance = new Hat();
         return instance;
     }
-
 
     public TrajectoryFollower findPathToNote() {
         // TODO implement
@@ -26,7 +29,9 @@ public class Hat implements ISubsystem {
 
     public TrajectoryFollower findPathToSpeaker() {
         // TODO implement
-        // this one is a challenge: we have a region we want to be in
+        // we have a region we want to be in
+        // check out util.Geometry.ScoringRegion and
+        // constants.FieldElements.scoring_regions
         return null;
     }
 
@@ -37,9 +42,10 @@ public class Hat implements ISubsystem {
         return null;
     }
 
-
     @Override
     public void onLoop() {
+        receiveOptions();
+        submitTelemetry();
     }
 
     @Override

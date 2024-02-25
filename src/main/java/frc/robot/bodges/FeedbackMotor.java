@@ -5,8 +5,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
@@ -21,6 +23,8 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
     protected double static_ff = 0.0, factor = 1.0, last_effort = 0.0;
     protected DoubleSupplier active_feedback;
     protected String name;
+    protected double inputLimit_lower = MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts);
+    protected double inputLimit_upper = MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts);
 
     public FeedbackMotor setName(String name) {
         this.name = name;
@@ -105,6 +109,17 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         return this;
     }
 
+    public FeedbackMotor setControlEffortLimit(double limit) {
+        return setControlEffortLimit(-limit, limit);
+    }
+
+    public FeedbackMotor setControlEffortLimit(double limit_lower, double limit_upper) {
+        if (limit_upper > limit_lower) return setControlEffortLimit(limit_upper, limit_lower);
+        this.inputLimit_lower = Util.clampV(limit_lower);
+        this.inputLimit_upper = Util.clampV(limit_upper);
+        return this;
+    }
+
     public double getReference() { return active_pid.getSetpoint(); }
 
     public double getState() { return active_feedback.getAsDouble(); }
@@ -124,7 +139,7 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         receiveOptions();
 
         double output = static_ff + active_pid.calculate(getState());
-        output = Util.clampV(output);
+        output = Util.clamp(inputLimit_lower, output, inputLimit_upper);
         this.last_effort = output;
         this.setVoltage(output);
 

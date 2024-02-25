@@ -181,7 +181,6 @@ public class Drivetrain implements ISubsystem {
     }
     
 
-    // TODO look into wpilib PoseEstimator
     private void updatePoseFromSensors() {
         poseEstimator.update(
             gyro.getRotation2d(), 
