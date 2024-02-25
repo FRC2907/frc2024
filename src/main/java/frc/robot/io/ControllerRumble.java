@@ -37,6 +37,11 @@ public class ControllerRumble extends PS4Controller implements ISubsystem {
         this.rumble(duration, 1.0);
     }
 
+    @Override
+    public double getLeftY() { return -super.getLeftY(); }
+    @Override
+    public double getRightY() { return -super.getRightY(); }
+
     public Rotation2d getLeftAngle() {
         return Rotation2d.fromRadians(Math.atan2(getLeftY(), getLeftX()));
     } 

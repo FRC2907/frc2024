@@ -16,6 +16,8 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -38,9 +40,9 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     private double dx, y;
     private DoublePublisher p_dx, p_y;
 
-    public NoteTargetingPipeline(int w, int h, Scalar orangeLow, Scalar orangeHigh) {
-        this.w = w;
-        this.h = h;
+    public NoteTargetingPipeline() {
+        this.w = MechanismConstraints.camera.kWidth;
+        this.h = MechanismConstraints.camera.kHeight;
         CameraServer
                 .startAutomaticCapture()
                 .setResolution(w, h);
@@ -69,8 +71,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
                 //return Imgproc.contourArea(contour) < w * y * Control.camera.kAreaFilterFactor;
             };
 
-            this.orangeLow = orangeLow;
-            this.orangeHigh = orangeHigh;
+            this.orangeLow = MechanismConstraints.camera.kOrangeLow;
+            this.orangeHigh = MechanismConstraints.camera.kOrangeHigh;
 
             this.dx = 0;
             this.y = 0;
@@ -85,6 +87,13 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
         while (!Thread.interrupted())
             onLoop();
 
+    }
+
+    public static Transform2d pixelToTranslation(double dx, double y) {
+        return new Transform2d(); // TODO implement: map dx (how far off center) and y (how far up the image) to a translation on the field
+    }
+    public static Pose2d pixelToPose(Pose2d robot, double dx, double y) {
+        return robot.transformBy(pixelToTranslation(dx, y));
     }
 
     @Override

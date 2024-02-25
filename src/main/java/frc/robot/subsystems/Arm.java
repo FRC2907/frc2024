@@ -11,7 +11,7 @@ import frc.robot.util.Util;
 public class Arm implements ISubsystem {
     private Measure<Angle> setPoint_position;
     private Measure<Velocity<Angle>> setPoint_velocity;
-    private FeedbackMotor motor;
+    public final FeedbackMotor motor;
 
     private Arm(FeedbackMotor motor) {
         this.motor = motor;
@@ -21,7 +21,7 @@ public class Arm implements ISubsystem {
 
     public static Arm getInstance() {
         if (instance == null) {
-            instance = new Arm(MotorControllers.arm);
+            instance = new Arm(MotorControllers.arm());
         }
         return instance;
     }
@@ -36,7 +36,7 @@ public class Arm implements ISubsystem {
     }
 
     public Measure<Angle> getPosition() {
-        return Units.Degrees.of(motor.get_position());
+        return Units.Degrees.of(motor.getPosition());
     }
 
     public Measure<Angle> getPositionError() {
@@ -52,7 +52,7 @@ public class Arm implements ISubsystem {
     }
 
     public Measure<Velocity<Angle>> getVelocity() {
-        return Units.DegreesPerSecond.of(motor.get_velocity());
+        return Units.DegreesPerSecond.of(motor.getVelocity());
     }
 
     public Measure<Velocity<Angle>> getVelocityError() {
@@ -63,7 +63,6 @@ public class Arm implements ISubsystem {
         return motor.atSetpoint();
     }
 
-    // TODO look at moving these to velocity instead of incremental position
     public void up() {
         setSetPoint_velocity(GameInteractions.arm.kManualControlSpeed);
     }
@@ -111,7 +110,7 @@ public class Arm implements ISubsystem {
     @Override
     public void onLoop() {
         // TODO work on motion profiling this / using velocity -> position control
-        motor.set_position(setPoint_position.in(Units.Degrees));
+        motor.setPosition(setPoint_position.in(Units.Degrees));
     }
 
     @Override

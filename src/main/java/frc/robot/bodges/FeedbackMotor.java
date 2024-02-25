@@ -1,68 +1,145 @@
 package frc.robot.bodges;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.util.Util;
 
-/*
- * TODO try moving the implementations to a subclass of a generic implementation?
- * this becomes IFeedbackMotor and then
- * public abstract class FeedbackMotor<MC> {}
- * then
- * public class StupidTalonFX extends FeedbackMotor<TalonFX>
- * but that might get funky, if it expects the generic type to have things in common across all subclasses? idk
- * ---
- * well heck, just skip the generics. you're gonna have to use an internal variable anyways, just do that
+/**
+ * Describes a generic motor with closed-loop position and velocity control.
  */
-public interface FeedbackMotor extends MotorController, ISubsystem {
+public abstract class FeedbackMotor implements MotorController, ISubsystem {
 
-    public FeedbackMotor setFactor(double factor);
-    public double get_position();
-    public double get_velocity();
+    protected PIDController position_pid, velocity_pid, active_pid;
+    protected ArmFeedforward arm_ff = new ArmFeedforward(0, 0, 0);
+    protected ElevatorFeedforward elevator_ff = new ElevatorFeedforward(0, 0, 0);
+    protected double static_ff = 0.0, factor = 1.0, last_effort = 0.0;
+    protected DoubleSupplier active_feedback;
+    protected String name;
 
-    /*
-    private PIDController position_pid, velocity_pid, active_pid;
-    private ArmFeedforward arm_ff;
-    private ElevatorFeedforward elevator_ff;
-    private double static_ff;
-    private DoubleSupplier active_feedback;
-
-    @Override
-    public void setPosition(double reference) {
-        setReference(reference, position_pid, this::position);
+    public FeedbackMotor setName(String name) {
+        this.name = name;
+        return this;
     }
 
-    @Override
-    public void setVelocity(double reference) {
-        setReference(reference, velocity_pid, this::velocity);
+    public String getName() { return name; }
+
+    public FeedbackMotor setInverted_(boolean isInverted) {
+        this.setInverted(isInverted);
+        return this;
     }
 
-    private void setReference(double reference, PIDController pid, DoubleSupplier feedback) {
-        this.reference = reference;
+    public FeedbackMotor setFactor(double factor) {
+        this.factor = factor;
+        return setFactor_downstream(factor);
+    }
+    protected abstract FeedbackMotor setFactor_downstream(double factor);
+
+    public abstract double getPosition();
+    public abstract double getVelocity();
+
+    public FeedbackMotor setPosition(double reference) {
+        setReference(reference, position_pid, this::getPosition);
+        return this;
+    }
+
+    public FeedbackMotor setVelocity(double reference) {
+        setReference(reference, velocity_pid, this::getVelocity);
+        return this;
+    }
+
+    private FeedbackMotor setReference(double reference, PIDController pid, DoubleSupplier feedback) {
         this.active_pid = pid;
+        this.active_pid.setSetpoint(reference);
         this.active_feedback = feedback;
+        return this;
     }
-    */
 
-    public FeedbackMotor setPositionController(PIDController pid);
-    public FeedbackMotor setVelocityController(PIDController pid);
-    public FeedbackMotor setStaticFF(double ff);
-    public FeedbackMotor setArmFF(ArmFeedforward ff);
-    public FeedbackMotor setElevatorFF(ElevatorFeedforward ff);
-    public FeedbackMotor setPositionHysteresis(double h);
-    public FeedbackMotor setPositionHysteresis(double p, double v);
-    public FeedbackMotor setVelocityHysteresis(double h);
-    public FeedbackMotor setVelocityHysteresis(double v, double a);
+    public FeedbackMotor setPositionController(PIDController pid) {
+        this.position_pid = pid;
+        return this;
+    }
 
-    public FeedbackMotor set_position(double reference);
-    public FeedbackMotor set_velocity(double reference);
-    public double get_reference();
-    public double get_error();
-    public double get_lastControlEffort();
-    public boolean atSetpoint();
+    public FeedbackMotor setVelocityController(PIDController pid) {
+        this.velocity_pid = pid;
+        return this;
+    }
 
-    public double mechanism_to_encoder(double mechanism);
-    public double encoder_to_mechanism(double encoder);
+    public FeedbackMotor setStaticFF(double ff) {
+        this.static_ff = ff;
+        return this;
+    }
+
+    public FeedbackMotor setArmFF(ArmFeedforward ff) {
+        this.arm_ff = ff;
+        return this;
+    }
+
+    public FeedbackMotor setElevatorFF(ElevatorFeedforward ff) {
+        this.elevator_ff = ff;
+        return this;
+    }
+
+    public FeedbackMotor setPositionHysteresis(double h) {
+        position_pid.setTolerance(h);
+        return this;
+    }
+
+    public FeedbackMotor setPositionHysteresis(double p, double v) {
+        position_pid.setTolerance(p, v);
+        return this;
+    }
+
+    public FeedbackMotor setVelocityHysteresis(double h) {
+        velocity_pid.setTolerance(h);
+        return this;
+    }
+
+    public FeedbackMotor setVelocityHysteresis(double v, double a) {
+        velocity_pid.setTolerance(v, a);
+        return this;
+    }
+
+    public double getReference() { return active_pid.getSetpoint(); }
+
+    public double getState() { return active_feedback.getAsDouble(); }
+
+    public double getError() { return active_pid.getPositionError(); }
+
+    public double getLastControlEffort() { return last_effort; }
+
+    public boolean atSetpoint() { return active_pid.atSetpoint(); }
+
+    public double mechanismToEncoder(double mechanism) { return mechanism / factor; }
+
+    public double encoderToMechanism(double encoder) { return encoder * factor; }
+
+    @Override
+    public void onLoop() {
+        receiveOptions();
+
+        double output = static_ff + active_pid.calculate(getState());
+        output = Util.clampV(output);
+        this.last_effort = output;
+        this.setVoltage(output);
+
+        submitTelemetry();
+    }
+
+    @Override
+    public void submitTelemetry() {
+        if (name != null) {
+            SmartDashboard.putNumberArray(name + "/refstate", new double[] {getReference(), getState()});
+            SmartDashboard.putNumberArray(name + "/errinput", new double[] {getError(), getLastControlEffort()});
+        }
+    }
+
+    @Override
+    public void receiveOptions() { }
+
 }
