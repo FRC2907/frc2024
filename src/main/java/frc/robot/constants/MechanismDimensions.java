@@ -1,10 +1,7 @@
 package frc.robot.constants;
 
-import org.opencv.core.Scalar;
-
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
-import frc.robot.util.Util;
 
 /**
  * Style guidance:
@@ -18,8 +15,7 @@ import frc.robot.util.Util;
 public class MechanismDimensions {
 
     public static class electrical {
-        private static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12.0);
-        public static final Measure<Voltage> kMaxVoltage = Util.clampSymmetrical(Units.Volts.of(12.0), MAX_VOLTAGE);
+        public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12.0);
     }
 
     public static class arm {
@@ -59,12 +55,10 @@ public class MechanismDimensions {
     }
 
     public static class camera {
-        public static final int WIDTH = 320;
-        public static final int HEIGHT = 240;
-        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
-        public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
-        public static final double kAreaFilterFactor = 0.075;
-        public static final boolean kEnabled = true;
-        public static final boolean kNoteTrackingEnabled = false;
+        // TODO anything about the physical position of the camera can go here
+    }
+
+    public static class limelight {
+        // TODO anything about the physical position of the limelight can go here
     }
 }

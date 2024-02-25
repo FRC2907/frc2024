@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import frc.robot.util.Util;
 
 public class StupidSparkMax extends CANSparkMax implements FeedbackMotor {
 
@@ -37,29 +38,34 @@ public class StupidSparkMax extends CANSparkMax implements FeedbackMotor {
     private ArmFeedforward arm_ff = new ArmFeedforward(0, 0, 0);
     @SuppressWarnings({"unused"})
     private ElevatorFeedforward elevator_ff = new ElevatorFeedforward(0, 0, 0);
-    private double static_ff = 0.0, factor = 1.0;
+    private double static_ff = 0.0, factor = 1.0, last_effort = 0.0;
     private DoubleSupplier active_feedback;
 
+    @Override
     public FeedbackMotor setPositionController(PIDController pid) {
         this.position_pid = pid;
         return this;
     }
 
+    @Override
     public FeedbackMotor setVelocityController(PIDController pid) {
         this.velocity_pid = pid;
         return this;
     }
 
+    @Override
     public FeedbackMotor setStaticFF(double ff) {
         this.static_ff = ff;
         return this;
     }
 
+    @Override
     public FeedbackMotor setArmFF(ArmFeedforward ff) {
         this.arm_ff = ff;
         return this;
     }
 
+    @Override
     public FeedbackMotor setElevatorFF(ElevatorFeedforward ff) {
         this.elevator_ff = ff;
         return this;
@@ -84,13 +90,25 @@ public class StupidSparkMax extends CANSparkMax implements FeedbackMotor {
         return this;
     }
 
+    @Override
     public double get_reference() {
         return active_pid.getSetpoint();
     }
 
     @Override
+    public double get_error() {
+        return active_pid.getPositionError();
+    }
+
+    @Override
+    public double get_lastControlEffort() { return last_effort; }
+
+    @Override
     public void onLoop() {
-        this.set(static_ff + active_pid.calculate(active_feedback.getAsDouble()));
+        double output = static_ff + active_pid.calculate(active_feedback.getAsDouble());
+        output = Util.clampV(output);
+        this.last_effort = output;
+        this.setVoltage(output);
     }
 
     @Override

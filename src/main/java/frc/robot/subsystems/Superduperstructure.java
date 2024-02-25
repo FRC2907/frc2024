@@ -351,7 +351,7 @@ public class Superduperstructure implements ISubsystem {
                 arm.speakerPosition();
                 if (tjf == null)
                     tjf = hat.findPathToSpeaker();
-                if (arm.reachedSetPoint() && tjf.isDone()) { // TODO add drivetrain reached set point
+                else if (arm.reachedSetPoint() && tjf.isDone()) { // TODO add drivetrain reached set point
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
                     state = RobotState.READY_TO_SCORE_SPEAKER;
                 }

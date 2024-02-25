@@ -6,6 +6,16 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import frc.robot.subsystems.ISubsystem;
 
+/*
+ * TODO try moving the implementations to a subclass of a generic implementation?
+ * this becomes IFeedbackMotor and then
+ * public abstract class FeedbackMotor<MC> {}
+ * then
+ * public class StupidTalonFX extends FeedbackMotor<TalonFX>
+ * but that might get funky, if it expects the generic type to have things in common across all subclasses? idk
+ * ---
+ * well heck, just skip the generics. you're gonna have to use an internal variable anyways, just do that
+ */
 public interface FeedbackMotor extends MotorController, ISubsystem {
 
     public FeedbackMotor setFactor(double factor);
@@ -49,6 +59,8 @@ public interface FeedbackMotor extends MotorController, ISubsystem {
     public FeedbackMotor set_position(double reference);
     public FeedbackMotor set_velocity(double reference);
     public double get_reference();
+    public double get_error();
+    public double get_lastControlEffort();
     public boolean atSetpoint();
 
     public double mechanism_to_encoder(double mechanism);

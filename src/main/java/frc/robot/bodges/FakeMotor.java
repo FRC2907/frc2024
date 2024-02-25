@@ -78,6 +78,12 @@ public class FakeMotor implements FeedbackMotor {
     public double get_reference() { return reference; }
 
     @Override
+    public double get_error() { return reference; }
+
+    @Override
+    public double get_lastControlEffort() { return 0; }
+
+    @Override
     public void onLoop() { }
 
     @Override

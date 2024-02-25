@@ -3,7 +3,9 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.constants.MechanismConstraints;
 
 public class Util {
 	public static boolean wait(double step_start, double duration) {
@@ -16,6 +18,14 @@ public class Util {
 		if (max < value) return max;
 		return value;
 	}
+
+	public static double clampSymmetrical(double value, double cap) {
+		return clamp(-cap, value, cap);
+	}
+
+  public static double clampV(double value) {
+		return clampSymmetrical(value, MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts));
+  }
 
 	public static double clamp12(double value) {
 		return clamp(-12.0, value, 12.0);

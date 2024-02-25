@@ -1,8 +1,16 @@
 package frc.robot.constants;
 
+import org.opencv.core.Scalar;
+
 import edu.wpi.first.units.*;
+import frc.robot.util.Util;
 
 public class MechanismConstraints {
+
+    public static class electrical {
+        public static final Measure<Voltage> kMaxVoltage = Util.clampSymmetrical(Units.Volts.of(12.0), MechanismDimensions.electrical.MAX_VOLTAGE);
+    }
+
     public class arm {
         public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0); /// TODO empirical
         public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120); /// TODO empirical
@@ -22,5 +30,15 @@ public class MechanismConstraints {
 
     public class shooter {
         public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO empirical
+    }
+
+    public class camera {
+        public static final int kWidth = 320;
+        public static final int kHeight = 240;
+        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
+        public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
+        public static final double kAreaFilterFactor = 0.075;
+        public static final boolean kEnabled = true;
+        public static final boolean kNoteTrackingEnabled = false;
     }
 }

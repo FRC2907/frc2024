@@ -404,6 +404,151 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
+              "_title": "limelight_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Interface",
+              "_title": "limelight_Interface",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Stream",
+              "_title": "limelight_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/motor pid",
+              "_title": "motor pid",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/motor state",
+              "_title": "motor state",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/motor error",
+              "_title": "motor error",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "15,5": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/debug/arm.down",
+              "_title": "debug/arm.down",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,6": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/debug/rfrnc",
+              "_title": "debug/rfrnc",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "14,6": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/debug/error",
+              "_title": "debug/error",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,7": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/debug/state",
+              "_title": "debug/state",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "12,7": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/debug/input",
+              "_title": "debug/input",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -535,6 +680,157 @@
               "Range/Max": 100.0,
               "Visuals/Show value": true
             }
+          },
+          "3,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/motor pid",
+              "_title": "SmartDashboard/motor pid",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 0.5,
+              "Y-axis/Lower bound": -0.5,
+              "Y-axis/Unit": "ul"
+            }
+          },
+          "6,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/motor state",
+              "_title": "SmartDashboard/motor state",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Unit": "ul"
+            }
+          },
+          "9,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/motor error",
+              "_title": "SmartDashboard/motor error",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Unit": "ul"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Debug",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/debug/",
+      "widgetPane": {
+        "gridSize": 100.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/debug/rfrnc",
+              "_title": "rfrnc",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/debug/rfrnc": true
+            }
+          },
+          "6,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/debug/error",
+              "_title": "error",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/debug/error": true
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/debug/state",
+              "_title": "state",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/debug/state": true
+            }
+          },
+          "9,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/debug/input",
+              "_title": "input",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 13.0,
+              "Y-axis/Lower bound": -13.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/debug/input": true
+            }
           }
         }
       }
@@ -542,7 +838,7 @@
   ],
   "windowGeometry": {
     "x": 0.0,
-    "y": -0.88970947265625,
+    "y": 0.0,
     "width": 1920.0,
     "height": 1080.0
   }
