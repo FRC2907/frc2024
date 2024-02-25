@@ -72,6 +72,8 @@ public class MotorControllers {
 					_drivetrainRight = Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS);
 					break;
 				case FLAT:
+					_drivetrainLeft = Motors.talonfx.createGroup(Ports.can.drivetrain.RIGHTS);
+					break;
 				case DEBUG:
 				default:
 					_drivetrainRight = new FakeMotor();
