@@ -35,10 +35,11 @@ public class MechanismConstraints {
     public class camera {
         public static final int kWidth = 320;
         public static final int kHeight = 240;
-        public static final Scalar kOrangeLow = new Scalar(4, 127, 127);
+        public static final Scalar kOrangeLow = new Scalar(6, 66, 75);
         public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
         public static final double kAreaFilterFactor = 0.075;
         public static final boolean kEnabled = true;
-        public static final boolean kNoteTrackingEnabled = false;
+        public static final boolean kNoteTrackingEnabled = true;
+        public static final boolean kBlackoutNoteFeed = false;
     }
 }

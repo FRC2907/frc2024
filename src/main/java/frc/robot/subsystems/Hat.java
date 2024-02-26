@@ -24,6 +24,7 @@ public class Hat implements ISubsystem {
         // TODO implement
         // basically we need to be able to map a pixel (X,Y) in the camera feed to a
         // translation on the field, then feed that to the trajectory generator
+        // the pixel translation will be written in NoteTargetingPipeline someday
         return null;
     }
 

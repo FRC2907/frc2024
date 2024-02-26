@@ -366,32 +366,6 @@
               "_showGlyph": false
             }
           },
-          "2,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Acked ref: ",
-              "_title": "Acked ref: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Error: ",
-              "_title": "Error: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "4,3": {
             "size": [
               1,
@@ -444,6 +418,32 @@
               "_showGlyph": false
             }
           },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/raw_dx",
+              "_title": "note/raw_dx",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/raw_y",
+              "_title": "note/raw_y",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
           "0,4": {
             "size": [
               1,
@@ -451,8 +451,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/motor pid",
-              "_title": "motor pid",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:hue",
+              "_title": "note/orange_lo:hue",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -464,8 +464,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/motor state",
-              "_title": "motor state",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:hue",
+              "_title": "note/orange_hi:hue",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -477,25 +477,36 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/motor error",
-              "_title": "motor error",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:sat",
+              "_title": "note/orange_lo:sat",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
           "15,5": {
             "size": [
-              2,
-              2
+              1,
+              1
             ],
             "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/debug/arm.down",
-              "_title": "debug/arm.down",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:sat",
+              "_title": "note/orange_hi:sat",
               "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "_showGlyph": false
+            }
+          },
+          "16,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:val",
+              "_title": "note/orange_lo:val",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,6": {
@@ -505,8 +516,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/debug/rfrnc",
-              "_title": "debug/rfrnc",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:val",
+              "_title": "note/orange_hi:val",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -518,8 +529,34 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/debug/error",
-              "_title": "debug/error",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:hue.set",
+              "_title": "note/orange_lo:hue.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "15,6": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:sat.set",
+              "_title": "note/orange_lo:sat.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "16,6": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:val.set",
+              "_title": "note/orange_lo:val.set",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -531,8 +568,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/debug/state",
-              "_title": "debug/state",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:hue.set",
+              "_title": "note/orange_hi:hue.set",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -544,8 +581,21 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/debug/input",
-              "_title": "debug/input",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:sat.set",
+              "_title": "note/orange_hi:sat.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,7": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:val.set",
+              "_title": "note/orange_hi:val.set",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -744,7 +794,7 @@
     {
       "title": "Debug",
       "autoPopulate": true,
-      "autoPopulatePrefix": "SmartDashboard/debug/",
+      "autoPopulatePrefix": "SmartDashboard/testmotor/",
       "widgetPane": {
         "gridSize": 100.0,
         "showGrid": true,
@@ -752,15 +802,15 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
+          "9,2": {
             "size": [
-              3,
-              6
+              5,
+              4
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/debug/rfrnc",
-              "_title": "rfrnc",
+              "_source0": "network_table:///SmartDashboard/testmotor/errinput",
+              "_title": "/SmartDashboard/testmotor/errinput",
               "_glyph": 148,
               "_showGlyph": false,
               "Graph/Visible time": 30.0,
@@ -768,19 +818,18 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 10.0,
               "Y-axis/Lower bound": -10.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/debug/rfrnc": true
+              "Y-axis/Unit": "m/s"
             }
           },
-          "6,0": {
+          "4,2": {
             "size": [
-              3,
-              6
+              5,
+              4
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/debug/error",
-              "_title": "error",
+              "_source0": "network_table:///SmartDashboard/testmotor/refstate",
+              "_title": "/SmartDashboard/testmotor/refstate",
               "_glyph": 148,
               "_showGlyph": false,
               "Graph/Visible time": 30.0,
@@ -788,48 +837,227 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 10.0,
               "Y-axis/Lower bound": -10.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/debug/error": true
+              "Y-axis/Unit": "m/s, V"
             }
-          },
-          "0,0": {
+          }
+        }
+      }
+    },
+    {
+      "title": "Note tracking",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/note/",
+      "widgetPane": {
+        "gridSize": 100.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "5,1": {
             "size": [
-              3,
-              6
+              2,
+              1
             ],
             "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/debug/state",
-              "_title": "state",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/raw_dx",
+              "_title": "raw_dx",
               "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 10.0,
-              "Y-axis/Lower bound": -10.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/debug/state": true
+              "_showGlyph": false
             }
           },
-          "9,0": {
+          "7,1": {
             "size": [
-              3,
-              6
+              2,
+              1
             ],
             "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/debug/input",
-              "_title": "input",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/raw_y",
+              "_title": "raw_y",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:hue",
+              "_title": "orange_lo:hue",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:hue",
+              "_title": "orange_hi:hue",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:sat",
+              "_title": "orange_lo:sat",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:sat",
+              "_title": "orange_hi:sat",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:val",
+              "_title": "orange_lo:val",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:val",
+              "_title": "orange_hi:val",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:hue.set",
+              "_title": "orange_lo:hue.set",
               "_glyph": 148,
               "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 13.0,
-              "Y-axis/Lower bound": -13.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/debug/input": true
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 359.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          },
+          "3,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:sat.set",
+              "_title": "orange_lo:sat.set",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 255.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          },
+          "3,5": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_lo:val.set",
+              "_title": "orange_lo:val.set",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 255.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          },
+          "6,3": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:hue.set",
+              "_title": "orange_hi:hue.set",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 359.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          },
+          "6,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:sat.set",
+              "_title": "orange_hi:sat.set",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 255.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          },
+          "6,5": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/note/orange_hi:val.set",
+              "_title": "orange_hi:val.set",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 255.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
             }
           }
         }
