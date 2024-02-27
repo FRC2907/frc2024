@@ -48,8 +48,8 @@ public class Drivetrain implements ISubsystem {
         this.poseEstimator = new DifferentialDrivePoseEstimator(
             MechanismDimensions.drivetrain.DRIVE_KINEMATICS,
             gyro.getRotation2d(),
-            leftMotor.get_position(),
-            rightMotor.get_position(),
+            leftMotor.getPosition(),
+            rightMotor.getPosition(),
             new Pose2d(),
             VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5).in(Units.Radians)),
             VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
@@ -58,7 +58,7 @@ public class Drivetrain implements ISubsystem {
     private static Drivetrain instance;
     public static Drivetrain getInstance() {
         if (instance == null) {
-            instance = new Drivetrain(MotorControllers.drivetrainLeft, MotorControllers.drivetrainRight);
+            instance = new Drivetrain(MotorControllers.drivetrainLeft(), MotorControllers.drivetrainRight());
         }
         return instance;
     }
@@ -140,8 +140,8 @@ public class Drivetrain implements ISubsystem {
 
 
     private void sendMotorInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
-        leftMotor.set_velocity(left.in(Units.MetersPerSecond));
-        rightMotor.set_velocity(right.in(Units.MetersPerSecond));
+        leftMotor.setVelocity(left.in(Units.MetersPerSecond));
+        rightMotor.setVelocity(right.in(Units.MetersPerSecond));
     }
 
 
@@ -181,12 +181,11 @@ public class Drivetrain implements ISubsystem {
     }
     
 
-    // TODO look into wpilib PoseEstimator
     private void updatePoseFromSensors() {
         poseEstimator.update(
             gyro.getRotation2d(), 
-            leftMotor.get_position(), 
-            rightMotor.get_position()
+            leftMotor.getPosition(), 
+            rightMotor.getPosition()
         );
         
         poseEstimator.addVisionMeasurement(
@@ -219,11 +218,11 @@ public class Drivetrain implements ISubsystem {
     }
 
     public Measure<Velocity<Distance>> getVelocityL() {
-        return Units.MetersPerSecond.of(leftMotor.get_velocity());
+        return Units.MetersPerSecond.of(leftMotor.getVelocity());
     }
 
     public Measure<Velocity<Distance>> getVelocityR() {
-        return Units.MetersPerSecond.of(rightMotor.get_velocity());
+        return Units.MetersPerSecond.of(rightMotor.getVelocity());
     }
 
     public Measure<Distance> getPositionX() {

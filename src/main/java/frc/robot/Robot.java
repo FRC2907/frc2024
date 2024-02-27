@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
-import frc.robot.constants.MechanismDimensions;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Misc;
+import frc.robot.debug.FakeMotorTest;
+import frc.robot.debug.MotorControllerTest;
+import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
 
@@ -36,29 +39,28 @@ public class Robot extends TimedRobot {
     super(Misc.kPeriod.in(Units.Seconds));
   }
 
-  private Superduperstructure superduperstructure;
   private Thread noteTargetingThread;
 
   private SendableChooser<Routine> autoChooser;
   private Routine auto;
 
   public Alliance ally;
+  
+  private ISubsystem[] subsystems;
 
   @Override
   public void robotInit() {
-    if (MechanismDimensions.camera.kEnabled) {
-    noteTargetingThread = new Thread(
-        new NoteTargetingPipeline(
-          MechanismDimensions.camera.WIDTH
-          , MechanismDimensions.camera.HEIGHT
-          , MechanismDimensions.camera.kOrangeLow
-          , MechanismDimensions.camera.kOrangeHigh
-          )
-      );
+    if (MechanismConstraints.camera.kEnabled) {
+      noteTargetingThread = new Thread(new NoteTargetingPipeline());
       noteTargetingThread.setDaemon(true);
       noteTargetingThread.start();
     }
-    superduperstructure = Superduperstructure.getInstance();
+    // superduperstructure = Superduperstructure.getInstance();
+    this.subsystems = new ISubsystem[] {
+        //Superduperstructure.getInstance()
+        //new MotorControllerTest()
+        new FakeMotorTest()
+    };
 
     RoutineInstantiator.go();
     autoChooser = new SendableChooser<>();
@@ -74,7 +76,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    superduperstructure.onLoop();
+    for (ISubsystem s : subsystems)
+      s.onLoop();
   }
 
   @Override
@@ -90,7 +93,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    superduperstructure.neutralPosition();
+    // superduperstructure.neutralPosition();
   }
 
   @Override

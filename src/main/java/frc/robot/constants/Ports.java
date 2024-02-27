@@ -8,7 +8,7 @@ public class Ports {
         }
 
         public static class drivetrain {
-            public static final Integer[] LEFTS = { 1, 2 };
+            public static final Integer[] LEFTS = { 1 };
             public static final Integer[] RIGHTS = { 3, 4 };
         }
 

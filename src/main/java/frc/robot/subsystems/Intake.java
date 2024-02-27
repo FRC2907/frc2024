@@ -17,7 +17,7 @@ public class Intake implements ISubsystem {
     private static Intake instance;
     public static Intake getInstance() {
         if (instance == null) {
-            instance = new Intake(MotorControllers.intake);
+            instance = new Intake(MotorControllers.intake());
         }
         return instance;
     }
@@ -30,7 +30,7 @@ public class Intake implements ISubsystem {
         return setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return Units.MetersPerSecond.of(motor.get_velocity());
+        return Units.MetersPerSecond.of(motor.getVelocity());
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -58,7 +58,7 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        motor.set_velocity(setPoint.in(Units.MetersPerSecond));
+        motor.setVelocity(setPoint.in(Units.MetersPerSecond));
     }
 
     @Override

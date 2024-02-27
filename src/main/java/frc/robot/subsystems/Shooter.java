@@ -17,7 +17,7 @@ public class Shooter implements ISubsystem {
     private static Shooter instance;
     public static Shooter getInstance() {
         if (instance == null) {
-            instance = new Shooter(MotorControllers.shooter);
+            instance = new Shooter(MotorControllers.shooter());
         }
         return instance;
     }
@@ -30,7 +30,7 @@ public class Shooter implements ISubsystem {
         return setPoint;
     }
     public Measure<Velocity<Distance>> getVelocity() {
-        return Units.MetersPerSecond.of(motor.get_velocity());
+        return Units.MetersPerSecond.of(motor.getVelocity());
     }
     public Measure<Velocity<Distance>> getError() {
         return getSetPoint().minus(getVelocity());
@@ -58,7 +58,7 @@ public class Shooter implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        motor.set_velocity(setPoint.in(Units.MetersPerSecond));
+        motor.setVelocity(setPoint.in(Units.MetersPerSecond));
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -16,10 +17,10 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.constants.MechanismDimensions;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.MechanismConstraints;
 
 // https://docs.wpilib.org/en/stable/docs/software/vision-processing/roborio/using-the-cameraserver-on-the-roborio.html
 
@@ -36,15 +37,14 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     private Scalar orangeLow, orangeHigh;
 
     private double dx, y;
-    private DoublePublisher p_dx, p_y;
 
-    public NoteTargetingPipeline(int w, int h, Scalar orangeLow, Scalar orangeHigh) {
-        this.w = w;
-        this.h = h;
+    public NoteTargetingPipeline() {
+        this.w = MechanismConstraints.camera.kWidth;
+        this.h = MechanismConstraints.camera.kHeight;
         CameraServer
                 .startAutomaticCapture()
                 .setResolution(w, h);
-        if (MechanismDimensions.camera.kNoteTrackingEnabled) {
+        if (MechanismConstraints.camera.kNoteTrackingEnabled) {
             this.cvSink = CameraServer.getVideo();
             this.outputStream = CameraServer.putVideo("Note Targeting", w, h);
             this.i_color = new Mat();
@@ -64,19 +64,26 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             // true means "remove this item from consideration"
             // stuff at the bottom should be bigger to pass the filter
             this.sizeFilter = (contour) -> {
-                return false; // for now let's just allow everything
+                //return false; // for now let's just allow everything
                 //double y = Imgproc.boundingRect(contour).y;
                 //return Imgproc.contourArea(contour) < w * y * Control.camera.kAreaFilterFactor;
+                return Imgproc.contourArea(contour) < w * h * 1/1024;
             };
 
-            this.orangeLow = orangeLow;
-            this.orangeHigh = orangeHigh;
+            this.orangeLow = MechanismConstraints.camera.kOrangeLow;
+            this.orangeHigh = MechanismConstraints.camera.kOrangeHigh;
 
             this.dx = 0;
             this.y = 0;
-            NetworkTable nt = NetworkTableInstance.getDefault().getTable("note-tracking");
-            this.p_dx = nt.getDoubleTopic("dx").publish();
-            this.p_y = nt.getDoubleTopic("y").publish();
+
+            SmartDashboard.putNumber("note/orange_lo:hue.set", orangeLow.val[0]);
+            SmartDashboard.putNumber("note/orange_lo:sat.set", orangeLow.val[1]);
+            SmartDashboard.putNumber("note/orange_lo:val.set", orangeLow.val[2]);
+            SmartDashboard.putNumber("note/orange_hi:hue.set", orangeHigh.val[0]);
+            SmartDashboard.putNumber("note/orange_hi:sat.set", orangeHigh.val[1]);
+            SmartDashboard.putNumber("note/orange_hi:val.set", orangeHigh.val[2]);
+
+            //Calib3d.fisheye_initUndistortRectifyMap();
         }
     }
 
@@ -87,10 +94,24 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     }
 
+    public static Transform2d pixelToTranslation(double dx, double y) {
+        return new Transform2d();
+        // TODO implement: map dx (how far off center) and y (how far up the image) to a
+        // translation on the field, relative to the robot (i.e. this function must
+        // account for the camera's pose on the robot + the note's position relative to
+        // the camera)
+    }
+
+    public static Pose2d pixelToPose(Pose2d robot, double dx, double y) {
+        return robot.transformBy(pixelToTranslation(dx, y));
+    }
+
     @Override
     public void onLoop() {
-        if (MechanismDimensions.camera.kNoteTrackingEnabled)
+        receiveOptions();
+        if (MechanismConstraints.camera.kNoteTrackingEnabled)
             runNoteTracking();
+        submitTelemetry();
     }
 
     private void runNoteTracking() {
@@ -101,8 +122,10 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
         Imgproc.cvtColor(i_color, m_tmp, Imgproc.COLOR_BGR2HSV);
         Core.inRange(m_tmp, orangeLow, orangeHigh, i_mask);
-        Core.bitwise_not(i_mask, m_tmp);
-        i_color.setTo(new Scalar(0, 0, 0), m_tmp);
+        if (MechanismConstraints.camera.kBlackoutNoteFeed) {
+            Core.bitwise_not(i_mask, m_tmp);
+            i_color.setTo(new Scalar(0, 0, 0), m_tmp);
+        }
 
         pts.clear();
         Imgproc.findContours(i_mask, pts, m_tmp, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -127,7 +150,6 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
             dx = (line_x / w) - 0.5;
             y = line_y / h;
-            submitTelemetry();
         }
 
         outputStream.putFrame(i_color);
@@ -135,14 +157,29 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        if (MechanismDimensions.camera.kNoteTrackingEnabled) {
-            p_dx.set(dx);
-            p_y.set(y);
+        if (MechanismConstraints.camera.kNoteTrackingEnabled) {
+            SmartDashboard.putNumber("note/raw_dx", dx);
+            SmartDashboard.putNumber("note/raw_y", y);
+            SmartDashboard.putNumber("note/orange_lo:hue", orangeLow .val[0]);
+            SmartDashboard.putNumber("note/orange_hi:hue", orangeHigh.val[0]);
+            SmartDashboard.putNumber("note/orange_lo:sat", orangeLow .val[1]);
+            SmartDashboard.putNumber("note/orange_hi:sat", orangeHigh.val[1]);
+            SmartDashboard.putNumber("note/orange_lo:val", orangeLow .val[2]);
+            SmartDashboard.putNumber("note/orange_hi:val", orangeHigh.val[2]);
         }
     }
 
     @Override
     public void receiveOptions() {
-        // not used atm
+        this.orangeLow  = new Scalar(
+              SmartDashboard.getNumber("note/orange_lo:hue.set", orangeLow.val[0])
+            , SmartDashboard.getNumber("note/orange_lo:sat.set", orangeLow.val[1])
+            , SmartDashboard.getNumber("note/orange_lo:val.set", orangeLow.val[2])
+            );
+        this.orangeHigh  = new Scalar(
+              SmartDashboard.getNumber("note/orange_hi:hue.set", orangeHigh.val[0])
+            , SmartDashboard.getNumber("note/orange_hi:sat.set", orangeHigh.val[1])
+            , SmartDashboard.getNumber("note/orange_hi:val.set", orangeHigh.val[2])
+            );
     }
 }

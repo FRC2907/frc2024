@@ -1,143 +1,51 @@
 package frc.robot.bodges;
 
-import java.util.function.DoubleSupplier;
-
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+public class StupidSparkMax extends FeedbackMotor {
 
-public class StupidSparkMax extends CANSparkMax implements FeedbackMotor {
+    private CANSparkMax m;
 
     public StupidSparkMax(int deviceId, MotorType type) {
-        super(deviceId, type);
+        this.m = new CANSparkMax(deviceId, type);
     }
 
     @Override
-    public FeedbackMotor setFactor(double factor) {
+    protected FeedbackMotor setFactor_downstream(double factor) {
         this.factor = factor;
-        this.getEncoder().setPositionConversionFactor(factor);
-        this.getEncoder().setVelocityConversionFactor(factor);
+        m.getEncoder().setPositionConversionFactor(factor);
+        m.getEncoder().setVelocityConversionFactor(factor);
         return this;
     }
 
-    @Override
-    public double get_position() {
-        return this.getEncoder().getPosition();
+    public void follow(StupidSparkMax leader) {
+        m.follow(leader.m);
     }
 
     @Override
-    public double get_velocity() {
-        return this.getEncoder().getVelocity();
-    }
-
-    private PIDController position_pid, velocity_pid, active_pid;
-    @SuppressWarnings({"unused"})
-    private ArmFeedforward arm_ff = new ArmFeedforward(0, 0, 0);
-    @SuppressWarnings({"unused"})
-    private ElevatorFeedforward elevator_ff = new ElevatorFeedforward(0, 0, 0);
-    private double static_ff = 0.0, factor = 1.0;
-    private DoubleSupplier active_feedback;
-
-    public FeedbackMotor setPositionController(PIDController pid) {
-        this.position_pid = pid;
-        return this;
-    }
-
-    public FeedbackMotor setVelocityController(PIDController pid) {
-        this.velocity_pid = pid;
-        return this;
-    }
-
-    public FeedbackMotor setStaticFF(double ff) {
-        this.static_ff = ff;
-        return this;
-    }
-
-    public FeedbackMotor setArmFF(ArmFeedforward ff) {
-        this.arm_ff = ff;
-        return this;
-    }
-
-    public FeedbackMotor setElevatorFF(ElevatorFeedforward ff) {
-        this.elevator_ff = ff;
-        return this;
-    }
+    public double getPosition() { return m.getEncoder().getPosition(); }
 
     @Override
-    public FeedbackMotor set_position(double reference) {
-        setReference(reference, position_pid, this::get_position);
-        return this;
-    }
+    public double getVelocity() { return m.getEncoder().getVelocity(); }
+
+    /* everything below this line is boilerplate; you may copy-paste into new files */
 
     @Override
-    public FeedbackMotor set_velocity(double reference) {
-        setReference(reference, velocity_pid, this::get_velocity);
-        return this;
-    }
-
-    private FeedbackMotor setReference(double reference, PIDController pid, DoubleSupplier feedback) {
-        this.active_pid = pid;
-        this.active_pid.setSetpoint(reference);
-        this.active_feedback = feedback;
-        return this;
-    }
-
-    public double get_reference() {
-        return active_pid.getSetpoint();
-    }
+    public void set(double speed) { m.set(speed); }
 
     @Override
-    public void onLoop() {
-        this.set(static_ff + active_pid.calculate(active_feedback.getAsDouble()));
-    }
+    public double get() { return m.get(); }
 
     @Override
-    public void submitTelemetry() {
-    }
+    public void setInverted(boolean isInverted) { m.setInverted(isInverted); }
 
     @Override
-    public void receiveOptions() {
-    }
+    public boolean getInverted() { return m.getInverted(); }
 
     @Override
-    public double mechanism_to_encoder(double mechanism) {
-        return mechanism / factor;
-    }
+    public void disable() { m.disable(); }
 
     @Override
-    public double encoder_to_mechanism(double encoder) {
-        return encoder * factor;
-    }
-
-    @Override
-    public FeedbackMotor setPositionHysteresis(double h) {
-        position_pid.setTolerance(h);
-        return this;
-    }
-
-    @Override
-    public FeedbackMotor setPositionHysteresis(double p, double v) {
-        position_pid.setTolerance(p, v);
-        return this;
-    }
-
-    @Override
-    public FeedbackMotor setVelocityHysteresis(double h) {
-        velocity_pid.setTolerance(h);
-        return this;
-    }
-
-    @Override
-    public FeedbackMotor setVelocityHysteresis(double v, double a) {
-        velocity_pid.setTolerance(v, a);
-        return this;
-    }
-
-    @Override
-    public boolean atSetpoint() {
-        return active_pid.atSetpoint();
-    }
-
+    public void stopMotor() { m.stopMotor(); }
 }
