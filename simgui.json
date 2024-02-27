@@ -28,6 +28,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/DifferentialDrive[1]": "DifferentialDrive",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/PIDController[1]": "PIDController",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
@@ -35,10 +36,13 @@
     "Persistent Values": {
       "open": false
     },
-    "Retained Values": {
-      "open": false
-    },
     "transitory": {
+      "SmartDashboard": {
+        "open": true,
+        "testmotor": {
+          "open": true
+        }
+      },
       "arm": {
         "open": true
       },

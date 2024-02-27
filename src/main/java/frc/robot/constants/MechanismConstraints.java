@@ -38,7 +38,7 @@ public class MechanismConstraints {
         public static final Scalar kOrangeLow = new Scalar(6, 66, 75);
         public static final Scalar kOrangeHigh = new Scalar(32, 255, 255);
         public static final double kAreaFilterFactor = 0.075;
-        public static final boolean kEnabled = true;
+        public static final boolean kEnabled = false;
         public static final boolean kNoteTrackingEnabled = true;
         public static final boolean kBlackoutNoteFeed = false;
     }

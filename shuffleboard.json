@@ -599,56 +599,42 @@
               "_glyph": 148,
               "_showGlyph": false
             }
-          }
-        }
-      }
-    },
-    {
-      "title": "LiveWindow",
-      "autoPopulate": true,
-      "autoPopulatePrefix": "LiveWindow/",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "0,0": {
+          },
+          "14,7": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///LiveWindow/Ungrouped/PWMSparkMax[0]/Value",
-              "_title": "Ungrouped/PWMSparkMax[0]/Value",
+              "_source0": "network_table:///SmartDashboard/PIDController[1]/p",
+              "_title": "PIDController[1]/p",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "1,0": {
+          "15,7": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///LiveWindow/Ungrouped/Talon FX [12]/Value",
-              "_title": "Ungrouped/Talon FX [12]/Value",
+              "_source0": "network_table:///SmartDashboard/PIDController[1]/i",
+              "_title": "PIDController[1]/i",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "2,0": {
+          "16,7": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///LiveWindow/Ungrouped/PWMSparkMax[13]/Value",
-              "_title": "Ungrouped/PWMSparkMax[13]/Value",
+              "_source0": "network_table:///SmartDashboard/PIDController[1]/d",
+              "_title": "PIDController[1]/d",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -802,7 +788,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "9,2": {
+          "9,0": {
             "size": [
               5,
               4
@@ -816,12 +802,14 @@
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 10.0,
-              "Y-axis/Lower bound": -10.0,
-              "Y-axis/Unit": "m/s"
+              "Y-axis/Upper bound": 13.0,
+              "Y-axis/Lower bound": -13.0,
+              "Y-axis/Unit": "m/s",
+              "Visible data/SmartDashboard/testmotor/errinput[0]": true,
+              "Visible data/SmartDashboard/testmotor/errinput[1]": true
             }
           },
-          "4,2": {
+          "4,0": {
             "size": [
               5,
               4
@@ -837,7 +825,61 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 10.0,
               "Y-axis/Lower bound": -10.0,
-              "Y-axis/Unit": "m/s, V"
+              "Y-axis/Unit": "m/s, V",
+              "Visible data/SmartDashboard/testmotor/refstate[0]": true,
+              "Visible data/SmartDashboard/testmotor/refstate[1]": true
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotor/p.set",
+              "_title": "p.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotor/d.set",
+              "_title": "d.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,4": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/testmotor/update",
+              "_title": "update",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotor/r.set",
+              "_title": "r.set",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
