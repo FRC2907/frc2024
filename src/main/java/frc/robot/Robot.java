@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +42,8 @@ public class Robot extends TimedRobot {
   private SendableChooser<Routine> autoChooser;
   private Routine auto;
 
+  public Alliance ally;
+
   @Override
   public void robotInit() {
     if (MechanismDimensions.camera.kEnabled) {
@@ -62,6 +66,10 @@ public class Robot extends TimedRobot {
       autoChooser.addOption(r.getName(), r);
     autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Empty"));
     SmartDashboard.putData(autoChooser);
+
+    if (DriverStation.getAlliance().isPresent()){
+      ally = DriverStation.getAlliance().get();
+    }
   }
 
   @Override
