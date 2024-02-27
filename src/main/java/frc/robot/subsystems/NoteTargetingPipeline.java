@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -81,6 +82,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             SmartDashboard.putNumber("note/orange_hi:hue.set", orangeHigh.val[0]);
             SmartDashboard.putNumber("note/orange_hi:sat.set", orangeHigh.val[1]);
             SmartDashboard.putNumber("note/orange_hi:val.set", orangeHigh.val[2]);
+
+            //Calib3d.fisheye_initUndistortRectifyMap();
         }
     }
 
