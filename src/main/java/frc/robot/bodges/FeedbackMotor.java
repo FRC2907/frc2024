@@ -20,7 +20,7 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
     protected PIDController position_pid, velocity_pid, active_pid;
     protected ArmFeedforward arm_ff = new ArmFeedforward(0, 0, 0);
     protected ElevatorFeedforward elevator_ff = new ElevatorFeedforward(0, 0, 0);
-    protected double static_ff = 0.0, factor = 1.0, last_effort = 0.0;
+    protected double velocity_ff = 0.0, static_ff = 0.0, factor = 1.0, last_effort = 0.0;
     protected DoubleSupplier active_feedback;
     protected String name;
     protected double inputLimit_lower = MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts);
@@ -58,9 +58,21 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
     }
 
     private FeedbackMotor setReference(double reference, PIDController pid, DoubleSupplier feedback) {
-        this.active_pid = pid;
+        if (active_pid != pid)
+            this.active_pid = pid;
+        if (active_feedback != feedback)
+            this.active_feedback = feedback;
+        setReference(reference);
+        return this;
+    }
+
+    /**
+     * Update the setpoint of the active PID controller profile without reassigning the controller.
+     * @param reference New setpoint
+     * @return FeedbackMotor on which this method was called, for chaining
+     */
+    private FeedbackMotor setReference(double reference) {
         this.active_pid.setSetpoint(reference);
-        this.active_feedback = feedback;
         return this;
     }
 
@@ -86,6 +98,11 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
 
     public FeedbackMotor setElevatorFF(ElevatorFeedforward ff) {
         this.elevator_ff = ff;
+        return this;
+    }
+
+    public FeedbackMotor setVelocityFF(double ff) {
+        this.velocity_ff = ff;
         return this;
     }
 
@@ -130,18 +147,46 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
 
     public boolean atSetpoint() { return active_pid.atSetpoint(); }
 
+    public boolean trackingPosition() { return active_pid == position_pid; }
+    public boolean trackingVelocity() { return active_pid == velocity_pid; }
+
     public double mechanismToEncoder(double mechanism) { return mechanism / factor; }
 
     public double encoderToMechanism(double encoder) { return encoder * factor; }
+
+    private void runPID() {
+        double output = static_ff + active_pid.calculate(getState());
+        if (trackingVelocity()) output += velocity_ff * getReference();
+        output = Util.clamp(inputLimit_lower, output, inputLimit_upper);
+        this.last_effort = output;
+        this.setVoltage(output);
+    }
+
+    /*
+    private void runProfile(MotionProfile profile) {
+        setProfile(profile);
+        this.profile.start();
+        runProfile();
+    }
+
+    private void runProfile() {
+        if (profile == null) return;
+        if (profile.isDone()) {
+            setPosition(profile.get().position);
+            System.out.println("== End of profile ==");
+            System.out.println(profile.now() + "s of " + profile.length() + " s");
+            profile = null;
+            return;
+        }
+        setVelocity(profile.get().velocity);
+    }
+    */
 
     @Override
     public void onLoop() {
         receiveOptions();
 
-        double output = static_ff + active_pid.calculate(getState());
-        output = Util.clamp(inputLimit_lower, output, inputLimit_upper);
-        this.last_effort = output;
-        this.setVoltage(output);
+        runPID();
 
         submitTelemetry();
     }

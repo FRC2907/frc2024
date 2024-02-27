@@ -12,6 +12,7 @@ import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Misc;
+import frc.robot.debug.FakeMotorTest;
 import frc.robot.debug.MotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
@@ -52,8 +53,9 @@ public class Robot extends TimedRobot {
     }
     // superduperstructure = Superduperstructure.getInstance();
     this.subsystems = new ISubsystem[] {
-        Superduperstructure.getInstance()
+        //Superduperstructure.getInstance()
         //new MotorControllerTest()
+        new FakeMotorTest()
     };
 
     RoutineInstantiator.go();
@@ -68,7 +70,6 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     for (ISubsystem s : subsystems)
       s.onLoop();
-    // superduperstructure.onLoop();
   }
 
   @Override

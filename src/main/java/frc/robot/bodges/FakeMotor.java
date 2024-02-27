@@ -1,12 +1,18 @@
 package frc.robot.bodges;
 
+import edu.wpi.first.units.Units;
+import frc.robot.constants.Misc;
+import frc.robot.util.Util;
+
 public class FakeMotor extends FeedbackMotor {
 
-    private double speed;
-    private boolean isInverted;
+    private double speed = 0;
+    private boolean isInverted = false;
+    private double factor = 1;
+    private double position = 0;
 
     @Override
-    public void set(double speed) { this.speed = speed; }
+    public void set(double speed) { this.speed = Util.clampSymmetrical(speed, 1); }
 
     @Override
     public double get() { return speed; }
@@ -24,11 +30,17 @@ public class FakeMotor extends FeedbackMotor {
     public void stopMotor() { set(0); }
 
     @Override
-    protected FeedbackMotor setFactor_downstream(double factor) { return this; }
+    protected FeedbackMotor setFactor_downstream(double factor) { this.factor = factor; return this; }
 
     @Override
-    public double getPosition() { return 0; }
+    public double getPosition() { return factor * position; }
 
     @Override
-    public double getVelocity() { return 0; }
+    public double getVelocity() { return factor * get(); }
+
+    @Override
+    public void onLoop() {
+        this.position += get() * Misc.kPeriod.in(Units.Seconds);
+        super.onLoop();
+    }
 }
