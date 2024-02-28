@@ -3,12 +3,15 @@ package frc.robot.subsystems;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.util.Geometry;
-import frc.robot.constants.FieldElements;
+import frc.robot.constants.game_elements.FieldElements;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismConstraints.drivetrain;
 
@@ -32,22 +35,25 @@ public class Hat implements ISubsystem {
     }
 
     public TrajectoryFollower findPathToNote() {
-        // TODO implement
-        // basically we need to be able to map a pixel (X,Y) in the camera feed to a
-        // translation on the field, then feed that to the trajectory generator
-        // the pixel translation will be written in NoteTargetingPipeline someday
-        return null;
+        double x = SmartDashboard.getNumber("note/x", 0);
+        double y = SmartDashboard.getNumber("note/y", 0);
+        double r = SmartDashboard.getNumber("note/r", 0);
+        Transform2d transform = new Transform2d(x, y, Rotation2d.fromDegrees(r));
+
+        Pose2d here = drivetrain.getPose();
+        Pose2d there = here.transformBy(transform);
+        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
     }
 
     public TrajectoryFollower findPathToSpeaker() {
         Pose2d here = drivetrain.getPose();
-        Pose2d there = FieldElements.scoring_regions.blue.kSpeaker.getNearest(here);
+        Pose2d there = FieldElements.getScoringRegions().kSpeaker.getNearest(here);
         return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
     }
 
     public TrajectoryFollower findPathToAmp() {
         Pose2d here = drivetrain.getPose();
-        Pose2d there = FieldElements.scoring_regions.blue.kAmp.getNearest(here);
+        Pose2d there = FieldElements.getScoringRegions().kAmp.getNearest(here);
         return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
     }
 
