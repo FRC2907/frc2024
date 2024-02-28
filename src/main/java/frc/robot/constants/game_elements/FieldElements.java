@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.constants.game_elements;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
+import frc.robot.util.Util;
 import frc.robot.util.Geometry.ScoringRegion;
 
 // https://firstfrc.blob.core.windows.net/frc2024/FieldAssets/2024FieldDrawings.pdf circa p. 240
@@ -108,56 +109,44 @@ public class FieldElements {
     public static final List<Translation2d> kMidfieldNotes = lengths.y.kMidfieldNotes.stream()
         .map(y -> new Translation2d(lengths.x.kMidline, y)).toList();
 
-    public abstract class points_color {
-      public static Translation2d kSpeaker, kAmp, kStage;
-      public static List<Translation2d> kWingNotes;
-    }
+    public static FieldPoints blue = new FieldPoints(
+      new Translation2d(lengths.x.blue.kAmpCenter, lengths.y.blue.kAmpCenter),
+      new Translation2d(lengths.x.blue.kSpeakerCenter, lengths.y.blue.kSpeakerCenter),
+      new Translation2d(lengths.x.blue.kStageCenter, lengths.y.blue.kStageCenter),
+      lengths.y.blue.kWingNotes.stream().map(y -> new Translation2d(lengths.x.blue.kWingNotes, y)).toList()
+    );
+    public static FieldPoints red = new FieldPoints(
+      new Translation2d(lengths.x.red.kAmpCenter, lengths.y.red.kAmpCenter),
+      new Translation2d(lengths.x.red.kSpeakerCenter, lengths.y.red.kSpeakerCenter),
+      new Translation2d(lengths.x.red.kStageCenter, lengths.y.red.kStageCenter),
+      lengths.y.red.kWingNotes.stream().map(y -> new Translation2d(lengths.x.red.kWingNotes, y)).toList()
+    );
 
-    public class blue extends points_color {
-      public static final Translation2d kSpeaker = new Translation2d(lengths.x.blue.kSpeakerCenter,
-          lengths.y.blue.kSpeakerCenter);
-      public static final Translation2d kAmp = new Translation2d(lengths.x.blue.kAmpCenter, lengths.y.blue.kAmpCenter);
-      public static final Translation2d kStage = new Translation2d(lengths.x.blue.kStageCenter,
-          lengths.y.blue.kStageCenter);
-      public static final List<Translation2d> kWingNotes = lengths.y.blue.kWingNotes.stream()
-          .map(y -> new Translation2d(lengths.x.blue.kWingNotes, y)).toList();
-    }
-
-    public class red extends points_color {
-      public static final Translation2d kSpeaker = new Translation2d(lengths.x.red.kSpeakerCenter,
-          lengths.y.red.kSpeakerCenter);
-      public static final Translation2d kAmp = new Translation2d(lengths.x.red.kAmpCenter, lengths.y.red.kAmpCenter);
-      public static final Translation2d kStage = new Translation2d(lengths.x.red.kStageCenter,
-          lengths.y.red.kStageCenter);
-      public static final List<Translation2d> kWingNotes = lengths.y.red.kWingNotes.stream()
-          .map(y -> new Translation2d(lengths.x.red.kWingNotes, y)).toList();
-    }
   }
 
-  public class scoring_regions {
-    public abstract class scoring_regions_color {
-      public static ScoringRegion kAmp, kSpeaker;
-    }
+  public static class scoring_regions {
+    public static ScoringRegions blue = new ScoringRegions(
+        ScoringRegion.of(
+            new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90)), Units.Inches.of(0).in(Units.Meters),
+            Units.Inches.of(2).in(Units.Meters), Rotation2d.fromDegrees(20)),
+        ScoringRegion.of(
+            new Pose2d(points.blue.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60).in(Units.Meters),
+            Units.Inches.of(120).in(Units.Meters), Rotation2d.fromDegrees(100)));
 
-    public class blue extends scoring_regions_color {
-      public static final ScoringRegion kAmp = ScoringRegion.of(
-        new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90))
-        , Units.Inches.of(0).in(Units.Meters)
-        , Units.Inches.of(2).in(Units.Meters)
-        , Rotation2d.fromDegrees(20)
-      );
-      public static final ScoringRegion kSpeaker = ScoringRegion.of(
-          new Pose2d(points.blue.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60).in(Units.Meters),
-          Units.Inches.of(120).in(Units.Meters), Rotation2d.fromDegrees(100));
-    }
+    public static ScoringRegions red = new ScoringRegions(
+        ScoringRegion.of(
+            new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90)), Units.Inches.of(0).in(Units.Meters),
+            Units.Inches.of(2).in(Units.Meters), Rotation2d.fromDegrees(20)),
+        ScoringRegion.of(
+            new Pose2d(points.red.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60).in(Units.Meters),
+            Units.Inches.of(120).in(Units.Meters), Rotation2d.fromDegrees(100)));
+  }
 
-    public class red extends scoring_regions_color {
-      public static final ScoringRegion kAmp = ScoringRegion.of(
-          new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90)), Units.Inches.of(0).in(Units.Meters),
-          Units.Inches.of(2).in(Units.Meters), Rotation2d.fromDegrees(20));
-      public static final ScoringRegion kSpeaker = ScoringRegion.of(
-          new Pose2d(points.red.kSpeaker, Rotation2d.fromDegrees(180)), Units.Inches.of(60).in(Units.Meters),
-          Units.Inches.of(120).in(Units.Meters), Rotation2d.fromDegrees(100));
-    }
+  public static FieldPoints getFieldPoints() {
+    return Util.isBlue() ? points.blue : points.red;
+  }
+
+  public static ScoringRegions getScoringRegions() {
+    return Util.isBlue() ? scoring_regions.blue : scoring_regions.red;
   }
 }
