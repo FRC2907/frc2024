@@ -19,6 +19,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.MechanismConstraints;
 
@@ -37,6 +38,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     private Scalar orangeLow, orangeHigh;
 
     private double dx, y;
+    private Transform2d floorTransform = new Transform2d();
 
     public NoteTargetingPipeline() {
         this.w = MechanismConstraints.camera.kWidth;
@@ -150,6 +152,8 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
             dx = (line_x / w) - 0.5;
             y = line_y / h;
+
+            this.floorTransform = pixelToTranslation(line_x, line_y);
         }
 
         outputStream.putFrame(i_color);
@@ -166,6 +170,10 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             SmartDashboard.putNumber("note/orange_hi:sat", orangeHigh.val[1]);
             SmartDashboard.putNumber("note/orange_lo:val", orangeLow .val[2]);
             SmartDashboard.putNumber("note/orange_hi:val", orangeHigh.val[2]);
+
+            SmartDashboard.putNumber("note/x", floorTransform.getX());
+            SmartDashboard.putNumber("note/y", floorTransform.getY());
+            SmartDashboard.putNumber("note/r", floorTransform.getRotation().getDegrees());
         }
     }
 
