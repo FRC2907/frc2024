@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
     // superduperstructure = Superduperstructure.getInstance();
     this.subsystems = new ISubsystem[] {
         //Superduperstructure.getInstance()
-        //new MotorControllerTest()
-        new FakeMotorTest()
+        new MotorControllerTest()
+       //new FakeMotorTest()
     };
 
     RoutineInstantiator.go();
