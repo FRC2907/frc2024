@@ -4,7 +4,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.MechanismConstraints;
 
 public class Util {
@@ -78,5 +80,12 @@ public class Util {
 			for (int i = 0; i < out.length; i++)
 				out[i] = values[i]*factor;
 		return out;
+	}
+	
+	public static boolean isBlue(){
+		if (DriverStation.getAlliance().isPresent()){
+      	return DriverStation.getAlliance().get() == Alliance.Blue;
+		}
+		return true;
 	}
 }

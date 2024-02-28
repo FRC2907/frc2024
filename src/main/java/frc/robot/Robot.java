@@ -69,9 +69,6 @@ public class Robot extends TimedRobot {
     autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Empty"));
     SmartDashboard.putData(autoChooser);
 
-    if (DriverStation.getAlliance().isPresent()){
-      ally = DriverStation.getAlliance().get();
-    }
   }
 
   @Override

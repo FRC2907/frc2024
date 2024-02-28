@@ -133,7 +133,7 @@ public class FieldElements {
   public class scoring_regions {
     public class blue {
       public static final ScoringRegion kAmp = ScoringRegion.of(
-        new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(-90))
+        new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90))
         , Units.Inches.of(0).in(Units.Meters)
         , Units.Inches.of(2).in(Units.Meters)
         , Rotation2d.fromDegrees(20)
@@ -149,7 +149,7 @@ public class FieldElements {
 
   public class red {
       public static final ScoringRegion kAmp = ScoringRegion.of(
-        new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(-90))
+        new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90))
         , Units.Inches.of(0).in(Units.Meters)
         , Units.Inches.of(2).in(Units.Meters)
         , Rotation2d.fromDegrees(20)
