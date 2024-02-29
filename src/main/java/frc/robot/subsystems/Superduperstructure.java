@@ -400,7 +400,7 @@ public class Superduperstructure implements ISubsystem {
                 break;
             case SELF_RIGHTING:
                 arm.selfRightingPosition();
-                //TODO check if we need to push back max
+                //TODO check if we need to push number back
                 break;
             case FOLLOWING_TRAJECTORY:
                 if (tjf.isDone()){
