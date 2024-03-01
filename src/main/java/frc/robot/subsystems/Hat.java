@@ -5,15 +5,11 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import frc.robot.util.Geometry;
 import frc.robot.constants.game_elements.FieldElements;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.constants.MechanismConstraints.drivetrain;
+
 
 /**
  * The Hat generates trajectories in real time based on
@@ -24,9 +20,7 @@ public class Hat implements ISubsystem {
 
     private static Hat instance;
     private static Drivetrain drivetrain = Drivetrain.getInstance();
-    private static TrajectoryConfig config = 
-    new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
-                         MechanismConstraints.drivetrain.kMaxAcceleration);
+
 
     public static Hat getInstance() {
         if (instance == null)
@@ -42,19 +36,22 @@ public class Hat implements ISubsystem {
 
         Pose2d here = drivetrain.getPose();
         Pose2d there = here.transformBy(transform);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
+        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
+        (here, there), MechanismConstraints.drivetrain.config));
     }
 
     public TrajectoryFollower findPathToSpeaker() {
         Pose2d here = drivetrain.getPose();
         Pose2d there = FieldElements.getScoringRegions().kSpeaker.getNearest(here);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
+        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
+        (here, there), MechanismConstraints.drivetrain.config));
     }
 
     public TrajectoryFollower findPathToAmp() {
         Pose2d here = drivetrain.getPose();
         Pose2d there = FieldElements.getScoringRegions().kAmp.getNearest(here);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of(here, there), config));
+        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
+        (here, there), MechanismConstraints.drivetrain.config));
     }
 
     @Override

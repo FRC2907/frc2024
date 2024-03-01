@@ -111,6 +111,10 @@ public class Superduperstructure implements ISubsystem {
     public void followingTrajectory(){
         state = RobotState.FOLLOWING_TRAJECTORY;
     }
+    public void followTrajectory(TrajectoryFollower path){
+        this.tjf = path;
+        followingTrajectory();
+    }
 
     public void neutralPosition() {
         if (intake.hasNote()){

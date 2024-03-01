@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import org.opencv.core.Scalar;
 
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.units.*;
 import frc.robot.util.Util;
 
@@ -22,6 +23,9 @@ public class MechanismConstraints {
         public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1); /// TODO empirical
         public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO empirical
         public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO empirical
+        public final static TrajectoryConfig config = 
+        new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
+                         MechanismConstraints.drivetrain.kMaxAcceleration);
     }
 
     public class intake {

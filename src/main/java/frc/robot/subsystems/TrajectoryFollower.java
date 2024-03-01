@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.math.controller.RamseteController;
@@ -8,9 +9,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.auto.actions.templates.Action;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
 
 public class TrajectoryFollower extends Action {
@@ -32,6 +35,10 @@ public class TrajectoryFollower extends Action {
         this(t, MechanismDimensions.drivetrain.DRIVE_KINEMATICS);
     }
 
+    public TrajectoryFollower (Pose2d destination){
+        this(TrajectoryGenerator.generateTrajectory(List.of
+        (Drivetrain.getInstance().getPose(), destination), MechanismConstraints.drivetrain.config));
+    }
 
     public Map<String,Measure<Velocity<Distance>>> getWheelSpeeds(Pose2d current){
         Trajectory.State goal = trajectory.sample(timer.get()); 

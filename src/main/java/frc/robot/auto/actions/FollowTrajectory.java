@@ -1,5 +1,6 @@
 package frc.robot.auto.actions;
 
+import edu.wpi.first.math.proto.Trajectory;
 import frc.robot.auto.actions.templates.Action;
 import frc.robot.subsystems.Superduperstructure;
 import frc.robot.subsystems.TrajectoryFollower;
@@ -8,13 +9,15 @@ import frc.robot.subsystems.Superduperstructure.RobotState;
 public class FollowTrajectory extends Action {
     private Superduperstructure superduperstructure = Superduperstructure.getInstance();
 
+    private TrajectoryFollower path;
+
     public FollowTrajectory(TrajectoryFollower GetWheelSpeeds) {
-        //TODO follow trajectory
+        this.path = GetWheelSpeeds;
     }
 
     @Override
     public void onStart() {
-        superduperstructure.followingTrajectory();
+        superduperstructure.followTrajectory(path);
     }
 
     @Override
