@@ -80,9 +80,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/intake.error": true,
-              "Visible data/SmartDashboard/shooter.error": true
+              "Y-axis/Unit": "ul"
             }
           },
           "6,0": {
@@ -198,8 +196,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 180.0,
               "Y-axis/Lower bound": -180.0,
-              "Y-axis/Unit": "deg",
-              "Visible data/SmartDashboard/arm.err": true
+              "Y-axis/Unit": "deg"
             }
           },
           "2,6": {
@@ -653,7 +650,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "5,1": {
+          "2,0": {
             "size": [
               2,
               2
@@ -669,7 +666,7 @@
               "Visuals/Show value": true
             }
           },
-          "9,1": {
+          "6,0": {
             "size": [
               2,
               2
@@ -685,7 +682,7 @@
               "Visuals/Show value": true
             }
           },
-          "7,1": {
+          "4,0": {
             "size": [
               2,
               2
@@ -701,7 +698,7 @@
               "Visuals/Show value": true
             }
           },
-          "3,1": {
+          "0,0": {
             "size": [
               2,
               2
@@ -717,7 +714,7 @@
               "Visuals/Show value": true
             }
           },
-          "3,3": {
+          "0,2": {
             "size": [
               3,
               3
@@ -736,7 +733,7 @@
               "Y-axis/Unit": "ul"
             }
           },
-          "6,3": {
+          "3,2": {
             "size": [
               3,
               3
@@ -755,7 +752,7 @@
               "Y-axis/Unit": "ul"
             }
           },
-          "9,3": {
+          "6,2": {
             "size": [
               3,
               3
@@ -1108,8 +1105,8 @@
   ],
   "windowGeometry": {
     "x": 0.0,
-    "y": 0.0,
-    "width": 1920.0,
-    "height": 1080.0
+    "y": 1.0,
+    "width": 1386.0,
+    "height": 787.0
   }
 }
