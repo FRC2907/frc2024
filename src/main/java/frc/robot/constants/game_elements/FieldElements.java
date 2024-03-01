@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
+import frc.robot.constants.MechanismConstraints.drivetrain;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Util;
 import frc.robot.util.Geometry.ScoringRegion;
 
@@ -113,12 +115,14 @@ public class FieldElements {
       new Translation2d(lengths.x.blue.kAmpCenter, lengths.y.blue.kAmpCenter),
       new Translation2d(lengths.x.blue.kSpeakerCenter, lengths.y.blue.kSpeakerCenter),
       new Translation2d(lengths.x.blue.kStageCenter, lengths.y.blue.kStageCenter),
+      new Translation2d(lengths.x.red.kAllianceWall, lengths.y.blue.kReferenceWall),
       lengths.y.blue.kWingNotes.stream().map(y -> new Translation2d(lengths.x.blue.kWingNotes, y)).toList()
     );
     public static FieldPoints red = new FieldPoints(
       new Translation2d(lengths.x.red.kAmpCenter, lengths.y.red.kAmpCenter),
       new Translation2d(lengths.x.red.kSpeakerCenter, lengths.y.red.kSpeakerCenter),
       new Translation2d(lengths.x.red.kStageCenter, lengths.y.red.kStageCenter),
+      new Translation2d(lengths.x.blue.kAllianceWall, lengths.y.red.kReferenceWall),
       lengths.y.red.kWingNotes.stream().map(y -> new Translation2d(lengths.x.red.kWingNotes, y)).toList()
     );
 
@@ -148,5 +152,44 @@ public class FieldElements {
 
   public static ScoringRegions getScoringRegions() {
     return Util.isBlue() ? scoring_regions.blue : scoring_regions.red;
+  }
+
+  public class directions{
+    public static Rotation2d towardOtherWall(){
+      return Util.isBlue() ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180);
+    }
+    public static Rotation2d towardAllianceWall(){
+      return Util.isBlue() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0);
+    }
+    public static Rotation2d left(){
+      return Util.isBlue() ? Rotation2d.fromDegrees(90) : Rotation2d.fromDegrees(-90);
+    }
+    public static Rotation2d right(){
+      return Util.isBlue() ? Rotation2d.fromDegrees(-90) : Rotation2d.fromDegrees(90);
+    }
+    public static Rotation2d towardStage(){
+      return getFieldPoints().kStage.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
+    }
+    public static Rotation2d towardSource(){
+      return getFieldPoints().kSource.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
+    }
+    public static Rotation2d towardTable(){
+      return Rotation2d.fromDegrees(-90);
+    }
+    public static Rotation2d towardAudience(){
+      return Rotation2d.fromDegrees(90);
+    }
+    public static Rotation2d towardBlue(){
+      return Rotation2d.fromDegrees(180);
+    }
+    public static Rotation2d towardRed(){
+      return Rotation2d.fromDegrees(0);
+    }
+    public static Rotation2d towardAmp(){
+      return getFieldPoints().kAmp.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
+    }
+    public static Rotation2d towardSpeaker(){
+      return getFieldPoints().kSpeaker.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
+    }
   }
 }
