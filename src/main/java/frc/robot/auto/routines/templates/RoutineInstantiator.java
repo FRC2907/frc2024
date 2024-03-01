@@ -7,5 +7,7 @@ public class RoutineInstantiator {
         new EmptyRoutine();
         new SampleRoutine();
         new DriveAcrossTheLine();
+        new OneNoteAmp();
+        new OneNoteSpeaker();
     }
 }
