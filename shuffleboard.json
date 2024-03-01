@@ -80,9 +80,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/intake.error": true,
-              "Visible data/SmartDashboard/shooter.error": true
+              "Y-axis/Unit": "ul"
             }
           },
           "6,0": {
@@ -198,8 +196,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 180.0,
               "Y-axis/Lower bound": -180.0,
-              "Y-axis/Unit": "deg",
-              "Visible data/SmartDashboard/arm.err": true
+              "Y-axis/Unit": "deg"
             }
           },
           "2,6": {
@@ -823,8 +820,8 @@
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 10.0,
-              "Y-axis/Lower bound": -10.0,
+              "Y-axis/Upper bound": 12.5,
+              "Y-axis/Lower bound": -12.5,
               "Y-axis/Unit": "m/s, V",
               "Visible data/SmartDashboard/testmotor/refstate[0]": true,
               "Visible data/SmartDashboard/testmotor/refstate[1]": true
@@ -878,6 +875,32 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/testmotor/r.set",
               "_title": "r.set",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotorV/vel",
+              "_title": "SmartDashboard/testmotorV/vel",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "14,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotor/voltPerVel",
+              "_title": "voltPerVel",
               "_glyph": 148,
               "_showGlyph": false
             }

@@ -20,11 +20,12 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
     protected PIDController position_pid, velocity_pid, active_pid;
     protected ArmFeedforward arm_ff = new ArmFeedforward(0, 0, 0);
     protected ElevatorFeedforward elevator_ff = new ElevatorFeedforward(0, 0, 0);
-    protected double velocity_ff = 0.0, static_ff = 0.0, factor = 1.0, last_effort = 0.0;
+    protected double static_ff = 0.0, factor = 1.0, last_effort = 0.0;
     protected DoubleSupplier active_feedback;
     protected String name;
     protected double inputLimit_lower = MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts);
     protected double inputLimit_upper = MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts);
+    protected DcMotorSpeedCurve speedCurve = new DcMotorSpeedCurve(0, 1);
 
     public FeedbackMotor setName(String name) {
         this.name = name;
@@ -101,11 +102,6 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         return this;
     }
 
-    public FeedbackMotor setVelocityFF(double ff) {
-        this.velocity_ff = ff;
-        return this;
-    }
-
     public FeedbackMotor setPositionHysteresis(double h) {
         position_pid.setTolerance(h);
         return this;
@@ -137,11 +133,16 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         return this;
     }
 
+    public FeedbackMotor setSpeedCurve(DcMotorSpeedCurve speedCurve) {
+        this.speedCurve = speedCurve;
+        return this;
+    }
+
     public double getReference() { return active_pid.getSetpoint(); }
 
     public double getState() { return active_feedback.getAsDouble(); }
 
-    public double getError() { return active_pid.getPositionError(); }
+    public double getError() { return getReference() - getState(); }
 
     public double getLastControlEffort() { return last_effort; }
 
@@ -155,8 +156,9 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
     public double encoderToMechanism(double encoder) { return encoder * factor; }
 
     private void runPID() {
-        double output = static_ff + active_pid.calculate(getState());
-        if (trackingVelocity()) output += velocity_ff * getReference();
+        double output = static_ff;
+        if (trackingVelocity()) output += speedCurve.getVoltage(getReference());
+        output += active_pid.calculate(getState());
         output = Util.clamp(inputLimit_lower, output, inputLimit_upper);
         this.last_effort = output;
         this.setVoltage(output);
@@ -187,6 +189,7 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         receiveOptions();
 
         runPID();
+        //this.setVoltage(active_pid.getSetpoint());
 
         submitTelemetry();
     }
@@ -196,10 +199,22 @@ public abstract class FeedbackMotor implements MotorController, ISubsystem {
         if (name != null) {
             SmartDashboard.putNumberArray(name + "/refstate", new double[] {getReference(), getState()});
             SmartDashboard.putNumberArray(name + "/errinput", new double[] {getError(), getLastControlEffort()});
+            //SmartDashboard.putNumber(name + "/p.set", active_pid.getP());
+            //SmartDashboard.putNumber(name + "/d.set", active_pid.getD());
+            SmartDashboard.putNumber(name + "/r.set", getReference());
+            SmartDashboard.putNumber(name + "/voltPerVel", getLastControlEffort() / getVelocity());
         }
     }
 
     @Override
-    public void receiveOptions() { }
+    public void receiveOptions() {
+        if (name != null) {
+            //active_pid.setP(SmartDashboard.getNumber(name + "/p.set", active_pid.getP()));
+            //active_pid.setD(SmartDashboard.getNumber(name + "/d.set", active_pid.getD()));
+            double newSetpoint = SmartDashboard.getNumber(name + "/r.set", getReference());
+            if (getReference() != newSetpoint)
+                setVelocity(newSetpoint);
+        }
+    }
 
 }
