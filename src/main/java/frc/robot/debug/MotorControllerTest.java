@@ -15,8 +15,8 @@ public class MotorControllerTest implements ISubsystem {
     this.m = new StupidTalonFX(1)
         .setName("testmotor")
         .setFactor(1)
-        .setPositionController(new PIDController(0, 0, 0, 0.02))
-        .setVelocityController(new PIDController(0.12, 0, 0, 0.02))
+        .setPositionController(new PIDController(0.5, 0, 0, 0.02))
+        .setVelocityController(new PIDController(0.2, 0, 0, 0.02))
         .setVelocity(0);
   }
 
