@@ -20,7 +20,6 @@ public class FakeMotorTest implements ISubsystem {
         .setFactor(15)
         .setPositionController(new PIDController(10, 0, 0, Misc.kPeriod.in(Units.Seconds)))
         .setVelocityController(new PIDController(0.7, 0, 0, Misc.kPeriod.in(Units.Seconds)))
-        .setVelocityFF(0.7)
         .setVelocity(0);
   }
 
