@@ -13,4 +13,3 @@ public class DriveAcrossTheLine extends Routine {
                                        FieldElements.directions.towardOtherWall())));
     }
 }
-
