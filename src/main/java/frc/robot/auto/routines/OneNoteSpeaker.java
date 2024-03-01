@@ -5,7 +5,7 @@ import frc.robot.auto.routines.templates.Routine;
 
 public class OneNoteSpeaker extends Routine {
     public OneNoteSpeaker() {
-        super("OneNote", 
+        super("OneNoteSpeaker", 
               new ScoreSpeaker());
     }
 }
