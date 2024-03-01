@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Units;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.util.Util;
 
 public class StupidTalonFX extends FeedbackMotor {
 
@@ -16,10 +17,11 @@ public class StupidTalonFX extends FeedbackMotor {
     public StupidTalonFX(int deviceId) {
         this.m = new TalonFX(deviceId);
         m.getConfigurator().apply(new TalonFXConfiguration()
-                .withVoltage(new VoltageConfigs()
-                        .withPeakForwardVoltage(MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts))
-                        .withPeakReverseVoltage(MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts))
-                        ));
+        );
+        //        .withVoltage(new VoltageConfigs()
+        //                .withPeakForwardVoltage(MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts))
+        //                .withPeakReverseVoltage(MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts))
+        //                ));
     }
 
     @Override
@@ -41,7 +43,7 @@ public class StupidTalonFX extends FeedbackMotor {
     /* everything below this line is boilerplate; you may copy-paste into new files */
 
     @Override
-    public void set(double speed) { m.set(speed); }
+    public void set(double speed) { m.set(Util.clampSymmetrical(speed, 1)); }
 
     @Override
     public double get() { return m.get(); }
