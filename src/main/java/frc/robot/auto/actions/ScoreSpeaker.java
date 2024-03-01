@@ -10,6 +10,7 @@ public class ScoreSpeaker extends Action {
     @Override
     public void onStart() {
         superduperstructure.moveToSpeaker();
+        superduperstructure.automateScoring(true);
     }
 
     @Override

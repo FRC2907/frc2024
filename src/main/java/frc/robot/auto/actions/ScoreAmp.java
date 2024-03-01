@@ -10,6 +10,7 @@ public class ScoreAmp extends Action {
     @Override
     public void onStart() {
         superduperstructure.moveToAmp();
+        superduperstructure.automateScoring(true);
     }
 
     @Override
