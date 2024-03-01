@@ -336,7 +336,7 @@ public class Superduperstructure implements ISubsystem {
                 if (tjf == null){
                     tjf = hat.findPathToAmp();
                 }
-                if (arm.reachedSetPoint()) { // TODO add drivetrain reached set point
+                if (arm.reachedSetPoint()) { 
                     state = RobotState.READY_TO_SCORE_AMP;
                 }
                 break;
@@ -355,7 +355,7 @@ public class Superduperstructure implements ISubsystem {
                 arm.speakerPosition();
                 if (tjf == null)
                     tjf = hat.findPathToSpeaker();
-                else if (arm.reachedSetPoint() && tjf.isDone()) { // TODO add drivetrain reached set point
+                else if (arm.reachedSetPoint() && tjf.isDone()) { 
                     // TODO do we also want to get the shooter wheels up to speed first? or no?
                     state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
@@ -400,7 +400,7 @@ public class Superduperstructure implements ISubsystem {
                 break;
             case SELF_RIGHTING:
                 arm.selfRightingPosition();
-                //TODO check if we need to push back max
+                //TODO check if we need to push number back
                 break;
             case FOLLOWING_TRAJECTORY:
                 if (tjf.isDone()){

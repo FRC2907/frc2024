@@ -109,7 +109,6 @@ public class Arm implements ISubsystem {
 
     @Override
     public void onLoop() {
-        // TODO work on motion profiling this / using velocity -> position control
         motor.setPosition(setPoint_position.in(Units.Degrees));
     }
 
