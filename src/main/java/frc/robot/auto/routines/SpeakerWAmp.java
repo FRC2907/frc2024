@@ -7,12 +7,14 @@ import frc.robot.auto.actions.ScoreSpeaker;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.game_elements.FieldElements;
 import frc.robot.constants.game_elements.StrategicStructures;
+import frc.robot.util.Util;
 
 public class SpeakerWAmp extends Routine {
     public SpeakerWAmp() {
         super("SpeakerWAmp", 
               new ScoreSpeaker(),
-              new DriveToward(new Pose2d(StrategicStructures.acrossTheLineTarget, 
+             new DriveToward(new Pose2d(Util.isBlue() ? FieldElements.points.blue.kWingNotes.get(2) : 
+                                                         FieldElements.points.red.kWingNotes.get(2),
                                          FieldElements.directions.towardOtherWall())),
               new GetNote(), 
               new ScoreSpeaker());
