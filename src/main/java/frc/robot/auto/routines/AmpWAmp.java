@@ -15,8 +15,7 @@ public class AmpWAmp extends Routine {
     public AmpWAmp() {
         super("AmpWAmp", 
               new ScoreAmp(),
-              new DriveToward(new Pose2d(Util.isBlue() ? FieldElements.points.blue.kWingNotes.get(2) : 
-                                                         FieldElements.points.red.kWingNotes.get(2),
+              new DriveToward(new Pose2d(FieldElements.getFieldPoints().kWingNotes.get(2),
                                          FieldElements.directions.towardOtherWall())),
               new GetNote(),
               new ScoreAmp());
