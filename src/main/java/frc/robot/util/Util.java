@@ -47,7 +47,7 @@ public class Util {
 	}
 
 	public static <U extends Unit<U>> Measure<U> clampSymmetrical(Measure<U> value, Measure<U> cap) {
-		return clamp(cap.negate(), value, cap);
+			return clamp(cap.negate(), value, cap);
 	}
 
 	public static <U extends Unit<U>> boolean checkHysteresis(Measure<U> error, Measure<U> hysteresis) {

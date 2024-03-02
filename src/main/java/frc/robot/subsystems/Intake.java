@@ -1,17 +1,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MotorControllers;
 
 public class Intake implements ISubsystem {
-    private Measure<Velocity<Distance>> setPoint;
-    private FeedbackMotor motor;
+    private DimensionalFeedbackMotor<Distance> motor;
 
-    private Intake(FeedbackMotor _motor) {
-        this.motor = _motor;
+    private Intake(DimensionalFeedbackMotor<Distance> motor) {
+        this.motor = motor;
     }
 
     private static Intake instance;
@@ -23,28 +21,18 @@ public class Intake implements ISubsystem {
     }
 
 
-    public void setSetPoint(Measure<Velocity<Distance>> _setPoint) {
-        setPoint = _setPoint;
+    public void setVelocity(Measure<Velocity<Distance>> reference) {
+        motor.setVelocity(reference);
     }
-    public Measure<Velocity<Distance>> getSetPoint() {
-        return setPoint;
-    }
-    public Measure<Velocity<Distance>> getVelocity() {
-        return Units.MetersPerSecond.of(motor.getVelocity());
-    }
-    public Measure<Velocity<Distance>> getError() {
-        return getSetPoint().minus(getVelocity());
-    }
-
 
     public void intake() {
-        setSetPoint(GameInteractions.intake.kIntakingSpeed);
+        setVelocity(GameInteractions.intake.kIntakingSpeed);
     }
     public void outake() {
-        setSetPoint(GameInteractions.intake.kOutakingSpeed);
+        setVelocity(GameInteractions.intake.kOutakingSpeed);
     }
     public void off() {
-        setSetPoint(GameInteractions.intake.kOff);
+        setVelocity(GameInteractions.intake.kOff);
     }
 
 
@@ -58,25 +46,15 @@ public class Intake implements ISubsystem {
     /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        motor.setVelocity(setPoint.in(Units.MetersPerSecond));
+        motor.onLoop();
     }
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putNumber("intake.velocity"    , getVelocity().in(Units.MetersPerSecond));
-        SmartDashboard.putNumber("intake.setpoint"    , getSetPoint().in(Units.MetersPerSecond));
-        SmartDashboard.putNumber("intake.setpoint.set", getSetPoint().in(Units.MetersPerSecond));
-        SmartDashboard.putNumber("intake.error"       , getError()   .in(Units.MetersPerSecond));
     }
 
     @Override
     public void receiveOptions() {
-        setSetPoint(
-            Units.MetersPerSecond.of(
-                SmartDashboard.getNumber("intake.setpoint.set"
-                , getSetPoint().in(Units.MetersPerSecond))
-            )
-        );
     }
 
 }

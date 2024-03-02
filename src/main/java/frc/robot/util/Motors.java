@@ -3,152 +3,114 @@ package frc.robot.util;
 import java.util.Arrays;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.controller.PIDController;
-import frc.robot.bodges.rawrlib.raw.StupidSparkMax;
-import frc.robot.bodges.rawrlib.raw.StupidTalonFX;
+import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
+import frc.robot.bodges.rawrlib.motors.WrappedSparkMaxBrushless;
+import frc.robot.bodges.rawrlib.motors.WrappedTalonFX;
 import frc.robot.constants.Misc;
 
 public class Motors {
     public class sparkmax {
-        public static StupidSparkMax createGroup(Integer... ids) {
+        public static WrappedMotorController createGroup(Integer... ids) {
             return createGroup(false, ids);
         }
 
-        public static StupidSparkMax createGroup(boolean inverted, Integer... ids) {
-            return createGroup(inverted, 1.0, new PIDController(0, 0, 0), new PIDController(0, 0, 0), ids);
-        }
-
-        public static StupidSparkMax createGroup(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer... ids) {
-            StupidSparkMax out = Arrays.stream(ids)
-                    .map(id -> new StupidSparkMax(id, MotorType.kBrushless))
+        public static WrappedMotorController createGroup(boolean inverted, Integer... ids) {
+            CANSparkMax out = Arrays.stream(ids)
+                    .map(id -> new CANSparkMax(id, MotorType.kBrushless))
                     .reduce((leader, follower) -> {
                         follower.follow(leader);
                         return leader;
                     }).get();
             out.setInverted(inverted);
-            out.setFactor(factor);
-            out.setPositionController(position_pid);
-            out.setVelocityController(velocity_pid);
-            return out;
+            return new WrappedSparkMaxBrushless(out);
         }
 
         @SafeVarargs
-        public static StupidSparkMax createGroup(Pair<Integer, Boolean>... specs) {
+        public static WrappedMotorController createGroup(Pair<Integer, Boolean>... specs) {
             if (specs.length == 0) {
                 if (Misc.debug) {
                     System.err.println("[EE] Attempted to create empty group of CANSparkMax");
                     new Exception().printStackTrace();
                 }
             }
-            return Arrays.stream(specs)
+            return new WrappedSparkMaxBrushless(Arrays.stream(specs)
                     .map(spec -> {
-                        StupidSparkMax out = new StupidSparkMax(spec.getFirst(), MotorType.kBrushless);
+                        CANSparkMax out = new CANSparkMax(spec.getFirst(), MotorType.kBrushless);
                         out.setInverted(spec.getSecond());
                         return out;
                     }).reduce((leader, follower) -> {
+                        System.out.println("init sparkmax id " + follower.getDeviceId() + " following id " + leader.getDeviceId());
                         follower.follow(leader);
                         return leader;
-                    }).get();
+                    }).get());
         }
 
-        public static StupidSparkMax createOpposedPair(Integer... ids) {
+        public static WrappedMotorController createOpposedPair(Integer... ids) {
             return createOpposedPair(ids[0], ids[1]);
         }
 
-        public static StupidSparkMax createOpposedPair(boolean inverted, Integer... ids) {
+        public static WrappedMotorController createOpposedPair(boolean inverted, Integer... ids) {
             return createOpposedPair(inverted, ids[0], ids[1]);
         }
 
-        public static StupidSparkMax createOpposedPair(Integer leader_id, Integer follower_id) {
+        public static WrappedMotorController createOpposedPair(Integer leader_id, Integer follower_id) {
             return createOpposedPair(false, leader_id, follower_id);
         }
 
-        public static StupidSparkMax createOpposedPair(boolean inverted, Integer leader_id, Integer follower_id) {
-            return createOpposedPair(inverted, 1.0, new PIDController(0, 0, 0), new PIDController(0, 0, 0), leader_id,
-                    follower_id);
-        }
-
-        public static StupidSparkMax createOpposedPair(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer... ids) {
-            return createOpposedPair(inverted, factor, position_pid, velocity_pid, ids[0], ids[1]);
-        }
-
-        public static StupidSparkMax createOpposedPair(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer leader_id, Integer follower_id) {
-            StupidSparkMax leader = new StupidSparkMax(leader_id, MotorType.kBrushless);
+        public static WrappedMotorController createOpposedPair(boolean inverted, Integer leader_id, Integer follower_id) {
+            CANSparkMax leader = new CANSparkMax(leader_id, MotorType.kBrushless);
             @SuppressWarnings({ "resource" })
-            StupidSparkMax follower = new StupidSparkMax(follower_id, MotorType.kBrushless);
+            CANSparkMax follower = new CANSparkMax(follower_id, MotorType.kBrushless);
+            System.out.println("init sparkmax id " + follower.getDeviceId() + " opposing id " + leader.getDeviceId());
             follower.follow(leader);
             leader.setInverted(inverted);
             follower.setInverted(!inverted);
-            leader.setFactor(factor);
-            leader.setPositionController(position_pid);
-            leader.setVelocityController(velocity_pid);
-            return leader;
+            return new WrappedSparkMaxBrushless(leader);
         }
     }
 
     public class talonfx {
-        public static StupidTalonFX createGroup(Integer... ids) {
+        public static WrappedMotorController createGroup(Integer... ids) {
             return createGroup(false, ids);
         }
 
-        public static StupidTalonFX createGroup(boolean inverted, Integer... ids) {
-            return createGroup(inverted, 1.0, new PIDController(0, 0, 0), new PIDController(0, 0, 0), ids);
-        }
-
-        public static StupidTalonFX createGroup(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer... ids) {
-            StupidTalonFX out = Arrays.stream(ids)
-                    .map(id -> new StupidTalonFX(id))
+        public static WrappedMotorController createGroup(boolean inverted, Integer... ids) {
+            TalonFX out = Arrays.stream(ids)
+                    .map(id -> new TalonFX(id))
                     .reduce((leader, follower) -> {
+                        System.out.println("init talonfx id " + follower.getDeviceID() + " following id " + leader.getDeviceID());
                         follower.setControl(new Follower(ids[0], false));
                         return leader;
                     }).get();
             out.setInverted(inverted);
-            out.setFactor(factor);
-            out.setPositionController(position_pid);
-            out.setVelocityController(velocity_pid);
-            return out;
+            return new WrappedTalonFX(out);
         }
 
-        public static StupidTalonFX createOpposedPair(Integer... ids) {
+        public static WrappedMotorController createOpposedPair(Integer... ids) {
             return createOpposedPair(ids[0], ids[1]);
         }
 
-        public static StupidTalonFX createOpposedPair(boolean inverted, Integer... ids) {
+        public static WrappedMotorController createOpposedPair(boolean inverted, Integer... ids) {
             return createOpposedPair(inverted, ids[0], ids[1]);
         }
 
-        public static StupidTalonFX createOpposedPair(Integer leader_id, Integer follower_id) {
+        public static WrappedMotorController createOpposedPair(Integer leader_id, Integer follower_id) {
             return createOpposedPair(false, leader_id, follower_id);
         }
 
-        public static StupidTalonFX createOpposedPair(boolean inverted, Integer leader_id, Integer follower_id) {
-            return createOpposedPair(inverted, 1.0, new PIDController(0, 0, 0), new PIDController(0, 0, 0), leader_id,
-                    follower_id);
-        }
-
-        public static StupidTalonFX createOpposedPair(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer... ids) {
-            return createOpposedPair(inverted, factor, position_pid, velocity_pid, ids[0], ids[1]);
-        }
-
-        public static StupidTalonFX createOpposedPair(boolean inverted, double factor, PIDController position_pid,
-                PIDController velocity_pid, Integer leader_id, Integer follower_id) {
-            StupidTalonFX leader = new StupidTalonFX(leader_id);
+        public static WrappedMotorController createOpposedPair(boolean inverted, Integer leader_id, Integer follower_id) {
+            TalonFX leader = new TalonFX(leader_id);
             @SuppressWarnings({ "resource" })
-            StupidTalonFX follower = new StupidTalonFX(follower_id);
+            TalonFX follower = new TalonFX(follower_id);
+            System.out.println("init talonfx id " + follower.getDeviceID() + " opposing id " + leader.getDeviceID());
             follower.setControl(new Follower(leader_id, true));
             leader.setInverted(inverted);
-            leader.setFactor(factor);
-            leader.setPositionController(position_pid);
-            leader.setVelocityController(velocity_pid);
-            return leader;
+            return new WrappedTalonFX(leader);
         }
 
         // mixed orientations not permitted at this time because i am lazy and tired and

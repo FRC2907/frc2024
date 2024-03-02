@@ -87,8 +87,11 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
    */
   public Measure<InputDimension> getFeedforwards() {
     Measure<InputDimension> out = gains.getF(getReference());
-    out = out.plus(gains.getS());
     out = out.plus(gains.getG());
+    //if (!converged())
+      // don't need to overcome friction if we've converged
+      // but...that doesn't hold for velocity control
+      out = out.plus(gains.getS());
     return out;
   }
 

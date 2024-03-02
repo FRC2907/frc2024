@@ -1,60 +1,42 @@
 package frc.robot.constants;
 
 import edu.wpi.first.units.*;
+import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
 
 public class PIDGains {
     public class arm {
-        public class position {
-            public static final Measure<Per<Voltage, Angle>> kP = Units.Volts.of(0.001)
-                    .per(Units.Rotations);
-            public static final Measure<Per<Voltage, Velocity<Angle>>> kD = Units.Volts.of(1)
-                    .per(Units.RotationsPerSecond);
-            /** Hysteresis */
-            public static final Measure<Angle> kH = Units.Degrees.of(2);
-        }
-
-        public class velocity {
-            public static final Measure<Per<Voltage, Velocity<Angle>>> kP = Units.Volts.of(0.001)
-                    .per(Units.RotationsPerSecond);
-            public static final Measure<Per<Voltage, Velocity<Velocity<Angle>>>> kD = Units.Volts.of(1)
-                    .per(Units.RotationsPerSecond.per(Units.Second));
-            /** Hysteresis */
-            public static final Measure<Velocity<Angle>> kH = Units.DegreesPerSecond.of(2);
-        }
+        public static DimensionalPIDFGains<Angle, Voltage> position = new DimensionalPIDFGains<Angle, Voltage>()
+            .setP(Units.Volts.of(0.001).per(Units.Rotations))
+            .setD(Units.Volts.of(1).per(Units.RotationsPerSecond))
+            ;
+        public static DimensionalPIDFGains<Velocity<Angle>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Angle>, Voltage>()
+            .setP(Units.Volts.of(0.001).per(Units.RotationsPerSecond))
+            .setD(Units.Volts.of(1).per(Units.RotationsPerSecond.per(Units.Second)))
+            ;
     }
 
     public class drivetrain {
-        public class position {
-        }
+        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+            .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
+            .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
+            ;
 
-        public class velocity {
-            public static final Measure<Per<Voltage, Velocity<Distance>>> kP = Units.Volts.of(0.02)
-                    .per(Units.MetersPerSecond);
-            public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>> kD = Units.Volts.of(0)
-                    .per(Units.MetersPerSecondPerSecond);
-        }
-
-        public class heading {
-            public static final Measure<Per<Velocity<Angle>, Angle>> kP = Units.DegreesPerSecond
-                    .of(2).per(Units.Degrees);
-        }
+        public static DimensionalPIDFGains<Angle, Velocity<Angle>> heading = new DimensionalPIDFGains<Angle, Velocity<Angle>>()
+            .setP(Units.DegreesPerSecond.of(2).per(Units.Degrees))
+            ;
     }
 
     public class intake {
-        public class velocity {
-            public static final Measure<Per<Voltage, Velocity<Distance>>> kP = Units.Volts.of(1)
-                    .per(Units.MetersPerSecond);
-            public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>> kD = Units.Volts.of(1)
-                    .per(Units.MetersPerSecondPerSecond);
-        }
+        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+            .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
+            .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
+            ;
     }
 
     public class shooter {
-        public class velocity {
-            public static final Measure<Per<Voltage, Velocity<Distance>>> kP = Units.Volts.of(1)
-                    .per(Units.MetersPerSecond);
-            public static final Measure<Per<Voltage, Velocity<Velocity<Distance>>>> kD = Units.Volts.of(1)
-                    .per(Units.MetersPerSecondPerSecond);
-        }
+        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+            .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
+            .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
+            ;
     }
 }

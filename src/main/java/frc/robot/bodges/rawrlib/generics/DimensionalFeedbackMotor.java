@@ -101,8 +101,63 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
     @SuppressWarnings({"unchecked"})
     public Measure<D> encoderToMechanism(Measure<Angle> encoder) { return (Measure<D>)encoder.times(factor); }
 
+    protected Measure<D> lowerBound;
+    public Measure<D> getLowerBound() { return lowerBound; }
+    public DimensionalFeedbackMotor<D> setLowerBound(Measure<D> lowerBound) {
+      if (upperBound != null && lowerBound.gt(upperBound))
+        throw new IllegalArgumentException("Lower bound " + lowerBound.baseUnitMagnitude()
+            + " should be less than upper bound " + this.upperBound.baseUnitMagnitude());
+      this.lowerBound = lowerBound;
+      return this;
+    }
+
+    protected Measure<D> upperBound;
+    public Measure<D> getUpperBound() { return upperBound; }
+    public DimensionalFeedbackMotor<D> setUpperBound(Measure<D> upperBound) {
+      if (lowerBound != null && upperBound.lt(lowerBound))
+        throw new IllegalArgumentException("Upper bound " + upperBound.baseUnitMagnitude()
+            + " should be greater than lower bound " + this.lowerBound.baseUnitMagnitude());
+      this.upperBound = upperBound;
+      return this;
+    }
+
+    protected Measure<Velocity<D>> maxVelocity;
+    public Measure<Velocity<D>> getMaxVelocity() { return maxVelocity; }
+    @SuppressWarnings({"unchecked"})
+    public DimensionalFeedbackMotor<D> setMaxVelocity(Measure<Velocity<D>> maxVelocity) {
+      if (maxVelocity.lt((Measure<Velocity<D>>) Util.anyZero()))
+        return setMaxVelocity(maxVelocity.negate());
+      this.maxVelocity = maxVelocity;
+      return this;
+    }
+
+    private void applyEndStops() {
+      switch (getTrackingMode()) {
+        case kPosition:
+          if (getUpperBound() != null && positionController.getReference().gt(getUpperBound()))
+            setPosition(getUpperBound());
+          else if (getLowerBound() != null && positionController.getReference().lt(getLowerBound()))
+            setPosition(getLowerBound());
+          // FIXME max velocity is not applied to position control, but should be
+          break;
+        case kVelocity:
+          @SuppressWarnings({"unchecked"})
+          int direction = velocityController.getReference().compareTo((Measure<Velocity<D>>) Util.anyZero());
+          if (getUpperBound() != null && direction > 0 && getPosition().gte(getUpperBound()))
+            setPosition(getUpperBound());
+          else if (getLowerBound() != null && direction < 0 && getPosition().lte(getLowerBound()))
+            setPosition(getLowerBound());
+          else if (getMaxVelocity() != null)
+          setVelocity(Util.clampSymmetrical(velocityController.getReference(), getMaxVelocity()));
+          break;
+        default:
+          break;
+      }
+    }
+
     private void track() {
       Measure<Voltage> input = Units.Volts.zero();
+      applyEndStops();
       switch (getTrackingMode()) {
         case kPosition:
           input = positionController.calculate();

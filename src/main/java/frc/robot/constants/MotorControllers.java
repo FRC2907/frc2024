@@ -1,130 +1,132 @@
 package frc.robot.constants;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.motors.FakeMotor;
-import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
+import frc.robot.bodges.rawrlib.angular.AngularFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import frc.robot.bodges.rawrlib.linear.LinearFeedbackMotor;
+import frc.robot.bodges.rawrlib.motors.*;
 import frc.robot.util.Motors;
 
 public class MotorControllers {
-	private static FeedbackMotor _arm, _drivetrainLeft, _drivetrainRight, _intake, _shooter;
-	public static final FeedbackMotor[] list = {
-		arm()
-		, drivetrainLeft()
-		, drivetrainRight()
-		, intake()
-		, shooter()
-	};
+	private static DimensionalFeedbackMotor<Angle> _arm;
+	private static DimensionalFeedbackMotor<Distance> _drivetrainLeft, _drivetrainRight, _intake, _shooter;
 
-	public static final FeedbackMotor arm() {
+	public static final DimensionalFeedbackMotor<Angle> arm() {
 		if (_arm == null) {
+		_arm = new AngularFeedbackMotor();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_arm = Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS);
+					_arm.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
 					break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_arm = new FakeMotor();
+					_arm.setWrappedMotorController(new WrappedFakeMotor());
 					break;
 			}
 			_arm
 					.setName("arm")
-					.setInverted_(false)
-					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL
-							.in(Units.Degrees.per(Units.Rotations)))
-					.setPositionController(PIDControllers.arm.kPosition)
-					.setVelocityController(PIDControllers.arm.kVelocity)
-					.setPositionHysteresis(PIDGains.arm.position.kH.in(Units.Degrees),
-							PIDGains.arm.velocity.kH.in(Units.DegreesPerSecond))
-					.setVelocityHysteresis(PIDGains.arm.velocity.kH.in(Units.DegreesPerSecond));
+					.setInverted(false)
+					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
+					.setLowerBound(MechanismConstraints.arm.kMinPosition)
+					.setUpperBound(MechanismConstraints.arm.kMaxPosition)
+					.setMaxVelocity(MechanismConstraints.arm.kMaxVelocity)
+					.configurePositionController(PIDGains.arm.position)
+					.configureVelocityController(PIDGains.arm.velocity)
+					.getPositionController().setHysteresis(MechanismConstraints.arm.kPositionHysteresis)
+					;
 		}
 		return _arm;
 	}
 
-	public static final FeedbackMotor drivetrainLeft() {
+	public static final DimensionalFeedbackMotor<Distance> drivetrainLeft() {
 		if (_drivetrainLeft == null) {
+			_drivetrainLeft = new LinearFeedbackMotor();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainLeft = Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS);
+					_drivetrainLeft.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS));
 					break;
 				case FLAT:
-					_drivetrainLeft = Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS);
+					_drivetrainLeft.setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS));
 					break;
 				case DEBUG:
 				default:
-					_drivetrainLeft = new FakeMotor();
+					_drivetrainLeft.setWrappedMotorController(new WrappedFakeMotor());
 					break;
 			}
 			_drivetrainLeft
 					.setName("dt_L")
-					.setInverted_(false)
-					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
-							.in(Units.Meters.per(Units.Rotations)))
-					.setVelocityController(PIDControllers.drivetrain.kVelocity);
+					.setInverted(false)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
+					.configureVelocityController(PIDGains.drivetrain.velocity);
 		}
 		return _drivetrainLeft;
 	}
 
-	public static final FeedbackMotor drivetrainRight() {
+	public static final DimensionalFeedbackMotor<Distance> drivetrainRight() {
 		if (_drivetrainRight == null) {
+			_drivetrainRight = new LinearFeedbackMotor();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainRight = Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS);
+					_drivetrainRight.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS));
 					break;
 				case FLAT:
-					_drivetrainLeft = Motors.talonfx.createGroup(Ports.can.drivetrain.RIGHTS);
+					_drivetrainRight.setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.RIGHTS));
 					break;
 				case DEBUG:
 				default:
-					_drivetrainRight = new FakeMotor();
+					_drivetrainRight.setWrappedMotorController(new WrappedFakeMotor());
 					break;
 			}
 			_drivetrainRight
 					.setName("dt_R")
-					.setInverted_(true)
-					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL
-							.in(Units.Meters.per(Units.Rotations)))
-					.setVelocityController(PIDControllers.drivetrain.kVelocity);
+					.setInverted(true)
+					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
+					.configureVelocityController(PIDGains.drivetrain.velocity);
 		}
 		return _drivetrainRight;
 	}
 
-	public static final FeedbackMotor intake() {
+	public static final DimensionalFeedbackMotor<Distance> intake() {
 		if (_intake == null) {
+			_intake = new LinearFeedbackMotor();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_intake = Motors.sparkmax.createGroup(Ports.can.intake.MOTORS);
+					_intake.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
 					break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_intake = new FakeMotor();
+					_intake.setWrappedMotorController(new WrappedFakeMotor());
 					break;
 			}
 			_intake
 					.setName("intake")
-					.setFactor(MechanismDimensions.intake.LINEAR_TRAVEL_PER_ENCODER_TRAVEL.in(Units.Meters.per(Units.Rotations)))
-					.setVelocityController(PIDControllers.intake.kVelocity);
+					.setInverted(false)
+					.setFactor(MechanismDimensions.intake.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
+					.configureVelocityController(PIDGains.intake.velocity);
 		}
 		return _intake;
 	}
 
-	public static final FeedbackMotor shooter() {
+	public static final DimensionalFeedbackMotor<Distance> shooter() {
 		if (_shooter == null) {
+			_shooter = new LinearFeedbackMotor();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_shooter = Motors.sparkmax.createGroup(Ports.can.shooter.MOTORS);
+					_shooter.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
 					break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_shooter = new FakeMotor();
+					_shooter.setWrappedMotorController(new WrappedFakeMotor());
 					break;
 			}
 			_shooter
 					.setName("shooter")
-					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL.in(Units.Meters.per(Units.Rotations)))
-					.setVelocityController(PIDControllers.shooter.kVelocity);
+					.setInverted(false)
+					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
+					.configureVelocityController(PIDGains.shooter.velocity);
 		}
 		return _shooter;
 	}

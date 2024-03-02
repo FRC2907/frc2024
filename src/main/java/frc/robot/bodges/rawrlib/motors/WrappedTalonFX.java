@@ -9,7 +9,11 @@ public class WrappedTalonFX extends WrappedMotorController {
   protected TalonFX m;
 
   public WrappedTalonFX(int deviceId) {
-    this.m = new TalonFX(deviceId);
+    this(new TalonFX(deviceId));
+  }
+
+  public WrappedTalonFX(TalonFX motor) {
+    this.m = motor;
     setMotor(m);
     // factory defaults
     m.getConfigurator().apply(new TalonFXConfiguration());
@@ -24,4 +28,5 @@ public class WrappedTalonFX extends WrappedMotorController {
   public Measure<Velocity<Angle>> getVelocity_downstream() {
     return Units.RotationsPerSecond.of(m.getVelocity().getValueAsDouble());
   }
+  
 }

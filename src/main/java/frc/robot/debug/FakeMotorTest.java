@@ -4,7 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import frc.robot.bodges.rawrlib.motors.FakeMotor;
 import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
-import frc.robot.constants.Misc;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;
 
@@ -18,8 +18,8 @@ public class FakeMotorTest implements ISubsystem {
     this.m = new FakeMotor()
         .setName("testmotor")
         .setFactor(15)
-        .setPositionController(new PIDController(10, 0, 0, Misc.kPeriod.in(Units.Seconds)))
-        .setVelocityController(new PIDController(0.7, 0, 0, Misc.kPeriod.in(Units.Seconds)))
+        .setPositionController(new PIDController(10, 0, 0, MechanismConstraints.kPeriod.in(Units.Seconds)))
+        .setVelocityController(new PIDController(0.7, 0, 0, MechanismConstraints.kPeriod.in(Units.Seconds)))
         .setVelocity(0);
   }
 
