@@ -8,9 +8,9 @@ import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.game_elements.FieldElements;
 import frc.robot.constants.game_elements.StrategicStructures;
 
-public class SpeakerWSpeaker extends Routine {
-    public SpeakerWSpeaker() {
-        super("SpeakerWSpeaker", 
+public class SpeakerWAmp extends Routine {
+    public SpeakerWAmp() {
+        super("SpeakerWAmp", 
               new ScoreSpeaker(),
               new DriveToward(new Pose2d(StrategicStructures.acrossTheLineTarget, 
                                          FieldElements.directions.towardOtherWall())),

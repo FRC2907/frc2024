@@ -9,5 +9,9 @@ public class RoutineInstantiator {
         new DriveAcrossTheLine();
         new OneNoteAmp();
         new OneNoteSpeaker();
+        new SpeakerWSpeaker();
+        new AmpWAmp();
+        new SpeakerWAmp();
+        new AmpWSpeaker();
     }
 }
