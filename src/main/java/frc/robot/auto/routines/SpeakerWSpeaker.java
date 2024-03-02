@@ -6,7 +6,6 @@ import frc.robot.auto.actions.GetNote;
 import frc.robot.auto.actions.ScoreSpeaker;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.game_elements.FieldElements;
-import frc.robot.util.Util;
 
 public class SpeakerWSpeaker extends Routine {
     public SpeakerWSpeaker() {
