@@ -1,7 +1,8 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.motors;
 
 import edu.wpi.first.units.Units;
-import frc.robot.constants.Misc;
+import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.util.Util;
 
 public class FakeMotor extends FeedbackMotor {
@@ -40,7 +41,7 @@ public class FakeMotor extends FeedbackMotor {
 
     @Override
     public void onLoop() {
-        this.position += get() * Misc.kPeriod.in(Units.Seconds);
+        this.position += get() * MechanismConstraints.kPeriod.in(Units.Seconds);
         super.onLoop();
     }
 }

@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.constants.Misc;
+import frc.robot.debug.AngularMotorControllerTest;
 import frc.robot.debug.FakeMotorTest;
 import frc.robot.debug.MotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
@@ -36,7 +35,7 @@ public class Robot extends TimedRobot {
    * Configure the loop rate for periodic methods.
    */
   public Robot() {
-    super(Misc.kPeriod.in(Units.Seconds));
+    super(MechanismConstraints.kPeriod.in(Units.Seconds));
   }
 
   private Thread noteTargetingThread;
@@ -57,9 +56,10 @@ public class Robot extends TimedRobot {
     }
     // superduperstructure = Superduperstructure.getInstance();
     this.subsystems = new ISubsystem[] {
-        //Superduperstructure.getInstance()
-        new MotorControllerTest()
+        Superduperstructure.getInstance()
+        //new MotorControllerTest()
         //new FakeMotorTest()
+        //new AngularMotorControllerTest()
     };
 
     RoutineInstantiator.go();

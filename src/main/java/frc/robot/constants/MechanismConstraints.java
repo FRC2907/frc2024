@@ -16,6 +16,7 @@ public class MechanismConstraints {
         public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0); /// TODO empirical
         public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120); /// TODO empirical
         public static final Measure<Velocity<Angle>> kMaxVelocity = Units.DegreesPerSecond.of(60); /// TODO empirical
+        public static final Measure<Angle> kPositionHysteresis = Units.Degrees.of(2);
     }
 
     public class drivetrain {
@@ -46,4 +47,6 @@ public class MechanismConstraints {
         public static final boolean kNoteTrackingEnabled = true;
         public static final boolean kBlackoutNoteFeed = false;
     }
+
+    public static final Measure<Time> kPeriod = Units.Milliseconds.of(20);
 }

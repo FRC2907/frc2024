@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.raw;
 
 public class DcMotorSpeedCurve {
   // we assume (0,0) always

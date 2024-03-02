@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.FeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalPIDFController;
 import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.constants.PIDGains;
@@ -23,16 +24,17 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain implements ISubsystem {
 
-    private FeedbackMotor leftMotor, rightMotor;
+    private DimensionalFeedbackMotor<Distance> leftMotor, rightMotor;
     private Measure<Velocity<Distance>> leftSpeed, rightSpeed;
     private Field2d sb_field;
     private DriveMode mode;
     private Timer timer;
     private AHRS gyro;
     private final DifferentialDrivePoseEstimator poseEstimator;
+    private final DimensionalPIDFController<Angle, Velocity<Angle>> headingController = new DimensionalPIDFController<Angle, Velocity<Angle>>();
 
 
-    private Drivetrain(FeedbackMotor left, FeedbackMotor right) {
+    private Drivetrain(DimensionalFeedbackMotor<Distance> left, DimensionalFeedbackMotor<Distance> right) {
         this.leftMotor = left;
         this.rightMotor = right;
         this.mode = DriveMode.LOCAL_FORWARD;
@@ -48,11 +50,16 @@ public class Drivetrain implements ISubsystem {
         this.poseEstimator = new DifferentialDrivePoseEstimator(
             MechanismDimensions.drivetrain.DRIVE_KINEMATICS,
             gyro.getRotation2d(),
-            leftMotor.getPosition(),
-            rightMotor.getPosition(),
+            leftMotor.getPosition().in(Units.Meters),
+            rightMotor.getPosition().in(Units.Meters),
             new Pose2d(),
             VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5).in(Units.Radians)),
             VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
+
+        this.headingController
+        // TODO verify that this doesn't just eval at startup
+        .setStateSupplier(() -> Units.Rotations.of(this.getHeading().getRotations()))
+        .setGains(PIDGains.drivetrain.heading);
     }
 
     private static Drivetrain instance;
@@ -75,13 +82,8 @@ public class Drivetrain implements ISubsystem {
     }
 
 
-    private Pose2d pose = new Pose2d(); // FIXME this might be bad. or maybe not
-
     public Pose2d getPose() {
-        return pose;
-    }
-    private void setPose(Pose2d _pose) {
-        pose = _pose;
+        return poseEstimator.getEstimatedPosition();
     }
 
     public Rotation2d getHeadingError(Rotation2d reference) {
@@ -123,25 +125,14 @@ public class Drivetrain implements ISubsystem {
         setCurvatureInputs(speed, turn);
     }
     public void setFieldDriveInputs(Measure<Velocity<Distance>> speed, Rotation2d direction) {
-        setCurvatureInputs(speed, 
-            Units.DegreesPerSecond.of(
-                // this is goofy
-                // we're just fighting the type system
-                PIDGains.drivetrain.heading.kP
-                // deg/s / deg => 1/s
-                .in(Units.DegreesPerSecond.per(Units.Degrees))
-                // then (1/s) * deg => deg/s
-                * getHeadingError(direction).getDegrees()
-                // which is a unit of angular velocity
-                // which is what we want :)
-            )
-        );
+        headingController.setReference(Units.Degrees.of(direction.getDegrees()));
+        setCurvatureInputs(speed, headingController.calculate());
     }
 
 
     private void sendMotorInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
-        leftMotor.setVelocity(left.in(Units.MetersPerSecond));
-        rightMotor.setVelocity(right.in(Units.MetersPerSecond));
+        leftMotor.setVelocity(left);
+        rightMotor.setVelocity(right);
     }
 
 
@@ -164,6 +155,8 @@ public class Drivetrain implements ISubsystem {
     public void onLoop() {
         updatePoseFromSensors();
         sendMotorInputs(leftSpeed, rightSpeed);
+        leftMotor.onLoop();
+        rightMotor.onLoop();
     }
 
     
@@ -184,15 +177,14 @@ public class Drivetrain implements ISubsystem {
     private void updatePoseFromSensors() {
         poseEstimator.update(
             gyro.getRotation2d(), 
-            leftMotor.getPosition(), 
-            rightMotor.getPosition()
+            leftMotor.getPosition().in(Units.Meters), 
+            rightMotor.getPosition().in(Units.Meters)
         );
         
-        poseEstimator.addVisionMeasurement(
-        LimelightHelpers.getBotPose2d(""), 
-        Timer.getFPGATimestamp());
-
-        setPose(poseEstimator.getEstimatedPosition());
+        if (LimelightHelpers.getLatestResults("").targetingResults.targets_Fiducials.length >= 1)
+            poseEstimator.addVisionMeasurement(
+                    LimelightHelpers.getBotPose2d(""),
+                    Timer.getFPGATimestamp());
 
         /*Measure<Time> elapsed = Units.Seconds.of(timer.get());
         timer.restart();
@@ -218,11 +210,11 @@ public class Drivetrain implements ISubsystem {
     }
 
     public Measure<Velocity<Distance>> getVelocityL() {
-        return Units.MetersPerSecond.of(leftMotor.getVelocity());
+        return leftMotor.getVelocity();
     }
 
     public Measure<Velocity<Distance>> getVelocityR() {
-        return Units.MetersPerSecond.of(rightMotor.getVelocity());
+        return rightMotor.getVelocity();
     }
 
     public Measure<Distance> getPositionX() {
