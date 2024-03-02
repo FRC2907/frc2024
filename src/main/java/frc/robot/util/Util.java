@@ -1,9 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -27,6 +25,10 @@ public class Util {
 
   public static double clampV(double value) {
 		return clampSymmetrical(value, MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts));
+  }
+
+  public static Measure<Voltage> clampV(Measure<Voltage> value) {
+		return clampSymmetrical(value, MechanismConstraints.electrical.kMaxVoltage);
   }
 
 	public static double clamp12(double value) {
@@ -88,4 +90,45 @@ public class Util {
 		}
 		return true;
 	}
+
+  public static <T extends Unit<T>> Measure<T> initializeOrAdd(Measure<T> collector, Measure<T> other) {
+    if (collector == null) return other;
+    return collector.plus(other);
+  }
+
+	public static double fuzz() { return Math.random() * 0.0001; }
+
+	public static Measure<Voltage> angleTimesVoltagePerAngle(Measure<Angle> angle, Measure<Per<Voltage, Angle>> rate) {
+		return Units.Volts.of(angle.in(Units.Rotations) * rate.in(Units.Volts.per(Units.Rotations)));
+	}
+	public static Measure<Voltage> angleTimeTimesVoltagePerAngleTime(Measure<Mult<Angle,Time>> angleSum, Measure<Per<Voltage, Mult<Angle,Time>>> rate) {
+		return Units.Volts.of(angleSum.in(Units.Rotations.mult(Units.Seconds)) * rate.in(Units.Volts.per(Units.Rotations.mult(Units.Seconds))));
+	}
+	public static Measure<Voltage> angleSpeedTimesVoltagePerAngleSpeed(Measure<Velocity<Angle>> angle, Measure<Per<Voltage, Velocity<Angle>>> rate) {
+		return Units.Volts.of(angle.in(Units.RotationsPerSecond) * rate.in(Units.Volts.per(Units.RotationsPerSecond)));
+	}
+	public static Measure<Voltage> angleSpeedTimeTimesVoltagePerAngleSpeedTime(Measure<Mult<Velocity<Angle>,Time>> angleSum, Measure<Per<Voltage, Mult<Velocity<Angle>,Time>>> rate) {
+		return Units.Volts.of(angleSum.in(Units.RotationsPerSecond.mult(Units.Seconds)) * rate.in(Units.Volts.per(Units.RotationsPerSecond.mult(Units.Seconds))));
+	}
+	public static Measure<Voltage> angleSpeedSpeedTimesVoltagePerAngleSpeedSpeed(Measure<Velocity<Velocity<Angle>>> angle, Measure<Per<Voltage, Velocity<Velocity<Angle>>>> rate) {
+		return Units.Volts.of(angle.in(Units.RotationsPerSecond.per(Units.Second)) * rate.in(Units.Volts.per(Units.RotationsPerSecond.per(Units.Second))));
+	}
+
+	public static Measure<Voltage> distanceTimesVoltagePerDistance(Measure<Distance> angle, Measure<Per<Voltage, Distance>> rate) {
+		return Units.Volts.of(angle.in(Units.Meters) * rate.in(Units.Volts.per(Units.Meters)));
+	}
+	public static Measure<Voltage> distanceTimeTimesVoltagePerDistanceTime(Measure<Mult<Distance,Time>> angleSum, Measure<Per<Voltage, Mult<Distance,Time>>> rate) {
+		return Units.Volts.of(angleSum.in(Units.Meters.mult(Units.Seconds)) * rate.in(Units.Volts.per(Units.Meters.mult(Units.Seconds))));
+	}
+	public static Measure<Voltage> distanceSpeedTimesVoltagePerDistanceSpeed(Measure<Velocity<Distance>> angle, Measure<Per<Voltage, Velocity<Distance>>> rate) {
+		return Units.Volts.of(angle.in(Units.MetersPerSecond) * rate.in(Units.Volts.per(Units.MetersPerSecond)));
+	}
+	public static Measure<Voltage> distanceSpeedTimeTimesVoltagePerDistanceSpeedTime(Measure<Mult<Velocity<Distance>,Time>> distanceSum, Measure<Per<Voltage, Mult<Velocity<Distance>,Time>>> rate) {
+		return Units.Volts.of(distanceSum.in(Units.MetersPerSecond.mult(Units.Seconds)) * rate.in(Units.Volts.per(Units.MetersPerSecond.mult(Units.Seconds))));
+	}
+	public static Measure<Voltage> distanceSpeedSpeedTimesVoltagePerDistanceSpeedSpeed(Measure<Velocity<Velocity<Distance>>> distance, Measure<Per<Voltage, Velocity<Velocity<Distance>>>> rate) {
+		return Units.Volts.of(distance.in(Units.MetersPerSecond.per(Units.Second)) * rate.in(Units.Volts.per(Units.MetersPerSecond.per(Units.Second))));
+	}
+
+	public static Measure<?> anyZero() { return Units.Value.zero().times(Units.Value.zero()); }
 }
