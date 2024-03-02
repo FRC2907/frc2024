@@ -1,7 +1,6 @@
 package frc.robot.bodges.rawrlib.generics;
 
 import edu.wpi.first.units.*;
-import frc.robot.util.Util;
 
 public abstract class DimensionalDcMotorSpeedCurve<D extends Unit<D>> {
   protected final Measure<Per<Velocity<D>, Voltage>> lower_slope, upper_slope;
