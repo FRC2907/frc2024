@@ -21,6 +21,7 @@ public class RoutineInstantiator {
         new AmpWAmp();
         new SpeakerWAmp();
         new AmpWSpeaker();
+        //all editable 3-Note templates ->
         new SpeakerMSpeakerMSpeaker();
         new AmpMAmpMAmp();
         new AmpMAmpMSpeaker();

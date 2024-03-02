@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.debug.AngularMotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
@@ -75,7 +74,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // TODO write auto routines
     auto = autoChooser.getSelected();
   }
 

@@ -237,7 +237,7 @@ public class Superduperstructure implements ISubsystem {
         }
 
 
-        if (operator.getCrossButtonPressed()) { // TODO automatic intake
+        if (operator.getCrossButtonPressed()) {
             moveToIntaking();
         }
         if (operator.getSquareButtonPressed()) {
