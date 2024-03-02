@@ -1,5 +1,8 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.raw;
 
+/**
+ * @deprecated
+ */
 public class DcMotorSpeedCurve {
   // we assume (0,0) always
   private final double lower_slope, lower_knee, middle_slope, upper_knee, upper_slope;

@@ -7,7 +7,6 @@ import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Misc;
-import frc.robot.constants.MotorControllers;
 
 public class Superduperstructure implements ISubsystem {
     private Drivetrain drivetrain;
@@ -419,9 +418,6 @@ public class Superduperstructure implements ISubsystem {
         // Tell all the subsystems to do their thing for this cycle
         for (ISubsystem s : subsystems)
             s.onLoop();
-        // also all the motors, this is when they update their outputs
-        for (ISubsystem m : MotorControllers.list)
-            m.onLoop();
 
         submitTelemetry();
     }

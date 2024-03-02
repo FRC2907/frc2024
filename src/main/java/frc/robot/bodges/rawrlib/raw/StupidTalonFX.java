@@ -1,15 +1,15 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.raw;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.units.Units;
-import frc.robot.constants.MechanismConstraints;
 import frc.robot.util.Util;
 
+/**
+ * @deprecated
+ */
 public class StupidTalonFX extends FeedbackMotor {
 
     private TalonFX m;
@@ -18,10 +18,6 @@ public class StupidTalonFX extends FeedbackMotor {
         this.m = new TalonFX(deviceId);
         m.getConfigurator().apply(new TalonFXConfiguration()
         );
-        //        .withVoltage(new VoltageConfigs()
-        //                .withPeakForwardVoltage(MechanismConstraints.electrical.kMaxVoltage.in(Units.Volts))
-        //                .withPeakReverseVoltage(MechanismConstraints.electrical.kMaxVoltage.negate().in(Units.Volts))
-        //                ));
     }
 
     @Override

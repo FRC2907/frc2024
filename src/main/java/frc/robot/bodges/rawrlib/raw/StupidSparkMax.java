@@ -1,8 +1,11 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.raw;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+/**
+ * @deprecated
+ */
 public class StupidSparkMax extends FeedbackMotor {
 
     private CANSparkMax m;

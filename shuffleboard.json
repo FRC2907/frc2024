@@ -904,6 +904,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "15,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/testmotor/ref",
+              "_title": "ref",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -1126,6 +1139,19 @@
             }
           }
         }
+      }
+    },
+    {
+      "title": "Tab 5",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 100.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
       }
     }
   ],

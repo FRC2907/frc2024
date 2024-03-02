@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.raw;
 
 import java.util.function.DoubleSupplier;
 
@@ -14,6 +14,7 @@ import frc.robot.util.Util;
 
 /**
  * Describes a generic motor with closed-loop position and velocity control.
+ * @deprecated
  */
 public abstract class FeedbackMotor implements MotorController, ISubsystem {
 

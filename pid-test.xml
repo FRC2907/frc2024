@@ -1,0 +1,59 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="input" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="842" y="382"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-12"/>
+		<property name="Maximum Y Value" value="12"/>
+	</widget>
+	<widget field="error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="437" y="382"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-12"/>
+		<property name="Maximum Y Value" value="12"/>
+	</widget>
+	<widget field="state" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="841" y="77"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-12"/>
+		<property name="Maximum Y Value" value="12"/>
+	</widget>
+	<widget field="reference" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="437" y="77"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-12"/>
+		<property name="Maximum Y Value" value="12"/>
+	</widget>
+	<widget field="d.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="757" y="789"/>
+	</widget>
+	<widget field="p.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="757" y="761"/>
+	</widget>
+	<widget field="r.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="759" y="731"/>
+	</widget>
+	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="0" y="80"/>
+	</widget>
+	<widget field="Auto Selector" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="60"/>
+	</widget>
+	<widget field="limelight_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="40"/>
+	</widget>
+	<widget field="limelight_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="20"/>
+	</widget>
+	<widget field="limelight_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Field"/>
+</xml>
