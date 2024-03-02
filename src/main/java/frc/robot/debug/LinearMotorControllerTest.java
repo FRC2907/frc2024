@@ -1,5 +1,6 @@
 package frc.robot.debug;
 
+import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
@@ -8,16 +9,19 @@ import frc.robot.bodges.rawrlib.linear.LinearDcMotorSpeedCurve;
 import frc.robot.bodges.rawrlib.linear.LinearFeedbackMotor;
 //import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
 import frc.robot.bodges.rawrlib.motors.WrappedTalonFX;
+import frc.robot.constants.MotorControllers;
+import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
 public class LinearMotorControllerTest implements ISubsystem {
   private DimensionalFeedbackMotor<Distance> m;
+  private ControllerRumble c = ControllerRumble.getInstance(0);
 
-  private Measure<Distance> ref = Units.Meters.zero();
+  private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
   public LinearMotorControllerTest() {
-    this.m = new LinearFeedbackMotor()
+  /*  this.m = new LinearFeedbackMotor()
         .setName("testmotor")
         .setWrappedMotorController(new WrappedTalonFX(1))
         //.setWrappedMotorController(new WrappedFakeMotor())
@@ -29,42 +33,39 @@ public class LinearMotorControllerTest implements ISubsystem {
           .setD(Units.Volts.zero().per(Units.MetersPerSecond))
           )
         .setPosition(ref)
-    ;
+    ;*/
+    this.m = MotorControllers.drivetrainLeft();
   }
 
   @Override
   public void onLoop() {
     receiveOptions();
-    m.setPosition(ref);
+    ref = Units.MetersPerSecond.of(c.getLeftY());
+    m.setVelocity(ref);
     m.onLoop();
     submitTelemetry();
   }
 
   @Override
   public void submitTelemetry() {
-    SmartDashboard.putNumber("r.set", ref.in(Units.Meters));
-    SmartDashboard.putNumber("p.set", m.getPositionController().getGains().getP().in(Units.Volts.per(Units.Meters)));
-    SmartDashboard.putNumber("d.set", m.getPositionController().getGains().getD().in(Units.Volts.per(Units.MetersPerSecond)));
+    SmartDashboard.putNumber("r.set", ref.in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("p.set", m.getVelocityController().getGains().getP().in(Units.Volts.per(Units.MetersPerSecond)));
+    SmartDashboard.putNumber("d.set", m.getVelocityController().getGains().getD().in(Units.Volts.per(Units.MetersPerSecondPerSecond)));
     SmartDashboard.putNumberArray("refstate", new double[] {
-      m.getPositionController().getReference().in(Units.Meters)
-      , m.getPositionController().getState().in(Units.Meters)
+      m.getVelocityController().getReference().in(Units.MetersPerSecond)
+      , m.getVelocityController().getState().in(Units.MetersPerSecond)
     });
     SmartDashboard.putNumberArray("errinput", new double[] {
-      m.getPositionController().getError().in(Units.Meters)
+      m.getVelocityController().getError().in(Units.MetersPerSecond)
       , m.getLastControlEffort().in(Units.Volts)
     });
-    SmartDashboard.putNumber("reference", Util.fuzz() + m.getPositionController().getReference().in(Units.Meters));
-    SmartDashboard.putNumber("state",     Util.fuzz() + m.getPositionController().getState().in(Units.Meters));
-    SmartDashboard.putNumber("error",     Util.fuzz() + m.getPositionController().getError().in(Units.Meters));
+    SmartDashboard.putNumber("reference", Util.fuzz() + m.getVelocityController().getReference().in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("state",     Util.fuzz() + m.getVelocityController().getState().in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("error",     Util.fuzz() + m.getVelocityController().getError().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("input",     Util.fuzz() + m.getLastControlEffort().in(Units.Volts));
   }
 
   @Override
   public void receiveOptions() {
-    ref = Units.Meters.of(SmartDashboard.getNumber("r.set", ref.in(Units.Meters)));
-    m.getPositionController().getGains().setP(Units.Volts.of(SmartDashboard.getNumber("p.set",
-        m.getPositionController().getGains().getP().in(Units.Volts.per(Units.Meters)))).per(Units.Meters));
-    m.getPositionController().getGains().setD(Units.Volts.of(SmartDashboard.getNumber("d.set",
-        m.getPositionController().getGains().getD().in(Units.Volts.per(Units.MetersPerSecond)))).per(Units.MetersPerSecond));
   }
 }

@@ -125,8 +125,10 @@ public class Drivetrain implements ISubsystem {
         setCurvatureInputs(speed, turn);
     }
     public void setFieldDriveInputs(Measure<Velocity<Distance>> speed, Rotation2d direction) {
-        headingController.setReference(Units.Degrees.of(direction.getDegrees()));
-        setCurvatureInputs(speed, headingController.calculate());
+        // FIXME
+        //headingController.setReference(Units.Degrees.of(direction.getDegrees()));
+        //setCurvatureInputs(speed, headingController.calculate());
+        setCurvatureInputs(speed, Units.Rotations.of(direction.minus(getHeading()).getRotations()).per(Units.Second));
     }
 
 

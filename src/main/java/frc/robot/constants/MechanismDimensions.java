@@ -26,7 +26,7 @@ public class MechanismDimensions {
 
     public static class drivetrain {
         public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(6);
-        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final double GEAR_RATIO = 1 / 8.45; /// TODO get from Build
         public static final Measure<Distance> TRACK_WIDTH = Units.Meters.of(0.5823458);
 
         public static final Measure<Per<Distance, Angle>> LINEAR_TRAVEL_PER_ENCODER_TRAVEL = WHEEL_DIAMETER

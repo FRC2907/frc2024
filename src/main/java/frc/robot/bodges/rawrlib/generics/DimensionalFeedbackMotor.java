@@ -223,7 +223,7 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
           double state = ctlr.getState().baseUnitMagnitude();
           double error = ctlr.getError().baseUnitMagnitude();
           double input = ctlr.calculate().baseUnitMagnitude();
-          double inputPerReference = input / reference;
+          double inputPerState = input / state;
           SmartDashboard.putNumberArray(name + "/all", new double[] {reference, state, error, input});
           SmartDashboard.putNumberArray(name + "/rx", new double[] {reference, state});
           SmartDashboard.putNumberArray(name + "/eu", new double[] {error, input});
@@ -231,7 +231,7 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
           SmartDashboard.putNumber(name + "/x", state);
           SmartDashboard.putNumber(name + "/e", error);
           SmartDashboard.putNumber(name + "/u", input);
-          SmartDashboard.putNumber(name + "/uPerE", inputPerReference);
+          SmartDashboard.putNumber(name + "/uPerX", inputPerState);
         }
     }
 

@@ -17,7 +17,7 @@ public class PIDGains {
 
     public class drivetrain {
         public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
-            .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
+            .setF(Units.Volts.of(2).per(Units.MetersPerSecond))
             .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
             ;
 

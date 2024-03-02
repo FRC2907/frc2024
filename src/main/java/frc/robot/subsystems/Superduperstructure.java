@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Ports;
+import frc.robot.constants.game_elements.FieldElements;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -184,19 +185,20 @@ public class Superduperstructure implements ISubsystem {
                     case FIELD_FORWARD:
                         drivetrain.setFieldDriveInputs(
                             MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
-                            , driver.getLeftAngle()
+                            , driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall())
                         );
                         break;
                     case FIELD_REVERSED:
                         drivetrain.setFieldDriveInputs(
                             MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
-                            , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
+                            , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180)).
+                                                            rotateBy(FieldElements.directions.towardOtherWall())
                         );
                         break;
                     case LOCAL_FORWARD:
                         drivetrain.setLocalDriveInputs(
                             MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftY())
-                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX())
+                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate()
                         );
                         break;
                     case LOCAL_REVERSED:
@@ -425,6 +427,7 @@ public class Superduperstructure implements ISubsystem {
     @Override
     public void submitTelemetry() {
         SmartDashboard.putString("superduperstructure.state", getState().toString());
+        SmartDashboard.putString("drive something", drivetrain.getDriveMode().toString());
 
         for (ISubsystem s : subsystems)
             s.submitTelemetry();
