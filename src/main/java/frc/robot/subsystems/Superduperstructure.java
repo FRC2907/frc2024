@@ -300,12 +300,6 @@ public class Superduperstructure implements ISubsystem {
             case MOVING_TO_INTAKING:
                 arm.floorPosition();
                 intake.intake();
-                // TODO automatically drive up to the Note
-                // steps:
-                // if we don't currently have a TrajectoryFollower: get one from the Hat
-                // then the handleDriving function will follow it each cycle
-                // for intaking i guess we don't really need to check whether we've finished the trajectory
-                // since having the note is all that matters
                 if (tjf == null){
                     tjf = hat.findPathToNote();
                 }
