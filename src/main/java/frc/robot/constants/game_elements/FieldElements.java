@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
-import frc.robot.constants.MechanismConstraints.drivetrain;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Util;
 import frc.robot.util.Geometry.ScoringRegion;

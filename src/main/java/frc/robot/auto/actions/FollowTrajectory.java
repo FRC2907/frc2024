@@ -1,6 +1,5 @@
 package frc.robot.auto.actions;
 
-import edu.wpi.first.math.proto.Trajectory;
 import frc.robot.auto.actions.templates.Action;
 import frc.robot.subsystems.Superduperstructure;
 import frc.robot.subsystems.TrajectoryFollower;
