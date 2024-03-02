@@ -4,9 +4,10 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
-public class DimensionalPIDFController<StateDimension extends Unit<StateDimension>, InputDimension extends Unit<InputDimension>> {
+public class DimensionalPIDFController<StateDimension extends Unit<StateDimension>, InputDimension extends Unit<InputDimension>> implements ISubsystem {
 
   public DimensionalPIDFController() {
     timer.restart();
@@ -132,6 +133,20 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
   // FIXME support derivative test
   public boolean converged() {
     return Util.checkHysteresis(getError(), getHysteresis());
+  }
+
+  @Override
+  public void onLoop() {
+    receiveOptions();
+    submitTelemetry();
+  }
+
+  @Override
+  public void submitTelemetry() {
+  }
+
+  @Override
+  public void receiveOptions() {
   }
 
 }

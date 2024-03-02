@@ -1,7 +1,9 @@
 package frc.robot.bodges.rawrlib.generics;
 
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
+import frc.robot.constants.Misc;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
@@ -204,19 +206,38 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
 
     @Override
     public void submitTelemetry() {
-        if (name != null) {
-            //SmartDashboard.putNumberArray(name + "/refstate", new double[] {velocityController.getReference().in(D.per(Units.Second)), getState()});
-            //SmartDashboard.putNumberArray(name + "/errinput", new double[] {getError(), getLastControlEffort()});
-            ////SmartDashboard.putNumber(name + "/p.set", active_pid.getP());
-            ////SmartDashboard.putNumber(name + "/d.set", active_pid.getD());
-            //SmartDashboard.putNumber(name + "/r.set", getReference());
-            //SmartDashboard.putNumber(name + "/voltPerVel", getLastControlEffort() / getVelocity());
+        if (Misc.debug && name != null) {
+          DimensionalPIDFController<?, Voltage> ctlr;
+          switch (getTrackingMode()) {
+            case kPosition:
+              ctlr = positionController;
+              break;
+            case kVelocity:
+              ctlr = velocityController;
+              break;
+            default:
+              ctlr = null;
+              break;
+          }
+          double reference = ctlr.getReference().baseUnitMagnitude();
+          double state = ctlr.getState().baseUnitMagnitude();
+          double error = ctlr.getError().baseUnitMagnitude();
+          double input = ctlr.calculate().baseUnitMagnitude();
+          double inputPerReference = input / reference;
+          SmartDashboard.putNumberArray(name + "/all", new double[] {reference, state, error, input});
+          SmartDashboard.putNumberArray(name + "/rx", new double[] {reference, state});
+          SmartDashboard.putNumberArray(name + "/eu", new double[] {error, input});
+          SmartDashboard.putNumber(name + "/r", reference);
+          SmartDashboard.putNumber(name + "/x", state);
+          SmartDashboard.putNumber(name + "/e", error);
+          SmartDashboard.putNumber(name + "/u", input);
+          SmartDashboard.putNumber(name + "/uPerE", inputPerReference);
         }
     }
 
     @Override
     public void receiveOptions() {
-        if (name != null) {
+        if (Misc.debug && name != null) {
             ////active_pid.setP(SmartDashboard.getNumber(name + "/p.set", active_pid.getP()));
             ////active_pid.setD(SmartDashboard.getNumber(name + "/d.set", active_pid.getD()));
             //double newSetpoint = SmartDashboard.getNumber(name + "/r.set", getReference());

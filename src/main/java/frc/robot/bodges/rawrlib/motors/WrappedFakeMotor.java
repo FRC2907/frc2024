@@ -6,23 +6,25 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 
 public class WrappedFakeMotor extends WrappedMotorController {
+  protected FakeMotor m;
 
   public WrappedFakeMotor() {
     this(new FakeMotor());
   }
 
   public WrappedFakeMotor(FakeMotor motor) {
+    this.m = motor;
     setMotor(motor);
   }
 
   @Override
   public Measure<Angle> getPosition_downstream() {
-    return Units.Degrees.zero();
+    return Units.Rotations.of(m.getPosition());
   }
 
   @Override
   public Measure<Velocity<Angle>> getVelocity_downstream() {
-    return Units.DegreesPerSecond.zero();
+    return Units.DegreesPerSecond.of(m.getVelocity());
   }
 
 }

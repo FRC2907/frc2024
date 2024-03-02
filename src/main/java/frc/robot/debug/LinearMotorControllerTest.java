@@ -6,7 +6,7 @@ import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
 import frc.robot.bodges.rawrlib.linear.LinearDcMotorSpeedCurve;
 import frc.robot.bodges.rawrlib.linear.LinearFeedbackMotor;
-import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
+//import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
 import frc.robot.bodges.rawrlib.motors.WrappedTalonFX;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
@@ -17,7 +17,6 @@ public class LinearMotorControllerTest implements ISubsystem {
   private Measure<Distance> ref = Units.Meters.zero();
 
   public LinearMotorControllerTest() {
-    //this.c = ControllerRumble.getInstance(0);
     this.m = new LinearFeedbackMotor()
         .setName("testmotor")
         .setWrappedMotorController(new WrappedTalonFX(1))

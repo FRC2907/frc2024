@@ -1,15 +1,15 @@
 package frc.robot.bodges.rawrlib.motors;
 
-import edu.wpi.first.units.Units;
-import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
-public class FakeMotor extends FeedbackMotor {
+public class FakeMotor implements MotorController, ISubsystem {
 
     private double speed = 0;
     private boolean isInverted = false;
-    private double factor = 1;
     private double position = 0;
 
     @Override
@@ -30,18 +30,27 @@ public class FakeMotor extends FeedbackMotor {
     @Override
     public void stopMotor() { set(0); }
 
-    @Override
-    protected FeedbackMotor setFactor_downstream(double factor) { this.factor = factor; return this; }
+    /**
+     * @return position in rotations
+     */
+    public double getPosition() { return position; }
 
-    @Override
-    public double getPosition() { return factor * position; }
+    /**
+     * @return velocity in rotations per second
+     */
+    public double getVelocity() { return get(); }
 
-    @Override
-    public double getVelocity() { return factor * get(); }
-
-    @Override
     public void onLoop() {
+        receiveOptions();
         this.position += get() * MechanismConstraints.kPeriod.in(Units.Seconds);
-        super.onLoop();
+        submitTelemetry();
+    }
+
+    @Override
+    public void submitTelemetry() {
+    }
+
+    @Override
+    public void receiveOptions() {
     }
 }

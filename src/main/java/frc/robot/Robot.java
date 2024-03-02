@@ -13,8 +13,6 @@ import frc.robot.auto.routines.templates.Routine;
 import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.debug.AngularMotorControllerTest;
-import frc.robot.debug.FakeMotorTest;
-import frc.robot.debug.MotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
@@ -57,8 +55,6 @@ public class Robot extends TimedRobot {
     // superduperstructure = Superduperstructure.getInstance();
     this.subsystems = new ISubsystem[] {
         Superduperstructure.getInstance()
-        //new MotorControllerTest()
-        //new FakeMotorTest()
         //new AngularMotorControllerTest()
     };
 
