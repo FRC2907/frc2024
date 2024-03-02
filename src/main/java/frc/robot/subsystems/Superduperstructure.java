@@ -371,7 +371,6 @@ public class Superduperstructure implements ISubsystem {
 
             case PREPARING_FOR_CLIMB:
                 arm.climbReadyPosition();
-                // TODO automatically drive up to the Stage
                 if (isScoringAutomated() && arm.reachedSetPoint()) {
                     state = RobotState.CLIMBING;
                 }
