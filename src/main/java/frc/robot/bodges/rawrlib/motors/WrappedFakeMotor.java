@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.motors;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
@@ -12,12 +12,12 @@ public class WrappedFakeMotor extends WrappedMotorController {
   }
 
   @Override
-  protected Measure<Angle> getPosition_downstream() {
+  public Measure<Angle> getPosition_downstream() {
     return Units.Degrees.zero();
   }
 
   @Override
-  protected Measure<Velocity<Angle>> getVelocity_downstream() {
+  public Measure<Velocity<Angle>> getVelocity_downstream() {
     return Units.DegreesPerSecond.zero();
   }
   

@@ -1,6 +1,10 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.angular;
 
 import edu.wpi.first.units.*;
+import frc.robot.bodges.rawrlib.generics.DimensionalErrorTracker;
+import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalPIDFController;
+import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
 
 /**
  * Describes a generic motor with closed-loop angular position and velocity control.

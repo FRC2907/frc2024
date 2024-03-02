@@ -1,6 +1,7 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.linear;
 
 import edu.wpi.first.units.*;
+import frc.robot.bodges.rawrlib.generics.DimensionalDcMotorSpeedCurve;
 
 public class LinearDcMotorSpeedCurve extends DimensionalDcMotorSpeedCurve<Distance> {
   

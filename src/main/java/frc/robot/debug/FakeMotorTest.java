@@ -2,8 +2,8 @@ package frc.robot.debug;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
-import frc.robot.bodges.FakeMotor;
-import frc.robot.bodges.FeedbackMotor;
+import frc.robot.bodges.rawrlib.motors.FakeMotor;
+import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
 import frc.robot.constants.Misc;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;

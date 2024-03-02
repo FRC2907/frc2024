@@ -2,9 +2,9 @@ package frc.robot.debug;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.DcMotorSpeedCurve;
-import frc.robot.bodges.FeedbackMotor;
-import frc.robot.bodges.StupidTalonFX;
+import frc.robot.bodges.rawrlib.raw.DcMotorSpeedCurve;
+import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
+import frc.robot.bodges.rawrlib.raw.StupidTalonFX;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;
 

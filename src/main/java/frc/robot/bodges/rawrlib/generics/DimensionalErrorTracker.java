@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.generics;
 
 import java.lang.reflect.Type;
 

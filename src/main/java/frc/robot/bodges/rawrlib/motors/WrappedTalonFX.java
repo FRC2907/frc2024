@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.motors;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,12 +16,12 @@ public class WrappedTalonFX extends WrappedMotorController {
   }
 
   @Override
-  protected Measure<Angle> getPosition_downstream() {
+  public Measure<Angle> getPosition_downstream() {
     return Units.Rotations.of(m.getPosition().getValueAsDouble());
   }
 
   @Override
-  protected Measure<Velocity<Angle>> getVelocity_downstream() {
+  public Measure<Velocity<Angle>> getVelocity_downstream() {
     return Units.RotationsPerSecond.of(m.getVelocity().getValueAsDouble());
   }
 }

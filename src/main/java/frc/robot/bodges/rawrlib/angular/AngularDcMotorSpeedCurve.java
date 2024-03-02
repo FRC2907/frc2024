@@ -1,6 +1,7 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.angular;
 
 import edu.wpi.first.units.*;
+import frc.robot.bodges.rawrlib.generics.DimensionalDcMotorSpeedCurve;
 
 public class AngularDcMotorSpeedCurve extends DimensionalDcMotorSpeedCurve<Angle> {
   

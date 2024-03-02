@@ -1,6 +1,7 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.motors;
 
 import edu.wpi.first.units.Units;
+import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
 import frc.robot.constants.Misc;
 import frc.robot.util.Util;
 

@@ -1,8 +1,8 @@
 package frc.robot.constants;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.FakeMotor;
-import frc.robot.bodges.FeedbackMotor;
+import frc.robot.bodges.rawrlib.motors.FakeMotor;
+import frc.robot.bodges.rawrlib.raw.FeedbackMotor;
 import frc.robot.util.Motors;
 
 public class MotorControllers {

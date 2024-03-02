@@ -1,4 +1,4 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.motors;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -6,8 +6,8 @@ import frc.robot.util.Util;
 
 public abstract class WrappedMotorController implements MotorController {
 
-    protected abstract Measure<Angle> getPosition_downstream();
-    protected abstract Measure<Velocity<Angle>> getVelocity_downstream();
+    public abstract Measure<Angle> getPosition_downstream();
+    public abstract Measure<Velocity<Angle>> getVelocity_downstream();
 
   /* everything below this line is boilerplate; you may copy-paste into new files */
 

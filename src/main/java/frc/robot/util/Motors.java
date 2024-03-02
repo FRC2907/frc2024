@@ -7,8 +7,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.bodges.StupidSparkMax;
-import frc.robot.bodges.StupidTalonFX;
+import frc.robot.bodges.rawrlib.raw.StupidSparkMax;
+import frc.robot.bodges.rawrlib.raw.StupidTalonFX;
 import frc.robot.constants.Misc;
 
 public class Motors {

@@ -1,6 +1,7 @@
-package frc.robot.bodges;
+package frc.robot.bodges.rawrlib.generics;
 
 import edu.wpi.first.units.*;
+import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 

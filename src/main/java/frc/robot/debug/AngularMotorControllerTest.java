@@ -2,12 +2,12 @@ package frc.robot.debug;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.WrappedTalonFX;
-import frc.robot.bodges.AngularDcMotorSpeedCurve;
-import frc.robot.bodges.AngularFeedbackMotor;
-import frc.robot.bodges.DimensionalFeedbackMotor;
-import frc.robot.bodges.DimensionalPIDFGains;
-import frc.robot.bodges.WrappedFakeMotor;
+import frc.robot.bodges.rawrlib.angular.AngularDcMotorSpeedCurve;
+import frc.robot.bodges.rawrlib.angular.AngularFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
+import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
+import frc.robot.bodges.rawrlib.motors.WrappedTalonFX;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
