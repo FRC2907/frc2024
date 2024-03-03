@@ -1,89 +1,43 @@
 package frc.robot.bodges.rawrlib.generics;
 
-import java.lang.reflect.Type;
-
 import edu.wpi.first.units.*;
 import frc.robot.util.Util;
 
+@SuppressWarnings({"unchecked"})
 public class DimensionalErrorTracker<StateDimension extends Unit<StateDimension>> {
-  protected Measure<StateDimension> p;
-  protected MutableMeasure<Mult<StateDimension, Time>> i;
-  protected Measure<Velocity<StateDimension>> d;
+  protected Measure<StateDimension> x = (Measure<StateDimension>) Util.anyZero();
+  protected Measure<Velocity<StateDimension>> dx = (Measure<Velocity<StateDimension>>) Util.anyZero();
+  protected Measure<StateDimension> p = (Measure<StateDimension>) Util.anyZero();
+  protected Measure<Mult<StateDimension, Time>> i = (Measure<Mult<StateDimension, Time>>) Util.anyZero();
+  protected Measure<Velocity<StateDimension>> d = (Measure<Velocity<StateDimension>>) Util.anyZero();
 
+  public Measure<StateDimension> getState() { return x; }
+  public Measure<Velocity<StateDimension>> getVelocity() { return dx; }
   public Measure<StateDimension> getError() { return p; }
   public Measure<Mult<StateDimension, Time>> getErrorSum() { return i; }
   public Measure<Velocity<StateDimension>> getErrorSpeed() { return d; }
 
-  protected Measure<StateDimension> izone;
+  protected Measure<StateDimension> izone = (Measure<StateDimension>) Util.anyZero();
   public Measure<StateDimension> getIZone() { return izone; }
   public DimensionalErrorTracker<StateDimension> setIZone(Measure<StateDimension> izone) {
+    if (Util.isNegative(izone))
+      return setIZone(izone.negate());
     this.izone = izone;
     return this;
   }
 
-  @SuppressWarnings({"unchecked"})
   public DimensionalErrorTracker<StateDimension> update(Measure<StateDimension> e, Measure<Time> dt) {
-    if (izone == null || izone.baseUnitMagnitude() == 0 || izone.gt(e)) {
-      i = Util.initializeOrAdd(i, (Measure<Mult<StateDimension, Time>>)e.times(dt)).mutableCopy();
-    }
-    else i.mut_setMagnitude(0); // outside of i-zone: clear the i term altogether. i dunno if that's how it's supposed to work
+    if (izone.baseUnitMagnitude() == 0 || izone.gt(e))
+      i = i.plus((Measure<Mult<StateDimension, Time>>) e.times(dt));
+    else i = (Measure<Mult<StateDimension, Time>>) Util.anyZero(); // outside of i-zone: clear the i term altogether. i dunno if that's how it's supposed to work
     d = e.plus(p).per(dt);
     p = e;
     return this;
   }
 
-  private DimensionalErrorTracker() {}
-
-  // FIXME just break this stuff out
-  public static DimensionalErrorTracker<Angle> createAngular() {
-    return createAngular(Units.Degrees.zero());
-  }
-
-  public static DimensionalErrorTracker<Angle> createAngular(Measure<Angle> izone) {
-    DimensionalErrorTracker<Angle> out = new DimensionalErrorTracker<>();
-    out.p = Units.Degrees.zero();
-    out.i = Units.Degrees.mult(Units.Seconds).zero().mutableCopy();
-    out.d = Units.DegreesPerSecond.zero();
-    out.izone = izone;
-    return out;
-  }
-
-  public static DimensionalErrorTracker<Velocity<Angle>> createAngularVelocity(Measure<Velocity<Angle>> izone) {
-    DimensionalErrorTracker<Velocity<Angle>> out = new DimensionalErrorTracker<>();
-    out.p = Units.DegreesPerSecond.zero();
-    out.i = Units.DegreesPerSecond.mult(Units.Seconds).zero().mutableCopy();
-    out.d = Units.DegreesPerSecond.per(Units.Second).zero();
-    out.izone = izone;
-    return out;
-  }
-
-  public static DimensionalErrorTracker<Distance> createLinear() {
-    return createLinear(Units.Meters.zero());
-  }
-
-  public static DimensionalErrorTracker<Distance> createLinear(Measure<Distance> izone) {
-    DimensionalErrorTracker<Distance> out = new DimensionalErrorTracker<>();
-    out.p = Units.Meters.zero();
-    out.i = Units.Meters.mult(Units.Seconds).zero().mutableCopy();
-    out.d = Units.MetersPerSecond.zero();
-    out.izone = izone;
-    return out;
-  }
-
-  public static DimensionalErrorTracker<Velocity<Distance>> createLinearVelocity(Measure<Velocity<Distance>> izone) {
-    DimensionalErrorTracker<Velocity<Distance>> out = new DimensionalErrorTracker<>();
-    out.p = Units.MetersPerSecond.zero();
-    out.i = Units.MetersPerSecond.mult(Units.Seconds).zero().mutableCopy();
-    out.d = Units.MetersPerSecondPerSecond.zero();
-    out.izone = izone;
-    return out;
-  }
-
-  public static DimensionalErrorTracker<?> create(Type t) {
-    switch (t.getTypeName()) {
-      case "Angle": return createAngular();
-      case "Distance": return createLinear();
-      default: throw new IllegalArgumentException();
-    }
+  public void update(Measure<StateDimension> x, Measure<StateDimension> e, Measure<Time> dt) {
+    update(e, dt);
+    dx = x.minus(this.x).per(dt);
+    this.x = x;
   }
 }

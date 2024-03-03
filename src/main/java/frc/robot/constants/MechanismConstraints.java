@@ -24,12 +24,22 @@ public class MechanismConstraints {
         public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1); /// TODO empirical
         public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO empirical
         public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO empirical
-        public final static TrajectoryConfig config = 
+        public final static TrajectoryConfig forward_config = 
         new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
-                         MechanismConstraints.drivetrain.kMaxAcceleration);
+                         MechanismConstraints.drivetrain.kMaxAcceleration)
+                         .setReversed(false);
+        public final static TrajectoryConfig reverse_config = 
+        new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
+                         MechanismConstraints.drivetrain.kMaxAcceleration)
+                         .setReversed(true);
+        public static final TrajectoryConfig intaking_config = forward_config;
+        public static final TrajectoryConfig scoring_config = reverse_config;
 
         public static final Measure<Distance> kIntakingDistanceInner = MechanismDimensions.frame.OUTER_LENGTH.plus(Units.Inches.of(3)); // TODO empirical/measure
         public static final Measure<Distance> kIntakingDistanceOuter = kIntakingDistanceInner.plus(Units.Inches.of(2)); // TODO empirical/measure
+
+        public static final double kDriverDeadband = 0.1;
+        public static final boolean kSquareInputs = false;
     }
 
     public class intake {
@@ -38,6 +48,7 @@ public class MechanismConstraints {
 
     public class shooter {
         public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kVelocityHysteresis = Units.MetersPerSecond.of(0.1);
     }
 
     public class camera {

@@ -5,6 +5,7 @@ import frc.robot.constants.Ports;
 import frc.robot.game_elements.FieldElements;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
+import frc.robot.util.Util;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Misc;
@@ -181,43 +182,41 @@ public class Superduperstructure implements ISubsystem {
                         ? Misc.kDefaultDriveModeWithNote
                         : Misc.kDefaultDriveModeWithoutNote
                     );
-                switch(drivetrain.getDriveMode()){
+                switch (drivetrain.getDriveMode()) {
                     case FIELD_FORWARD:
-                        if (driver.getLeftMagnitude() > 0.1){
-                        drivetrain.setFieldDriveInputs(
-                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
-                            , driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
-                        } else {
-                            drivetrain.stop(); //FIXME
-                        }
+                        if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
+                            drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
+                                    driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
+                        else
+                            drivetrain.stop();
                         break;
                     case FIELD_REVERSED:
-                        if (driver.getLeftMagnitude() > 0.1){
-                        drivetrain.setFieldDriveInputs(
-                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
-                            , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180)).
-                                                            rotateBy(FieldElements.directions.towardOtherWall()));
-                        } else {
-                            drivetrain.stop(); //FIXME
-                        }
+                        if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
+                            drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
+                                    driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
+                                            .rotateBy(FieldElements.directions.towardOtherWall()));
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
-                        drivetrain.setLocalDriveInputs(
-                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftY())
-                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate()
-                        );
+                        if (Util.checkDriverDeadband(driver.getLeftY()))
+                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getLeftY()),
+                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate());
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
-                        drivetrain.setLocalDriveInputs(
-                            MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftY()).negate()
-                            , MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate()
-                        );
+                        if (Util.checkDriverDeadband(driver.getLeftY()))
+                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getLeftY()).negate(),
+                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate());
+                        else
+                            drivetrain.stop();
                         break;
                     default:
-            if (Misc.debug) {
-                        System.err.println("[EE] Auto driving in non-auto robot state");
-                        new Exception().printStackTrace();
-            }
+                        if (Misc.debug) {
+                            System.err.println("[EE] Auto driving in non-auto robot state");
+                            new Exception().printStackTrace();
+                        }
                         break;
                 }
                 break;
@@ -331,9 +330,11 @@ public class Superduperstructure implements ISubsystem {
             case MOVING_TO_HOLDING_NOTE:
                 arm.holdingPosition();
                 intake.off();
+                shooter.off();
                 break;
 
             case HOLDING_NOTE:
+                // don't continue setting motor states: this allows manual control in this state
                 break;
 
             case MOVING_TO_AMP:
@@ -371,12 +372,16 @@ public class Superduperstructure implements ISubsystem {
                 break;
             case SCORING_SPEAKER:
                 shooter.speaker();
+                // TODO we probably need to spin up the shooter and then fire by running the intake briefly
+                // here and in amp
                 if (shooter.noteScored()) {
                     state = RobotState.NEUTRAL;
                 }
                 break;
 
             case PREPARING_FOR_CLIMB:
+                intake.off();
+                shooter.off();
                 arm.climbReadyPosition();
                 if (isScoringAutomated() && arm.reachedSetPoint()) {
                     state = RobotState.CLIMBING;
@@ -398,11 +403,16 @@ public class Superduperstructure implements ISubsystem {
                 state = RobotState.NEUTRAL;
                 break;
             case NEUTRAL:
-                break;
+                // don't continue setting motor states: this allows manual control in this state
+               break;
             case KNOCKED_OVER:
+                intake.off();
+                shooter.off();
                 state = RobotState.SELF_RIGHTING;
                 break;
             case SELF_RIGHTING:
+                intake.off();
+                shooter.off();
                 arm.selfRightingPosition();
                 //TODO check if we need to push number back
                 break;
@@ -432,8 +442,8 @@ public class Superduperstructure implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putString("superduperstructure.state", getState().toString());
-        SmartDashboard.putString("drive something", drivetrain.getDriveMode().toString());
+        SmartDashboard.putString("sup/state", getState().toString());
+        SmartDashboard.putString("sup/drivemode", drivetrain.getDriveMode().toString());
 
         for (ISubsystem s : subsystems)
             s.submitTelemetry();

@@ -1,9 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.angular.AngularFeedbackMotor;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
-import frc.robot.bodges.rawrlib.linear.LinearFeedbackMotor;
 import frc.robot.bodges.rawrlib.motors.*;
 import frc.robot.util.Motors;
 
@@ -13,7 +11,7 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Angle> arm() {
 		if (_arm == null) {
-		_arm = new AngularFeedbackMotor();
+		_arm = new DimensionalFeedbackMotor<Angle>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
 					_arm.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
@@ -28,11 +26,11 @@ public class MotorControllers {
 					.setName("arm")
 					.setInverted(false)
 					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
-					.setLowerBound(MechanismConstraints.arm.kMinPosition)
-					.setUpperBound(MechanismConstraints.arm.kMaxPosition)
-					.setMaxVelocity(MechanismConstraints.arm.kMaxVelocity)
 					.configurePositionController(PIDGains.arm.position)
 					.configureVelocityController(PIDGains.arm.velocity)
+					.setMinPosition(MechanismConstraints.arm.kMinPosition)
+					.setMaxPosition(MechanismConstraints.arm.kMaxPosition)
+					.setSymmetricalVelocity(MechanismConstraints.arm.kMaxVelocity)
 					.getPositionController().setHysteresis(MechanismConstraints.arm.kPositionHysteresis)
 					;
 		}
@@ -41,7 +39,7 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> drivetrainLeft() {
 		if (_drivetrainLeft == null) {
-			_drivetrainLeft = new LinearFeedbackMotor();
+			_drivetrainLeft = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
 					_drivetrainLeft.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS));
@@ -58,14 +56,17 @@ public class MotorControllers {
 					.setName("dt_L")
 					.setInverted(false)
 					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
-					.configureVelocityController(PIDGains.drivetrain.velocity);
+					.configureVelocityController(PIDGains.drivetrain.velocity)
+					.setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
+					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
+					;
 		}
 		return _drivetrainLeft;
 	}
 
 	public static final DimensionalFeedbackMotor<Distance> drivetrainRight() {
 		if (_drivetrainRight == null) {
-			_drivetrainRight = new LinearFeedbackMotor();
+			_drivetrainRight = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
 					_drivetrainRight.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS));
@@ -82,14 +83,17 @@ public class MotorControllers {
 					.setName("dt_R")
 					.setInverted(true)
 					.setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
-					.configureVelocityController(PIDGains.drivetrain.velocity);
+					.configureVelocityController(PIDGains.drivetrain.velocity)
+					.setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
+					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
+					;
 		}
 		return _drivetrainRight;
 	}
 
 	public static final DimensionalFeedbackMotor<Distance> intake() {
 		if (_intake == null) {
-			_intake = new LinearFeedbackMotor();
+			_intake = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
 					_intake.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
@@ -111,7 +115,7 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> shooter() {
 		if (_shooter == null) {
-			_shooter = new LinearFeedbackMotor();
+			_shooter = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
 					_shooter.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
@@ -126,7 +130,9 @@ public class MotorControllers {
 					.setName("shooter")
 					.setInverted(false)
 					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
-					.configureVelocityController(PIDGains.shooter.velocity);
+					.configureVelocityController(PIDGains.shooter.velocity)
+					.getVelocityController().setHysteresis(MechanismConstraints.shooter.kVelocityHysteresis)
+					;
 		}
 		return _shooter;
 	}

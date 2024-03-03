@@ -23,6 +23,8 @@ public class PIDGains {
 
         public static DimensionalPIDFGains<Angle, Velocity<Angle>> heading = new DimensionalPIDFGains<Angle, Velocity<Angle>>()
             .setP(Units.DegreesPerSecond.of(2).per(Units.Degrees))
+            .setMaxVel(MechanismConstraints.drivetrain.kMaxAngularVelocity)
+            .setMaxAccel(MechanismConstraints.drivetrain.kMaxAngularAcceleration)
             ;
     }
 

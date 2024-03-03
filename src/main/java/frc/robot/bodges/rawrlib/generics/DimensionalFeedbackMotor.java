@@ -10,7 +10,7 @@ import frc.robot.util.Util;
 /**
  * Describes a generic motor with closed-loop position and velocity control.
  */
-public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
+public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
 
     protected WrappedMotorController m;
     public WrappedMotorController getWrappedMotorController() { return m; }
@@ -63,9 +63,20 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
   protected DimensionalPIDFController<D, Voltage> positionController = new DimensionalPIDFController<D, Voltage>()
     .setStateSupplier(this::getPosition);
   public DimensionalPIDFController<D, Voltage> getPositionController() { return positionController; }
-  public abstract DimensionalFeedbackMotor<D> setPositionController(DimensionalPIDFController<D, Voltage> ctlr);
-  public abstract DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains);
-  public abstract DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains, Measure<D> izone);
+  public DimensionalFeedbackMotor<D> setPositionController(DimensionalPIDFController<D, Voltage> ctlr) {
+    this.positionController = ctlr;
+    getPositionController().setStateSupplier(this::getPosition);
+    return this;
+  }
+  public DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains) {
+    getPositionController().setGains(gains);
+    return this;
+  }
+  public DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains, Measure<D> izone) {
+    getPositionController().setGains(gains);
+    getPositionController().getErrorTracker().setIZone(izone);
+    return this;
+  }
   public DimensionalFeedbackMotor<D> setPosition(Measure<D> reference) {
       this.setTrackingMode(TrackingMode.kPosition);
       positionController.setReference(reference);
@@ -74,10 +85,21 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
 
   protected DimensionalPIDFController<Velocity<D>, Voltage> velocityController = new DimensionalPIDFController<Velocity<D>, Voltage>()
     .setStateSupplier(this::getVelocity);
-  public abstract DimensionalFeedbackMotor<D> setVelocityController(DimensionalPIDFController<Velocity<D>, Voltage> ctlr);
+  public DimensionalFeedbackMotor<D> setVelocityController(DimensionalPIDFController<Velocity<D>, Voltage> ctlr) {
+    this.velocityController = ctlr;
+    getVelocityController().setStateSupplier(this::getVelocity);
+    return this;
+  }
   public DimensionalPIDFController<Velocity<D>, Voltage> getVelocityController() { return velocityController; }
-  public abstract DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains);
-  public abstract DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains, Measure<Velocity<D>> izone);
+  public DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains) {
+    getVelocityController().setGains(gains);
+    return this;
+  }
+  public DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains, Measure<Velocity<D>> izone) {
+    getVelocityController().setGains(gains);
+    getVelocityController().getErrorTracker().setIZone(izone);
+    return this;
+  }
   public DimensionalFeedbackMotor<D> setVelocity(Measure<Velocity<D>> reference) {
       this.setTrackingMode(TrackingMode.kVelocity);
       velocityController.setReference(reference);
@@ -103,63 +125,99 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
     @SuppressWarnings({"unchecked"})
     public Measure<D> encoderToMechanism(Measure<Angle> encoder) { return (Measure<D>)encoder.times(factor); }
 
-    protected Measure<D> lowerBound;
-    public Measure<D> getLowerBound() { return lowerBound; }
-    public DimensionalFeedbackMotor<D> setLowerBound(Measure<D> lowerBound) {
-      if (upperBound != null && lowerBound.gt(upperBound))
-        throw new IllegalArgumentException("Lower bound " + lowerBound.baseUnitMagnitude()
-            + " should be less than upper bound " + this.upperBound.baseUnitMagnitude());
-      this.lowerBound = lowerBound;
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param minPosition
+     * @return
+     */
+    public DimensionalFeedbackMotor<D> setMinPosition(Measure<D> minPosition) {
+      getPositionController().getGains().setMinRef(minPosition);
       return this;
     }
-
-    protected Measure<D> upperBound;
-    public Measure<D> getUpperBound() { return upperBound; }
-    public DimensionalFeedbackMotor<D> setUpperBound(Measure<D> upperBound) {
-      if (lowerBound != null && upperBound.lt(lowerBound))
-        throw new IllegalArgumentException("Upper bound " + upperBound.baseUnitMagnitude()
-            + " should be greater than lower bound " + this.lowerBound.baseUnitMagnitude());
-      this.upperBound = upperBound;
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param maxPosition
+     * @return
+     */
+    public DimensionalFeedbackMotor<D> setMaxPosition(Measure<D> maxPosition) {
+      getPositionController().getGains().setMaxRef(maxPosition);
       return this;
     }
-
-    protected Measure<Velocity<D>> maxVelocity;
-    public Measure<Velocity<D>> getMaxVelocity() { return maxVelocity; }
-    @SuppressWarnings({"unchecked"})
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param minVelocity
+     * @return
+     */
+    public DimensionalFeedbackMotor<D> setMinVelocity(Measure<Velocity<D>> minVelocity) {
+      getPositionController().getGains().setMinVel(minVelocity);
+      getVelocityController().getGains().setMinRef(minVelocity);
+      return this;
+    }
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param maxVelocity
+     * @return
+     */
     public DimensionalFeedbackMotor<D> setMaxVelocity(Measure<Velocity<D>> maxVelocity) {
-      if (maxVelocity.lt((Measure<Velocity<D>>) Util.anyZero()))
-        return setMaxVelocity(maxVelocity.negate());
-      this.maxVelocity = maxVelocity;
+      getPositionController().getGains().setMaxVel(maxVelocity);
+      getVelocityController().getGains().setMaxRef(maxVelocity);
       return this;
     }
-
-    private void applyEndStops() {
-      switch (getTrackingMode()) {
-        case kPosition:
-          if (getUpperBound() != null && positionController.getReference().gt(getUpperBound()))
-            setPosition(getUpperBound());
-          else if (getLowerBound() != null && positionController.getReference().lt(getLowerBound()))
-            setPosition(getLowerBound());
-          // FIXME max velocity is not applied to position control, but should be
-          break;
-        case kVelocity:
-          @SuppressWarnings({"unchecked"})
-          int direction = velocityController.getReference().compareTo((Measure<Velocity<D>>) Util.anyZero());
-          if (getUpperBound() != null && direction > 0 && getPosition().gte(getUpperBound()))
-            setPosition(getUpperBound());
-          else if (getLowerBound() != null && direction < 0 && getPosition().lte(getLowerBound()))
-            setPosition(getLowerBound());
-          else if (getMaxVelocity() != null)
-          setVelocity(Util.clampSymmetrical(velocityController.getReference(), getMaxVelocity()));
-          break;
-        default:
-          break;
-      }
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param peakVelocity
+     * @return
+     */
+    @SuppressWarnings({"unchecked"})
+    public DimensionalFeedbackMotor<D> setSymmetricalVelocity(Measure<Velocity<D>> peakVelocity) {
+      if (peakVelocity.lt((Measure<Velocity<D>>) Util.anyZero()))
+        return setSymmetricalVelocity(peakVelocity.negate());
+      setMinVelocity(peakVelocity.negate());
+      setMaxVelocity(peakVelocity);
+      return this;
+    }
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param minAcceleration
+     * @return
+     */
+    public DimensionalFeedbackMotor<D> setMinAcceleration(Measure<Velocity<Velocity<D>>> minAcceleration) {
+      getVelocityController().getGains().setMinVel(minAcceleration);
+      return this;
+    }
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param maxAcceleration
+     * @return
+     */
+    public DimensionalFeedbackMotor<D> setMaxAcceleration(Measure<Velocity<Velocity<D>>> maxAcceleration) {
+      getVelocityController().getGains().setMaxVel(maxAcceleration);
+      return this;
+    }
+    /**
+     * This function must be called after using *FeedbackMotor::configure*Controller or DimensionalPIDFController::setGains.
+     * Those functions will overwrite these changes.
+     * @param peakAcceleration
+     * @return
+     */
+    @SuppressWarnings({"unchecked"})
+    public DimensionalFeedbackMotor<D> setSymmetricalAcceleration(Measure<Velocity<Velocity<D>>> peakAcceleration) {
+      if (peakAcceleration.lt((Measure<Velocity<Velocity<D>>>) Util.anyZero()))
+        return setSymmetricalAcceleration(peakAcceleration.negate());
+      setMinAcceleration(peakAcceleration.negate());
+      setMaxAcceleration(peakAcceleration);
+      return this;
     }
 
     private void track() {
       Measure<Voltage> input = Units.Volts.zero();
-      applyEndStops();
       switch (getTrackingMode()) {
         case kPosition:
           input = positionController.calculate();
@@ -175,25 +233,6 @@ public abstract class DimensionalFeedbackMotor<D extends Unit<D>> implements ISu
       m.setVoltage(input.in(Units.Volts));
     }
 
-    /*
-    private void runProfile(MotionProfile profile) {
-        setProfile(profile);
-        this.profile.start();
-        runProfile();
-    }
-
-    private void runProfile() {
-        if (profile == null) return;
-        if (profile.isDone()) {
-            setPosition(profile.get().position);
-            System.out.println("== End of profile ==");
-            System.out.println(profile.now() + "s of " + profile.length() + " s");
-            profile = null;
-            return;
-        }
-        setVelocity(profile.get().velocity);
-    }
-    */
 
     @Override
     public void onLoop() {

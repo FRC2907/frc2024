@@ -2,8 +2,7 @@ package frc.robot.debug;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.rawrlib.angular.AngularDcMotorSpeedCurve;
-import frc.robot.bodges.rawrlib.angular.AngularFeedbackMotor;
+import frc.robot.bodges.rawrlib.generics.DimensionalDcMotorSpeedCurve;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
 //import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
@@ -20,13 +19,13 @@ public class AngularMotorControllerTest implements ISubsystem {
 
   public AngularMotorControllerTest() {
     //this.c = ControllerRumble.getInstance(0);
-    this.m = new AngularFeedbackMotor()
+    this.m = new DimensionalFeedbackMotor<Angle>()
         .setName("testmotor")
         .setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS))
         //.setWrappedMotorController(new WrappedTalonFX(1))
         //.setWrappedMotorController(new WrappedFakeMotor())
         .setFactor(Units.Rotations.of(1).per(Units.Rotations)) // 1 m per rotation, for testing
-        .setSpeedCurve(new AngularDcMotorSpeedCurve(Units.Volts.zero(), Units.RotationsPerSecond.of(1/0.12).per(Units.Volts)))
+        .setSpeedCurve(new DimensionalDcMotorSpeedCurve<Angle>(Units.Volts.zero(), Units.RotationsPerSecond.of(1/0.12).per(Units.Volts)))
         .configurePositionController(
           new DimensionalPIDFGains<Angle, Voltage>()
           .setP(Units.Volts.of(0.05).per(Units.Rotations))

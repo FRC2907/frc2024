@@ -1,5 +1,8 @@
 package frc.robot.util;
 
+import java.util.List;
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -159,6 +162,74 @@ public class Util {
 	}
 
 	public static Measure<?> anyZero() { return Units.Value.zero().times(Units.Value.zero()); }
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Unit<T>> boolean isNegative(Measure<T> value) {
+		return value.lt((Measure<T>) anyZero());
+	}
+	@SuppressWarnings("unchecked")
+	public static <T extends Unit<T>> boolean isPositive(Measure<T> value) {
+		return value.gt((Measure<T>) anyZero());
+	}
+	@SuppressWarnings("unchecked")
+	public static <T extends Unit<T>> boolean isNonNegative(Measure<T> value) {
+		return value.gte((Measure<T>) anyZero());
+	}
+	@SuppressWarnings("unchecked")
+	public static <T extends Unit<T>> boolean isNonPositive(Measure<T> value) {
+		return value.lte((Measure<T>) anyZero());
+	}
+	@SuppressWarnings("unchecked")
+	public static <T extends Unit<T>> boolean isZero(Measure<T> value) {
+		return value.isNear((Measure<T>) anyZero(), 0.000001);
+	}
+	public static <T extends Unit<T>> Measure<T> abs(Measure<T> value) {
+		return isNegative(value) ? value.negate() : value;
+	}
+
+	// TODO move a bunch of this stuff to a util.Units library
+
+	public static <T> List<T> removeNulls(List<T> values) {
+		return values.stream().filter(x -> x != null).toList();
+	}
+	public static <T> List<T> unwrapOptionals(List<Optional<T>> values) {
+		return values.stream().map(x -> x.get()).toList();
+	}
+	public static <T> List<T> unwrapOptionalValues(List<Optional<T>> values) {
+		return removeNulls(unwrapOptionals(values));
+	}
+	public static <T extends Unit<T>> Measure<T> min(List<Measure<T>> values) {
+		return removeNulls(values).stream().min((a,b) -> a.compareTo(b)).get();
+	}
+	public static <T extends Unit<T>> Measure<T> max(List<Measure<T>> values) {
+		return removeNulls(values).stream().max((a,b) -> a.compareTo(b)).get();
+	}
+	@SafeVarargs
+	public static <T extends Unit<T>> Measure<T> min(Measure<T>... values) {
+		return min(List.of(values));
+	}
+	@SafeVarargs
+	public static <T extends Unit<T>> Measure<T> max(Measure<T>... values) {
+		return max(List.of(values));
+	}
+	@SafeVarargs
+	public static <T extends Unit<T>> Measure<T> min(Optional<Measure<T>>... values) {
+		return min(unwrapOptionalValues(List.of(values)));
+	}
+	@SafeVarargs
+	public static <T extends Unit<T>> Measure<T> max(Optional<Measure<T>>... values) {
+		return max(unwrapOptionalValues(List.of(values)));
+	}
+
+	public static double signedSquare(double value) { return value * Math.abs(value); }
+
+	public static Measure<Velocity<Distance>> scaleDriverInput(double value) {
+		return MechanismConstraints.drivetrain.kMaxVelocity.times(
+				MechanismConstraints.drivetrain.kSquareInputs ? signedSquare(value) : value);
+	}
+	public static boolean checkDriverDeadband(double value) {
+		return value > MechanismConstraints.drivetrain.kDriverDeadband;
+	}
 
 	public static Pose2d pointToPose(Pose2d start, Translation2d end) {
 		Rotation2d startHeading = start.getRotation();

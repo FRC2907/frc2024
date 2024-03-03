@@ -57,9 +57,9 @@ public class Drivetrain implements ISubsystem {
             VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
 
         this.headingController
-        // TODO verify that this doesn't just eval at startup
         .setStateSupplier(() -> Units.Rotations.of(this.getHeading().getRotations()))
-        .setGains(PIDGains.drivetrain.heading);
+        .setGains(PIDGains.drivetrain.heading)
+        ;
     }
 
     private static Drivetrain instance;
@@ -84,10 +84,6 @@ public class Drivetrain implements ISubsystem {
 
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
-    }
-
-    public Rotation2d getHeadingError(Rotation2d reference) {
-        return reference.minus(getHeading());
     }
 
 
@@ -129,10 +125,9 @@ public class Drivetrain implements ISubsystem {
         setCurvatureInputs(speed, turn);
     }
     public void setFieldDriveInputs(Measure<Velocity<Distance>> speed, Rotation2d direction) {
-        // FIXME
-        //headingController.setReference(Units.Degrees.of(direction.getDegrees()));
-        //setCurvatureInputs(speed, headingController.calculate());
-        setCurvatureInputs(speed, Units.Rotations.of(direction.minus(getHeading()).getRotations()).per(Units.Second));
+        headingController.setReference(Units.Degrees.of(direction.getDegrees()));
+        setCurvatureInputs(speed, headingController.calculate());
+        //setCurvatureInputs(speed, Units.Rotations.of(direction.minus(getHeading()).getRotations()).per(Units.Second));
     }
 
 

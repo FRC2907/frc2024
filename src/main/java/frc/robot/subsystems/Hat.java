@@ -26,16 +26,17 @@ public class Hat implements ISubsystem {
     public TrajectoryFollower findPathToNote() {
         Optional<Translation2d> maybe_there = NoteTargetingHelpers.getFieldPoint();
         if (maybe_there.isEmpty())
-            return new TrajectoryFollower(Drivetrain.getInstance().getPose());
-        return new TrajectoryFollower(maybe_there.get());
+            // return new TrajectoryFollower(Drivetrain.getInstance().getPose(), true); // go nowhere
+            return null;
+        return new TrajectoryFollower(maybe_there.get(), true);
     }
 
     public TrajectoryFollower findPathToSpeaker() {
-        return new TrajectoryFollower(FieldElements.getScoringRegions().kSpeaker);
+        return new TrajectoryFollower(FieldElements.getScoringRegions().kSpeaker, false);
     }
 
     public TrajectoryFollower findPathToAmp() {
-        return new TrajectoryFollower(FieldElements.getScoringRegions().kAmp);
+        return new TrajectoryFollower(FieldElements.getScoringRegions().kAmp, false);
     }
 
     @Override

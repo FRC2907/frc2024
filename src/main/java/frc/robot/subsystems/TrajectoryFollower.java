@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
@@ -39,17 +40,26 @@ public class TrajectoryFollower extends Action {
         this(t, MechanismDimensions.drivetrain.DRIVE_KINEMATICS);
     }
 
-    public TrajectoryFollower(Translation2d destination) {
-        this(Util.pointToPose(drivetrain.getPose(), destination));
-    }
-
-    public TrajectoryFollower(Pose2d destination) {
+    public TrajectoryFollower(Pose2d destination, TrajectoryConfig config) {
         this(TrajectoryGenerator.generateTrajectory(List.of
-        (drivetrain.getPose(), destination), MechanismConstraints.drivetrain.config));
+        (drivetrain.getPose(), destination), config));
     }
 
-    public TrajectoryFollower(ScoringRegion destination) {
-        this(destination.getNearest(drivetrain.getPose()));
+    public TrajectoryFollower(Pose2d destination, boolean intaking) {
+        this(TrajectoryGenerator.generateTrajectory(List.of
+        (drivetrain.getPose(), destination),
+        intaking
+        ? MechanismConstraints.drivetrain.intaking_config
+        : MechanismConstraints.drivetrain.scoring_config
+        ));
+    }
+
+    public TrajectoryFollower(ScoringRegion destination, boolean intaking) {
+        this(destination.getNearest(drivetrain.getPose()), intaking);
+    }
+
+    public TrajectoryFollower(Translation2d destination, boolean intaking) {
+        this(Util.pointToPose(drivetrain.getPose(), destination), intaking);
     }
 
     public Map<String,Measure<Velocity<Distance>>> getWheelSpeeds(Pose2d current){

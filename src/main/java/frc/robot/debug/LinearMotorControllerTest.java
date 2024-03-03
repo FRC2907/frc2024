@@ -1,14 +1,8 @@
 package frc.robot.debug;
 
-import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
-import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
-import frc.robot.bodges.rawrlib.linear.LinearDcMotorSpeedCurve;
-import frc.robot.bodges.rawrlib.linear.LinearFeedbackMotor;
-//import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
-import frc.robot.bodges.rawrlib.motors.WrappedTalonFX;
 import frc.robot.constants.MotorControllers;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;
@@ -21,7 +15,7 @@ public class LinearMotorControllerTest implements ISubsystem {
   private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
   public LinearMotorControllerTest() {
-  /*  this.m = new LinearFeedbackMotor()
+  /*  this.m = new DimensionalFeedbackMotor<Distance>()
         .setName("testmotor")
         .setWrappedMotorController(new WrappedTalonFX(1))
         //.setWrappedMotorController(new WrappedFakeMotor())
