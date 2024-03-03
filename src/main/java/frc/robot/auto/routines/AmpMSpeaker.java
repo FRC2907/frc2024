@@ -6,7 +6,7 @@ import frc.robot.auto.actions.GetNote;
 import frc.robot.auto.actions.ScoreAmp;
 import frc.robot.auto.actions.ScoreSpeaker;
 import frc.robot.auto.routines.templates.Routine;
-import frc.robot.constants.game_elements.FieldElements;
+import frc.robot.game_elements.FieldElements;
 
 public class AmpMSpeaker extends Routine {
     public AmpMSpeaker() {

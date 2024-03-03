@@ -6,40 +6,47 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.*;
 
 public class Geometry {
 
   public static class ScoringRegion {
     public final Pose2d inside, outside;
     public final Translation2d focus;
-    public final double in_radius, out_radius;
+    public final Measure<Distance> in_radius, out_radius;
     public final Rotation2d left, right;
 
-    private ScoringRegion(Translation2d focus, double ir, double or, Rotation2d a, Rotation2d c) {
+    private ScoringRegion(Translation2d focus, Measure<Distance> ir, Measure<Distance> or, Rotation2d a, Rotation2d c) {
       this.focus = focus;
       this.in_radius = ir;
       this.out_radius = or;
       this.left = a;
       this.right = c;
-      this.inside = new Pose2d(ir, 0, new Rotation2d(Math.PI)).transformBy(new Transform2d(focus, a));
-      this.outside = new Pose2d(or, 0, new Rotation2d(Math.PI)).transformBy(new Transform2d(focus, c));
+      this.inside = new Pose2d(ir, Units.Meters.zero(), new Rotation2d(Math.PI)).transformBy(new Transform2d(focus, a));
+      this.outside = new Pose2d(or, Units.Meters.zero(), new Rotation2d(Math.PI)).transformBy(new Transform2d(focus, c));
     }
-    public static ScoringRegion of(Translation2d focus, double ir, double or, Rotation2d a, Rotation2d c) {
-      if (ir <= or) return new ScoringRegion(focus, ir, or, a, c);
+    public static ScoringRegion of(Translation2d focus, Measure<Distance> ir, Measure<Distance> or, Rotation2d a, Rotation2d c) {
+      if (ir.lte(or)) return new ScoringRegion(focus, ir, or, a, c);
       else return new ScoringRegion(focus, or, ir, a, c);
     }
-    public static ScoringRegion of(Pose2d focus, double ir, double or, Rotation2d width) {
+    public static ScoringRegion of(Pose2d focus, Measure<Distance> ir, Measure<Distance> or, Rotation2d width) {
       Translation2d focus_point = focus.getTranslation();
       Rotation2d a = focus.getRotation().unaryMinus().plus(width.div(2));
       Rotation2d c = focus.getRotation().unaryMinus().minus(width.div(2));
-      if (ir <= or) return new ScoringRegion(focus_point, ir, or, a, c);
+      if (ir.lte(or)) return new ScoringRegion(focus_point, ir, or, a, c);
       else return new ScoringRegion(focus_point, or, ir, a, c);
     }
 
+    public static ScoringRegion circularRegion(Translation2d focus, Measure<Distance> ir, Measure<Distance> or) {
+      return new ScoringRegion(focus, ir, or, Rotation2d.fromDegrees(-179.9), Rotation2d.fromDegrees(179.9));
+    }
+
     public boolean contains(Pose2d pose) {
-      double l = left.getDegrees(), p = pose.getRotation().getDegrees(), r = right.getDegrees();
-      double distance = pose.getTranslation().getDistance(focus);
-      return ((l <= p && p <= r) || (l >= p && p >= r)) && (in_radius <= distance && distance <= out_radius);
+      Measure<Angle> l = Units.Degrees.of(left.getDegrees());
+      Measure<Angle> p = Units.Degrees.of(pose.getRotation().getDegrees());
+      Measure<Angle> r = Units.Degrees.of(right.getDegrees());
+      Measure<Distance> distance = Units.Meters.of(pose.getTranslation().getDistance(focus));
+      return Util.checkBetween(l, p, r) && Util.checkBetween(in_radius, distance, out_radius);
     }
 
     public Rotation2d getRotationForPoint(Translation2d point) {
@@ -80,6 +87,31 @@ public class Geometry {
       return source.nearest(List.of(getPoints(resolution, resolution)));
     }
 
+  }
+
+  public static class FieldOfView {
+    //  Y+
+    //   \
+    //    A-----------B
+    //     \            \
+    //      \             \
+    //       \              \
+    //        \               \
+    //         C----------------D---X+
+    private final Translation2d A, B, C, D;
+
+    public FieldOfView(Translation2d A, Translation2d B, Translation2d C, Translation2d D) {
+      this.A = A;
+      this.B = B;
+      this.C = C;
+      this.D = D;
+    }
+
+    public Translation2d interpolate(double x, double y) {
+      Translation2d far = A.interpolate(B, x);
+      Translation2d near = C.interpolate(D, x);
+      return far.interpolate(near, y);
+    }
   }
 
 }

@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
+import frc.robot.util.Geometry.FieldOfView;
 
 /**
  * Style guidance:
@@ -26,7 +27,7 @@ public class MechanismDimensions {
 
     public static class drivetrain {
         public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(6);
-        public static final double GEAR_RATIO = 1 / 8.45; /// TODO get from Build
+        public static final double GEAR_RATIO = 1 / 8.45;
         public static final Measure<Distance> TRACK_WIDTH = Units.Meters.of(0.5823458);
 
         public static final Measure<Per<Distance, Angle>> LINEAR_TRAVEL_PER_ENCODER_TRAVEL = WHEEL_DIAMETER
@@ -56,9 +57,18 @@ public class MechanismDimensions {
 
     public static class camera {
         // TODO anything about the physical position of the camera can go here
+        public static final FieldOfView fov = new FieldOfView(null, null, null, null);
     }
 
     public static class limelight {
         // TODO anything about the physical position of the limelight can go here
+    }
+
+    public static class frame {
+        public static final Measure<Distance> INNER_WIDTH = Units.Inches.of(28);
+        public static final Measure<Distance> INNER_LENGTH = Units.Inches.of(28.310);
+        public static final Measure<Distance> BUMPER_THICKNESS = Units.Inches.of(0.75 + 2.5);
+        public static final Measure<Distance> OUTER_WIDTH = INNER_WIDTH.plus(BUMPER_THICKNESS.times(2));
+        public static final Measure<Distance> OUTER_LENGTH = INNER_LENGTH.plus(BUMPER_THICKNESS.times(2));
     }
 }

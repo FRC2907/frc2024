@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.auto.actions.templates.Action;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
+import frc.robot.util.Util;
+import frc.robot.util.Geometry.ScoringRegion;
 
 public class TrajectoryFollower extends Action {
     private Trajectory trajectory;
@@ -22,6 +25,7 @@ public class TrajectoryFollower extends Action {
     private DifferentialDriveKinematics kinematics;
 
     private static RamseteController controller = new RamseteController();
+    private static Drivetrain drivetrain = Drivetrain.getInstance();
 
 
 
@@ -35,9 +39,17 @@ public class TrajectoryFollower extends Action {
         this(t, MechanismDimensions.drivetrain.DRIVE_KINEMATICS);
     }
 
-    public TrajectoryFollower (Pose2d destination){
+    public TrajectoryFollower(Translation2d destination) {
+        this(Util.pointToPose(drivetrain.getPose(), destination));
+    }
+
+    public TrajectoryFollower(Pose2d destination) {
         this(TrajectoryGenerator.generateTrajectory(List.of
-        (Drivetrain.getInstance().getPose(), destination), MechanismConstraints.drivetrain.config));
+        (drivetrain.getPose(), destination), MechanismConstraints.drivetrain.config));
+    }
+
+    public TrajectoryFollower(ScoringRegion destination) {
+        this(destination.getNearest(drivetrain.getPose()));
     }
 
     public Map<String,Measure<Velocity<Distance>>> getWheelSpeeds(Pose2d current){

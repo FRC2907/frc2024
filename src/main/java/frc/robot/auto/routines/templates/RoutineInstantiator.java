@@ -1,14 +1,7 @@
 package frc.robot.auto.routines.templates;
 
 import frc.robot.auto.routines.*;
-import frc.robot.auto.routines.three.AmpMAmpMAmp;
-import frc.robot.auto.routines.three.AmpMAmpMSpeaker;
-import frc.robot.auto.routines.three.AmpMSpeakerMAmp;
-import frc.robot.auto.routines.three.AmpMSpeakerMSpeaker;
-import frc.robot.auto.routines.three.SpeakerMAmpMAmp;
-import frc.robot.auto.routines.three.SpeakerMAmpMSpeaker;
-import frc.robot.auto.routines.three.SpeakerMSpeakerMAmp;
-import frc.robot.auto.routines.three.SpeakerMSpeakerMSpeaker;
+import frc.robot.auto.routines.three.*;
 
 public class RoutineInstantiator {
     public static void go() {

@@ -16,8 +16,6 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.MechanismConstraints;
 
@@ -34,9 +32,10 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     private Comparator<MatOfPoint> sizeSorter;
     private Predicate<MatOfPoint> sizeFilter;
     private Scalar orangeLow, orangeHigh;
+    private int targetLockFrameCount = 0;
 
-    private double dx, y;
-    private Transform2d floorTransform = new Transform2d();
+
+    private double dx, x, y;
 
     public NoteTargetingPipeline() {
         this.w = MechanismConstraints.camera.kWidth;
@@ -94,18 +93,6 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     }
 
-    public static Transform2d pixelToTranslation(double dx, double y) {
-        return new Transform2d();
-        // TODO implement: map dx (how far off center) and y (how far up the image) to a
-        // translation on the field, relative to the robot (i.e. this function must
-        // account for the camera's pose on the robot + the note's position relative to
-        // the camera)
-    }
-
-    public static Pose2d pixelToPose(Pose2d robot, double dx, double y) {
-        return robot.transformBy(pixelToTranslation(dx, y));
-    }
-
     @Override
     public void onLoop() {
         receiveOptions();
@@ -133,6 +120,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
         pts.sort(sizeSorter);
 
         if (pts.size() > 0) {
+            targetLockFrameCount += 1;
             Rect bound = Imgproc.boundingRect(pts.get(0));
             Imgproc.rectangle(i_color, bound, drawColor);
             double line_y = bound.y + bound.height / 2;
@@ -148,11 +136,11 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             //for (int i = 0; i < 4; i++)
             //    Imgproc.line(i_color, verts[i], verts[(i + 1) % 4], drawColor);
 
-            dx = (line_x / w) - 0.5;
+            x = line_x / w;
+            dx = x - 0.5;
             y = line_y / h;
 
-            this.floorTransform = pixelToTranslation(line_x, line_y);
-        }
+        } else targetLockFrameCount = 0;
 
         outputStream.putFrame(i_color);
     }
@@ -161,7 +149,9 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     public void submitTelemetry() {
         if (MechanismConstraints.camera.kNoteTrackingEnabled) {
             SmartDashboard.putNumber("note/raw_dx", dx);
+            SmartDashboard.putNumber("note/raw_x", x);
             SmartDashboard.putNumber("note/raw_y", y);
+            SmartDashboard.putNumber("note/targetLockFrameCount", targetLockFrameCount);
             SmartDashboard.putNumber("note/orange_lo:hue", orangeLow .val[0]);
             SmartDashboard.putNumber("note/orange_hi:hue", orangeHigh.val[0]);
             SmartDashboard.putNumber("note/orange_lo:sat", orangeLow .val[1]);
@@ -169,9 +159,6 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             SmartDashboard.putNumber("note/orange_lo:val", orangeLow .val[2]);
             SmartDashboard.putNumber("note/orange_hi:val", orangeHigh.val[2]);
 
-            SmartDashboard.putNumber("note/x", floorTransform.getX());
-            SmartDashboard.putNumber("note/y", floorTransform.getY());
-            SmartDashboard.putNumber("note/r", floorTransform.getRotation().getDegrees());
         }
     }
 

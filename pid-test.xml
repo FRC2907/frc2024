@@ -1,11 +1,58 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="input" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="842" y="382"/>
+	<widget field="arm.down" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="393"/>
+	</widget>
+	<widget field="arm.up" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="373"/>
+	</widget>
+	<widget field="dt.angVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="353"/>
+	</widget>
+	<widget field="dt.heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="333"/>
+	</widget>
+	<widget field="dt.velocityR" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="313"/>
+	</widget>
+	<widget field="dt.velocityL" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="293"/>
+	</widget>
+	<widget field="dt.velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="273"/>
+	</widget>
+	<widget field="dt.positionY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="253"/>
+	</widget>
+	<widget field="dt.positionX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="233"/>
+	</widget>
+	<widget field="superduperstructure.state" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="193"/>
+	</widget>
+	<widget field="feedforward" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="1269" y="386"/>
 		<property name="Buffer Size (samples)" value="500"/>
 		<property name="Autoscale Y Values" value="false"/>
 		<property name="Minimum Y Value" value="-12"/>
 		<property name="Maximum Y Value" value="12"/>
+	</widget>
+	<widget field="d_contrib" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="1269" y="76"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-100"/>
+		<property name="Maximum Y Value" value="100"/>
+	</widget>
+	<widget field="d_contrib_actual" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="213"/>
+	</widget>
+	<widget field="input" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="842" y="382"/>
+		<property name="Buffer Size (samples)" value="500"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Minimum Y Value" value="-2"/>
+		<property name="Maximum Y Value" value="2"/>
 	</widget>
 	<widget field="error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="437" y="382"/>

@@ -27,6 +27,9 @@ public class MechanismConstraints {
         public final static TrajectoryConfig config = 
         new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
                          MechanismConstraints.drivetrain.kMaxAcceleration);
+
+        public static final Measure<Distance> kIntakingDistanceInner = MechanismDimensions.frame.OUTER_LENGTH.plus(Units.Inches.of(3)); // TODO empirical/measure
+        public static final Measure<Distance> kIntakingDistanceOuter = kIntakingDistanceInner.plus(Units.Inches.of(2)); // TODO empirical/measure
     }
 
     public class intake {
@@ -46,6 +49,7 @@ public class MechanismConstraints {
         public static final boolean kEnabled = false;
         public static final boolean kNoteTrackingEnabled = true;
         public static final boolean kBlackoutNoteFeed = false;
+        public static final int kTargetLockFrameCountThreshold = 5;
     }
 
     public static final Measure<Time> kPeriod = Units.Milliseconds.of(20);

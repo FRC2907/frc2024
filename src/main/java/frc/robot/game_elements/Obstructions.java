@@ -1,4 +1,4 @@
-package frc.robot.constants.game_elements;
+package frc.robot.game_elements;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.constraint.EllipticalRegionConstraint;

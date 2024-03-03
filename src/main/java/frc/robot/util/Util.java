@@ -1,6 +1,8 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -50,8 +52,34 @@ public class Util {
 			return clamp(cap.negate(), value, cap);
 	}
 
+	public static <U extends Unit<U>> boolean checkBetween(Measure<U> low, Measure<U> value, Measure<U> high) {
+		if (low.gt(high)) return checkBetween(high, value, low);
+		return low.lte(value) && value.lte(high);
+	}
+
 	public static <U extends Unit<U>> boolean checkHysteresis(Measure<U> error, Measure<U> hysteresis) {
 		return hysteresis.negate().lt(error) && error.lt(hysteresis);
+	}
+
+	public static Measure<Angle> normalize360(Measure<Angle> value) {
+		Measure<Angle> out = value;//.plus(Units.Degrees.of(180));
+		while (out.in(Units.Degrees) >= 360)
+			out = out.minus(Units.Degrees.of(360));
+		while (out.in(Units.Degrees) < 0)
+			out = out.plus(Units.Degrees.of(360));
+		return out;
+	}
+
+	public static Measure<Angle> normalize180(Measure<Angle> value) {
+		return normalize360(value.plus(Units.Degrees.of(180))).minus(Units.Degrees.of(180));
+	}
+
+	public static Rotation2d normalize360(Rotation2d value) {
+		return new Rotation2d(normalize360(Units.Degrees.of(value.getDegrees())));
+	}
+
+	public static Rotation2d normalize180(Rotation2d value) {
+		return new Rotation2d(normalize180(Units.Degrees.of(value.getDegrees())));
 	}
 
 	public static double[] normalizeSymmetrical(double cap, double... values) {
@@ -131,4 +159,11 @@ public class Util {
 	}
 
 	public static Measure<?> anyZero() { return Units.Value.zero().times(Units.Value.zero()); }
+
+	public static Pose2d pointToPose(Pose2d start, Translation2d end) {
+		Rotation2d startHeading = start.getRotation();
+		Rotation2d headingToPoint = end.minus(start.getTranslation()).getAngle();
+		Rotation2d difference = headingToPoint.minus(startHeading);
+		return new Pose2d(end, headingToPoint.plus(difference));
+	}
 }

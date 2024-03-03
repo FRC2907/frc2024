@@ -1,14 +1,10 @@
 package frc.robot.subsystems;
 
-import java.util.List;
+import java.util.Optional;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import frc.robot.constants.game_elements.FieldElements;
-import frc.robot.constants.MechanismConstraints;
+import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.game_elements.FieldElements;
+import frc.robot.util.NoteTargetingHelpers;
 
 
 /**
@@ -19,7 +15,6 @@ import frc.robot.constants.MechanismConstraints;
 public class Hat implements ISubsystem {
 
     private static Hat instance;
-    private static Drivetrain drivetrain = Drivetrain.getInstance();
 
 
     public static Hat getInstance() {
@@ -29,29 +24,18 @@ public class Hat implements ISubsystem {
     }
 
     public TrajectoryFollower findPathToNote() {
-        double x = SmartDashboard.getNumber("note/x", 0);
-        double y = SmartDashboard.getNumber("note/y", 0);
-        double r = SmartDashboard.getNumber("note/r", 0);
-        Transform2d transform = new Transform2d(x, y, Rotation2d.fromDegrees(r));
-
-        Pose2d here = drivetrain.getPose();
-        Pose2d there = here.transformBy(transform);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
-        (here, there), MechanismConstraints.drivetrain.config));
+        Optional<Translation2d> maybe_there = NoteTargetingHelpers.getFieldPoint();
+        if (maybe_there.isEmpty())
+            return new TrajectoryFollower(Drivetrain.getInstance().getPose());
+        return new TrajectoryFollower(maybe_there.get());
     }
 
     public TrajectoryFollower findPathToSpeaker() {
-        Pose2d here = drivetrain.getPose();
-        Pose2d there = FieldElements.getScoringRegions().kSpeaker.getNearest(here);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
-        (here, there), MechanismConstraints.drivetrain.config));
+        return new TrajectoryFollower(FieldElements.getScoringRegions().kSpeaker);
     }
 
     public TrajectoryFollower findPathToAmp() {
-        Pose2d here = drivetrain.getPose();
-        Pose2d there = FieldElements.getScoringRegions().kAmp.getNearest(here);
-        return new TrajectoryFollower(TrajectoryGenerator.generateTrajectory(List.of
-        (here, there), MechanismConstraints.drivetrain.config));
+        return new TrajectoryFollower(FieldElements.getScoringRegions().kAmp);
     }
 
     @Override

@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Ports;
-import frc.robot.constants.game_elements.FieldElements;
+import frc.robot.game_elements.FieldElements;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import edu.wpi.first.math.geometry.Rotation2d;

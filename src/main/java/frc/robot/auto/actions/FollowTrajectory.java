@@ -1,5 +1,7 @@
 package frc.robot.auto.actions;
 
+import java.util.function.BooleanSupplier;
+
 import frc.robot.auto.actions.templates.Action;
 import frc.robot.subsystems.Superduperstructure;
 import frc.robot.subsystems.TrajectoryFollower;
@@ -9,9 +11,14 @@ public class FollowTrajectory extends Action {
     private Superduperstructure superduperstructure = Superduperstructure.getInstance();
 
     private TrajectoryFollower path;
+    private BooleanSupplier quit_condition;
 
-    public FollowTrajectory(TrajectoryFollower GetWheelSpeeds) {
-        this.path = GetWheelSpeeds;
+    public FollowTrajectory(TrajectoryFollower path) {
+        this(path, () -> false);
+    }
+    public FollowTrajectory(TrajectoryFollower path, BooleanSupplier quit_condition) {
+        this.path = path;
+        this.quit_condition = quit_condition;
     }
 
     @Override
@@ -21,7 +28,10 @@ public class FollowTrajectory extends Action {
 
     @Override
     public void whileRunning() {
-        if (superduperstructure.getState() == RobotState.NEUTRAL){
+        if (superduperstructure.getState() == RobotState.NEUTRAL
+                || superduperstructure.getState() == RobotState.HOLDING_NOTE
+                || quit_condition.getAsBoolean()
+            ) {
             this.running = false;
             this.finished = true;
         }

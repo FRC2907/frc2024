@@ -1,4 +1,4 @@
-package frc.robot.constants.game_elements;
+package frc.robot.game_elements;
 
 import edu.wpi.first.math.geometry.Translation2d;
 
