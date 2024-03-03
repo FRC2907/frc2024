@@ -183,17 +183,23 @@ public class Superduperstructure implements ISubsystem {
                     );
                 switch(drivetrain.getDriveMode()){
                     case FIELD_FORWARD:
+                        if (driver.getLeftMagnitude() > 0.1){
                         drivetrain.setFieldDriveInputs(
                             MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
-                            , driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall())
-                        );
+                            , driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
+                        } else {
+                            drivetrain.stop(); //FIXME
+                        }
                         break;
                     case FIELD_REVERSED:
+                        if (driver.getLeftMagnitude() > 0.1){
                         drivetrain.setFieldDriveInputs(
                             MechanismConstraints.drivetrain.kMaxVelocity.times(driver.getLeftMagnitude())
                             , driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180)).
-                                                            rotateBy(FieldElements.directions.towardOtherWall())
-                        );
+                                                            rotateBy(FieldElements.directions.towardOtherWall()));
+                        } else {
+                            drivetrain.stop(); //FIXME
+                        }
                         break;
                     case LOCAL_FORWARD:
                         drivetrain.setLocalDriveInputs(

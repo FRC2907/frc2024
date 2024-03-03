@@ -109,6 +109,10 @@ public class Drivetrain implements ISubsystem {
         rightSpeed = Units.MetersPerSecond.of(wheelSpeeds.rightMetersPerSecond);
     }
 
+    public void stop(){
+        setTankInputs(Units.MetersPerSecond.zero(), Units.MetersPerSecond.zero());
+    }
+
     private void setTankInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
         leftSpeed  = left ;
         rightSpeed = right;
