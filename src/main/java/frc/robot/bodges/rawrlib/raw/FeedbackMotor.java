@@ -14,8 +14,8 @@ import frc.robot.util.Util;
 
 /**
  * Describes a generic motor with closed-loop position and velocity control.
- * @deprecated
  */
+@Deprecated
 public abstract class FeedbackMotor implements MotorController, ISubsystem {
 
     protected PIDController position_pid, velocity_pid, active_pid;

@@ -7,9 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.util.Util;
 
-/**
- * @deprecated
- */
+@Deprecated
 public class StupidTalonFX extends FeedbackMotor {
 
     private TalonFX m;

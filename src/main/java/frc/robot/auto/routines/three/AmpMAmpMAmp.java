@@ -5,7 +5,7 @@ import frc.robot.auto.actions.DriveToward;
 import frc.robot.auto.actions.GetNote;
 import frc.robot.auto.actions.ScoreAmp;
 import frc.robot.auto.routines.templates.Routine;
-import frc.robot.constants.game_elements.FieldElements;
+import frc.robot.game_elements.FieldElements;
 
 public class AmpMAmpMAmp extends Routine {
     public AmpMAmpMAmp() {
