@@ -14,28 +14,15 @@ import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the
- * name of this class or
- * the package after creating this project, you must also update the
- * build.gradle file in the
- * project.
- */
-
 public class Robot extends TimedRobot {
 
-  /**
-   * Configure the loop rate for periodic methods.
-   */
+  // Configure the loop rate for periodic methods.
   public Robot() {
     super(MechanismConstraints.kPeriod.in(Units.Seconds));
   }
 
   private SendableChooser<Class<? extends Routine>> autoChooser;
   private Routine auto;
-
   private ISubsystem everything;
 
   @Override
@@ -67,48 +54,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     try {
-    auto = autoChooser.getSelected().getDeclaredConstructor().newInstance();
+      auto = autoChooser.getSelected().getDeclaredConstructor().newInstance();
+      auto.onStart();
     } catch (Exception e) {
       System.err.println(e.getMessage());
       e.printStackTrace();
     }
-    auto.onStart();
   }
 
   @Override
   public void autonomousPeriodic() {
-    auto.onLoop();
-  }
-
-  @Override
-  public void teleopInit() {
-  }
-
-  @Override
-  public void teleopPeriodic() {
-  }
-
-  @Override
-  public void disabledInit() {
-  }
-
-  @Override
-  public void disabledPeriodic() {
-  }
-
-  @Override
-  public void testInit() {
-  }
-
-  @Override
-  public void testPeriodic() {
-  }
-
-  @Override
-  public void simulationInit() {
-  }
-
-  @Override
-  public void simulationPeriodic() {
+    if (auto != null)
+      auto.onLoop();
   }
 }
