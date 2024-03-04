@@ -7,7 +7,8 @@ public class EmptyRoutine extends Routine {
 
     public EmptyRoutine() {
         super("Empty"
-        , new LogAction("Executing empty routine"));
+            , () -> new LogAction("Executing empty routine")
+        );
     }
     
 }

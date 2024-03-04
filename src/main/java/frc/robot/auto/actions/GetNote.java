@@ -14,7 +14,7 @@ public class GetNote extends Action {
 
     @Override
     public void whileRunning() {
-        if (superduperstructure.getState() == RobotState.NEUTRAL){
+        if (superduperstructure.getState() == RobotState.NEUTRAL || superduperstructure.getState() == RobotState.HOLDING_NOTE){
             this.running = false;
             this.finished = true;
         }

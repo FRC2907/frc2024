@@ -1,14 +1,25 @@
 package frc.robot.auto.actions.templates;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.function.Supplier;
+
+import frc.robot.auto.actions.DoNothingAction;
+import frc.robot.util.Util;
 
 public class ParallelAction extends Action {
-    protected List<Action> actions;
+    protected List<Supplier<Action>> action_suppliers;
+    protected List<Action> actions = Util.asList();
 
-    public ParallelAction(Action... _actions) {
-        this.actions = new ArrayList<>(Arrays.asList(_actions));
+    protected ParallelAction add(Supplier<Action> tail) {
+        action_suppliers.add(tail);
+        return this;
+    }
+
+    @SafeVarargs
+    public ParallelAction(Supplier<Action>... action_suppliers) {
+        this.action_suppliers = Util.asList(action_suppliers);
+        if (this.action_suppliers.size() < 1)
+            this.action_suppliers.add(DoNothingAction::new);
     }
 
     @Override
@@ -32,6 +43,7 @@ public class ParallelAction extends Action {
 
     @Override
     public void onStart() {
+        for (Supplier<Action> sa : this.action_suppliers) this.actions.add(sa.get());
         for (Action a : this.actions) a.onStart();
     }
 

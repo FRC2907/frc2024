@@ -157,18 +157,37 @@ public class FieldElements {
   public static ScoringRegion note(Translation2d point) {
     return ScoringRegion.circularRegion(point, MechanismConstraints.drivetrain.kIntakingDistanceInner, MechanismConstraints.drivetrain.kIntakingDistanceOuter);
   }
+  /**
+   * Get close enough to a note for the Hat to pick it up, but leave enough room to maneuver
+   * @param point
+   * @return
+   */
+  public static ScoringRegion noteBallpark(Translation2d point) {
+    return ScoringRegion.circularRegion(point, MechanismConstraints.drivetrain.kIntakingBallparkInner, MechanismConstraints.drivetrain.kIntakingBallparkOuter);
+  }
 
   public static List<ScoringRegion> getWingNotes() {
     return getFieldPoints().kWingNotes.stream().map(point -> note(point)).toList();
+  }
+  public static List<ScoringRegion> getWingNoteBallparks() {
+    return getFieldPoints().kWingNotes.stream().map(point -> noteBallpark(point)).toList();
   }
 
   public static List<ScoringRegion> getMidfieldNotes() {
     return points.kMidfieldNotes.stream().map(point -> note(point)).toList();
   }
+  public static List<ScoringRegion> getMidfieldNoteBallparks() {
+    return points.kMidfieldNotes.stream().map(point -> noteBallpark(point)).toList();
+  }
 
   public static List<ScoringRegion> getAutoNotes() {
     List<ScoringRegion> out = getWingNotes();
     out.addAll(getMidfieldNotes());
+    return out;
+  }
+  public static List<ScoringRegion> getAutoNoteBallparks() {
+    List<ScoringRegion> out = getWingNoteBallparks();
+    out.addAll(getMidfieldNoteBallparks());
     return out;
   }
 

@@ -2,7 +2,7 @@ package frc.robot.auto.actions.templates;
 
 public abstract class Action {
     protected boolean started = false, running = false, finished = false;
-    protected Action nextAction;
+    //protected Action nextAction;
 
     public void onLoop() {
              if (!this.isStarted())   { this.onStart();      }

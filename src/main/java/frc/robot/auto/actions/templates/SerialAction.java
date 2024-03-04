@@ -1,36 +1,38 @@
 package frc.robot.auto.actions.templates;
 
+import java.util.function.Supplier;
+
 public class SerialAction extends ParallelAction {
 
-    public SerialAction(Action... _actions) {
-        super(_actions);
+    protected Action currentAction;
+
+    @SafeVarargs
+    public SerialAction(Supplier<Action>... action_suppliers) {
+        super(action_suppliers);
     }
 
-    public void debug(String tag) {
-        System.out.println(tag);
-        for (Action a : this.actions)
-            System.out.println(a.toString() + a.started + a.running + a.finished);
+    @Override
+    public void onStart() {
+        this.currentAction = action_suppliers.remove(0).get();
     }
-    public void debug() { debug(""); }
 
     @Override
     public void onLoop() {
-        System.out.println("[DD] SerialAction::onLoop()");
-        if (this.actions.size() > 0) {
-            Action current = this.actions.get(0);
-            if (current.isDone()) {
-            current.onCleanup();
-            this.actions.remove(0);
-            }
-            else {
-                current.onLoop();
+        if (!currentAction.isStarted()) {
+            currentAction.onStart();
+        } else if (currentAction.isDone()) {
+            currentAction.onCleanup();
+            if (action_suppliers.size() > 0) {
+                onStart();
             }
         } else {
-            System.out.println("[II] No more actions to execute");
+            currentAction.onLoop();
         }
     }
 
     @Override
-    public boolean isDone() { return this.actions.size() == 0; }
-    
+    public boolean isDone() {
+        return this.action_suppliers.size() == 0 && currentAction.isDone();
+    }
+
 }

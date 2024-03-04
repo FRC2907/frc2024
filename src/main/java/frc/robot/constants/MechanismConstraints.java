@@ -37,9 +37,13 @@ public class MechanismConstraints {
 
         public static final Measure<Distance> kIntakingDistanceInner = MechanismDimensions.frame.OUTER_LENGTH.plus(Units.Inches.of(3)); // TODO empirical/measure
         public static final Measure<Distance> kIntakingDistanceOuter = kIntakingDistanceInner.plus(Units.Inches.of(2)); // TODO empirical/measure
+        public static final Measure<Distance> kIntakingBallparkInner = kIntakingDistanceOuter.plus(Units.Feet.of(2)); // TODO empirical/measure
+        public static final Measure<Distance> kIntakingBallparkOuter = kIntakingBallparkInner.plus(Units.Feet.of(3)); // TODO empirical/measure
 
         public static final double kDriverDeadband = 0.1;
         public static final boolean kSquareInputs = false;
+
+        public static final Measure<Velocity<Distance>> kSlowVelocity = Units.MetersPerSecond.of(0.5); // TODO empirical
     }
 
     public class intake {

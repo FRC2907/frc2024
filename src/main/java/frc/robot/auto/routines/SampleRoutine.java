@@ -8,12 +8,12 @@ public class SampleRoutine extends Routine {
 
     public SampleRoutine() {
         super("Sample",
-            new SampleAction("A")
-            , new ParallelAction(
-                new SampleAction("B")
-                , new SampleAction("C")
-            )
-            , new SampleAction("D")
+              () -> new SampleAction("A")
+            , () -> new ParallelAction(
+                  () -> new SampleAction("B")
+                , () -> new SampleAction("C")
+                    )
+            , () -> new SampleAction("D")
         );
     }
     

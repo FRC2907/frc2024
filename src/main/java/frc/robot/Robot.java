@@ -5,12 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
-import frc.robot.auto.routines.templates.RoutineInstantiator;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
@@ -35,46 +33,46 @@ public class Robot extends TimedRobot {
     super(MechanismConstraints.kPeriod.in(Units.Seconds));
   }
 
-  private Thread noteTargetingThread;
-
-  private SendableChooser<Routine> autoChooser;
+  private SendableChooser<Class<? extends Routine>> autoChooser;
   private Routine auto;
 
-  public Alliance ally;
-  
-  private ISubsystem[] subsystems;
+  private ISubsystem everything;
 
   @Override
   public void robotInit() {
+
     if (MechanismConstraints.camera.kEnabled) {
-      noteTargetingThread = new Thread(new NoteTargetingPipeline());
+      Thread noteTargetingThread = new Thread(new NoteTargetingPipeline());
       noteTargetingThread.setDaemon(true);
       noteTargetingThread.start();
     }
-    // superduperstructure = Superduperstructure.getInstance();
-    this.subsystems = new ISubsystem[] {
+
+    this.everything = 
         Superduperstructure.getInstance()
         //new LinearMotorControllerTest()
-    };
+    ;
 
-    RoutineInstantiator.go();
     autoChooser = new SendableChooser<>();
-    for (Routine r : Routine.getRoutines())
-      autoChooser.addOption(r.getName(), r);
-    autoChooser.setDefaultOption("None auto with left nothing", Routine.getRoutineByName("Empty"));
+    for (Class<? extends Routine> routineClass : Routine.getRoutines())
+      autoChooser.addOption(routineClass.getSimpleName(), routineClass);
     SmartDashboard.putData(autoChooser);
 
   }
 
   @Override
   public void robotPeriodic() {
-    for (ISubsystem s : subsystems)
-      s.onLoop();
+    everything.onLoop();
   }
 
   @Override
   public void autonomousInit() {
-    auto = autoChooser.getSelected();
+    try {
+    auto = autoChooser.getSelected().getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+      e.printStackTrace();
+    }
+    auto.onStart();
   }
 
   @Override
@@ -84,7 +82,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // superduperstructure.neutralPosition();
   }
 
   @Override

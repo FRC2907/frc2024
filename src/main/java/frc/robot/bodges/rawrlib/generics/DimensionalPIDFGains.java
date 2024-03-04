@@ -18,12 +18,12 @@ public class DimensionalPIDFGains<StateDimension extends Unit<StateDimension>, I
   protected Function<Measure<StateDimension>, Measure<InputDimension>> kF = (unused) -> (Measure<InputDimension>)Util.anyZero(); // ff per setpoint (use for velocity control or arm position)
   protected Measure<InputDimension> kG = (Measure<InputDimension>) Util.anyZero(); // gravity feedforward
   // the following need to be set or the thing just won't move from zero
-  protected Optional<Measure<StateDimension>> kMinRef = Optional.of(null); // minimum reference value
-  protected Optional<Measure<StateDimension>> kMaxRef = Optional.of(null); // maximum reference value
-  protected Optional<Measure<Velocity<StateDimension>>> kMinVel = Optional.of(null); // minimum reference derivative
-  protected Optional<Measure<Velocity<StateDimension>>> kMaxVel = Optional.of(null); // maximum reference derivative
-  protected Optional<Measure<Velocity<Velocity<StateDimension>>>> kMinAccel = Optional.of(null); // minimum reference second derivative
-  protected Optional<Measure<Velocity<Velocity<StateDimension>>>> kMaxAccel = Optional.of(null); // maximum reference second derivative
+  protected Optional<Measure<StateDimension>> kMinRef = Optional.ofNullable(null); // minimum reference value
+  protected Optional<Measure<StateDimension>> kMaxRef = Optional.ofNullable(null); // maximum reference value
+  protected Optional<Measure<Velocity<StateDimension>>> kMinVel = Optional.ofNullable(null); // minimum reference derivative
+  protected Optional<Measure<Velocity<StateDimension>>> kMaxVel = Optional.ofNullable(null); // maximum reference derivative
+  protected Optional<Measure<Velocity<Velocity<StateDimension>>>> kMinAccel = Optional.ofNullable(null); // minimum reference second derivative
+  protected Optional<Measure<Velocity<Velocity<StateDimension>>>> kMaxAccel = Optional.ofNullable(null); // maximum reference second derivative
 
   public DimensionalPIDFGains<StateDimension, InputDimension> setP(Measure<Per<InputDimension, StateDimension>> kP) { this.kP = kP; return this; }
   public DimensionalPIDFGains<StateDimension, InputDimension> setI(Measure<Per<InputDimension, Mult<StateDimension, Time>>> kI) { this.kI = kI; return this; }

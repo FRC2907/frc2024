@@ -1,28 +1,30 @@
 package frc.robot.auto.routines.templates;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
+
+import org.reflections.Reflections;
 
 import frc.robot.auto.actions.templates.Action;
 import frc.robot.auto.actions.templates.SerialAction;
 
 public class Routine extends SerialAction {
-    public Routine(String _name, Action... _actions) {
-        super(_actions);
+    @SafeVarargs
+    public Routine(String _name, Supplier<Action>... action_suppliers) {
+        super(action_suppliers);
         this.name = _name;
-        routines.add(this);
     }
 
+    @Override
     public void onLoop() {
         if (!this.isDone())
             super.onLoop();
     }
 
-    private static List<Routine> routines = new ArrayList<>();
-    public static List<Routine> getRoutines() { return routines; }
-    public static List<String> getRoutineNames() { return routines.stream().map(r -> r.getName()).toList(); }
-    public static Routine getRoutineByName(String name) {
-        return routines.stream().filter(r -> r.getName() == name).toList().get(0);
+    public static List<Class<? extends Routine>> getRoutines() {
+        Reflections reflections = new Reflections("frc.robot.auto.routines");
+        List<Class<? extends Routine>> routines = reflections.getSubTypesOf(Routine.class).stream().toList();
+        return routines;
     }
 
     private String name;

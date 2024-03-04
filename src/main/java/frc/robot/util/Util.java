@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -206,19 +208,24 @@ public class Util {
 	}
 	@SafeVarargs
 	public static <T extends Unit<T>> Measure<T> min(Measure<T>... values) {
-		return min(List.of(values));
+		return min(asList(values));
 	}
 	@SafeVarargs
 	public static <T extends Unit<T>> Measure<T> max(Measure<T>... values) {
-		return max(List.of(values));
+		return max(asList(values));
 	}
 	@SafeVarargs
 	public static <T extends Unit<T>> Measure<T> min(Optional<Measure<T>>... values) {
-		return min(unwrapOptionalValues(List.of(values)));
+		return min(unwrapOptionalValues(asList(values)));
 	}
 	@SafeVarargs
 	public static <T extends Unit<T>> Measure<T> max(Optional<Measure<T>>... values) {
-		return max(unwrapOptionalValues(List.of(values)));
+		return max(unwrapOptionalValues(asList(values)));
+	}
+
+	@SafeVarargs
+	public static <T> List<T> asList(T... values) {
+		return new ArrayList<T>(Arrays.asList(values));
 	}
 
 	public static double signedSquare(double value) { return value * Math.abs(value); }
