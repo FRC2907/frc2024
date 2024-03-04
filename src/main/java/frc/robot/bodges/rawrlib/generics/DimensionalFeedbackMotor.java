@@ -48,13 +48,11 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
     }
 
 
-    // FIXME may have to degeneric
     @SuppressWarnings("unchecked")
     public Measure<D> getPosition() {
       return (Measure<D>) m.getPosition_downstream().times(factor);
     }
 
-    // FIXME may have to degeneric
     @SuppressWarnings("unchecked")
     public Measure<Velocity<D>> getVelocity() {
       return (Measure<Velocity<D>>) m.getVelocity_downstream().times(factor);
@@ -239,6 +237,7 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
         receiveOptions();
 
         track();
+        getWrappedMotorController().onLoop();
 
         submitTelemetry();
     }
@@ -263,14 +262,14 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
           double error = ctlr.getError().baseUnitMagnitude();
           double input = ctlr.calculate().baseUnitMagnitude();
           double inputPerState = input / state;
-          SmartDashboard.putNumberArray(name + "/all", new double[] {reference, state, error, input});
-          SmartDashboard.putNumberArray(name + "/rx", new double[] {reference, state});
-          SmartDashboard.putNumberArray(name + "/eu", new double[] {error, input});
-          SmartDashboard.putNumber(name + "/r", reference);
-          SmartDashboard.putNumber(name + "/x", state);
-          SmartDashboard.putNumber(name + "/e", error);
-          SmartDashboard.putNumber(name + "/u", input);
-          SmartDashboard.putNumber(name + "/uPerX", inputPerState);
+          SmartDashboard.putNumberArray(name + " all", new double[] {reference, state, error, input});
+          SmartDashboard.putNumberArray(name + " rx", new double[] {reference, state});
+          SmartDashboard.putNumberArray(name + " eu", new double[] {error, input});
+          SmartDashboard.putNumber(name + " r", reference);
+          SmartDashboard.putNumber(name + " x", state);
+          SmartDashboard.putNumber(name + " e", error);
+          SmartDashboard.putNumber(name + " u", input);
+          SmartDashboard.putNumber(name + " uPerX", inputPerState);
         }
     }
 

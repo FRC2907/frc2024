@@ -49,7 +49,7 @@ public class MotorControllers {
 					break;
 				case DEBUG:
 				default:
-					_drivetrainLeft.setWrappedMotorController(new WrappedFakeMotor());
+					_drivetrainLeft.setWrappedMotorController(new WrappedModelMotor());
 					break;
 			}
 			_drivetrainLeft

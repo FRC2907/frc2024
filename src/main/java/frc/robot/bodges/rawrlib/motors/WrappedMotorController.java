@@ -2,9 +2,10 @@ package frc.robot.bodges.rawrlib.motors;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
-public abstract class WrappedMotorController implements MotorController {
+public abstract class WrappedMotorController implements MotorController, ISubsystem {
 
     public abstract Measure<Angle> getPosition_downstream();
     public abstract Measure<Velocity<Angle>> getVelocity_downstream();
@@ -18,7 +19,17 @@ public abstract class WrappedMotorController implements MotorController {
   }
 
   @Override
+  public void onLoop() {}
+  @Override
+  public void receiveOptions() {}
+  @Override
+  public void submitTelemetry() {}
+
+  @Override
   public void set(double speed) { _m.set(Util.clampSymmetrical(speed, 1)); }
+
+  @Override
+  public void setVoltage(double voltage) { set(voltage / 12.0); }
 
   @Override
   public double get() { return _m.get(); }

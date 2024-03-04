@@ -1,69 +1,8 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX (v6)[1]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX (v6)[1]/Rotor Sensor": {
-        "header": {
-          "open": true
-        }
-      },
-      "navX-Sensor[0]": {
-        "header": {
-          "open": true
-        }
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/DifferentialDrive[1]": "DifferentialDrive",
-      "/SmartDashboard/Field": "Field2d",
-      "/SmartDashboard/PIDController[1]": "PIDController",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
-    }
-  },
-  "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
-    "transitory": {
-      "SmartDashboard": {
-        "SendableChooser[0]": {
-          "open": true,
-          "string[]##v_/SmartDashboard/SendableChooser[0]/options": {
-            "open": true
-          }
-        },
-        "open": true,
-        "testmotor": {
-          "open": true
-        }
-      },
-      "arm": {
-        "open": true
-      },
-      "drivetrain": {
-        "open": true
-      },
-      "intake": {
-        "open": true
-      },
-      "note-tracking": {
-        "open": true
-      },
-      "shooter": {
-        "open": true
-      }
     }
   },
   "NetworkTables Info": {

@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.constants.Misc;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
@@ -16,10 +17,12 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
   }
 
   protected Supplier<Measure<StateDimension>> referenceSupplier;
+  public Measure<StateDimension> getReference_unbounded() { return this.referenceSupplier.get(); }
   // bam! motion magic
   @SuppressWarnings({ "unchecked" })
   public Measure<StateDimension> getReference() {
-    Measure<StateDimension> out = this.referenceSupplier.get();
+    Measure<StateDimension> out = getReference_unbounded();
+    if (!Misc.kEnableMotionMagic) return out;
 
     Optional<Measure<StateDimension>> minX = getGains().getMinRef(), maxX = getGains().getMaxRef();
     Optional<Measure<Velocity<StateDimension>>> minDX = getGains().getMinVel(), maxDX = getGains().getMaxVel();
@@ -30,12 +33,12 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
 
     Measure<Velocity<StateDimension>> minVelocityStep, minNextVelocity = null;
     Measure<StateDimension> minStateStep, minNextState = null;
-    if (minDDX.isPresent()) {
+    if (Misc.kEnableAccelerationLimiting && minDDX.isPresent()) {
       // we care about acceleration control, so we can put a lower bound on our next velocity
       minVelocityStep = (Measure<Velocity<StateDimension>>) minDDX.get().times(MechanismConstraints.kPeriod);
       minNextVelocity = lastVelocity.plus(minVelocityStep);
     }
-    if (minDX.isPresent()) {
+    if (Misc.kEnableVelocityLimiting && minDX.isPresent()) {
       // we care about velocity control, so we can put a lower bound on our next velocity
       minNextVelocity = Util.max(minDX.get(), minNextVelocity);
     }
@@ -44,7 +47,7 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
       minStateStep = (Measure<StateDimension>) minNextVelocity.times(MechanismConstraints.kPeriod);
       minNextState = lastState.plus(minStateStep);
     }
-    if (minX.isPresent()) {
+    if (Misc.kEnableStateLimiting && minX.isPresent()) {
       // we care about position control, so we can put a lower bound on our next state
       minNextState = Util.max(minX.get(), minNextState);
     }
@@ -54,12 +57,12 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
 
     Measure<Velocity<StateDimension>> maxVelocityStep, maxNextVelocity = null;
     Measure<StateDimension> maxStateStep, maxNextState = null;
-    if (maxDDX.isPresent()) {
+    if (Misc.kEnableAccelerationLimiting && maxDDX.isPresent()) {
       // we care about acceleration control, so we can put an upper bound on our next velocity
       maxVelocityStep = (Measure<Velocity<StateDimension>>) maxDDX.get().times(MechanismConstraints.kPeriod);
       maxNextVelocity = lastVelocity.plus(maxVelocityStep);
     }
-    if (maxDX.isPresent()) {
+    if (Misc.kEnableVelocityLimiting && maxDX.isPresent()) {
       // we care about velocity control, so we can put an upper bound on our next velocity
       maxNextVelocity = Util.min(maxDX.get(), maxNextVelocity);
     }
@@ -68,7 +71,7 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
       maxStateStep = (Measure<StateDimension>) maxNextVelocity.times(MechanismConstraints.kPeriod);
       maxNextState = lastState.plus(maxStateStep);
     }
-    if (maxX.isPresent()) {
+    if (Misc.kEnableStateLimiting && maxX.isPresent()) {
       // we care about position control, so we can put an upper bound on our next state
       maxNextState = Util.min(maxX.get(), maxNextState);
     }
@@ -83,8 +86,7 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
   // however we want, and the system will still attempt to approach what the
   // caller asked for.
   public DimensionalPIDFController<StateDimension, InputDimension> setReference(Measure<StateDimension> reference) {
-    this.referenceSupplier = () -> reference;
-    return this;
+    return setReference(() -> reference);
   }
   public DimensionalPIDFController<StateDimension, InputDimension> setReference(Supplier<Measure<StateDimension>> referenceSupplier) {
     this.referenceSupplier = referenceSupplier;
@@ -168,10 +170,11 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
   public Measure<InputDimension> getFeedforwards() {
     Measure<InputDimension> out = gains.getF(getReference());
     out = out.plus(gains.getG());
-    //if (!converged())
-      // don't need to overcome friction if we've converged
-      // but...that doesn't hold for velocity control
-      out = out.plus(gains.getS());
+    // this might still be wrong for velocity control
+      if (Util.isPositive(getError()))
+        out = out.plus(gains.getS());
+      else if (Util.isNegative(getError()))
+        out = out.minus(gains.getS());
     return out;
   }
 

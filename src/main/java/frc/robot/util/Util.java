@@ -129,7 +129,7 @@ public class Util {
     return collector.plus(other);
   }
 
-	public static double fuzz() { return Math.random() * 0.0001; }
+	public static double fuzz() { return Math.random() * 0.000001; }
 
 	public static Measure<Voltage> angleTimesVoltagePerAngle(Measure<Angle> angle, Measure<Per<Voltage, Angle>> rate) {
 		return Units.Volts.of(angle.in(Units.Rotations) * rate.in(Units.Volts.per(Units.Rotations)));

@@ -24,10 +24,12 @@ public class DimensionalDcMotorSpeedCurve<D extends Unit<D>> {
 
   @SuppressWarnings("unchecked")
   public Measure<Velocity<D>> getSpeed(Measure<Voltage> voltage) {
-    if (voltage.gt(upper_knee))
+    if (voltage.gt(upper_knee)) {
       return (Measure<Velocity<D>>) upper_slope.times(voltage.minus(upper_knee));
-    if (voltage.lt(lower_knee))
+    }
+    if (voltage.lt(lower_knee)) {
       return (Measure<Velocity<D>>) lower_slope.times(voltage.minus(lower_knee));
+    }
     return (Measure<Velocity<D>>) Util.anyZero();
   }
 

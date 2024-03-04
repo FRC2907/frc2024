@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.debug.LinearMotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.NoteTargetingPipeline;
 import frc.robot.subsystems.Superduperstructure;
@@ -35,8 +36,8 @@ public class Robot extends TimedRobot {
     }
 
     this.everything = 
-        Superduperstructure.getInstance()
-        //new LinearMotorControllerTest()
+        //Superduperstructure.getInstance()
+        new LinearMotorControllerTest()
     ;
 
     autoChooser = new SendableChooser<>();
@@ -48,7 +49,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    everything.onLoop();
+    if (everything != null)
+      everything.onLoop();
   }
 
   @Override

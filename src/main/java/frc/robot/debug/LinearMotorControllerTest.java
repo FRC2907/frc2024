@@ -3,7 +3,12 @@ package frc.robot.debug;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
-import frc.robot.constants.MotorControllers;
+import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
+import frc.robot.bodges.rawrlib.motors.WrappedModelMotor;
+import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
+import frc.robot.constants.MechanismConstraints;
+import frc.robot.constants.MechanismDimensions;
+import frc.robot.constants.PIDGains;
 import frc.robot.io.ControllerRumble;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
@@ -14,27 +19,24 @@ public class LinearMotorControllerTest implements ISubsystem {
 
   private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
+
   public LinearMotorControllerTest() {
-  /*  this.m = new DimensionalFeedbackMotor<Distance>()
-        .setName("testmotor")
-        .setWrappedMotorController(new WrappedTalonFX(1))
-        //.setWrappedMotorController(new WrappedFakeMotor())
-        .setFactor(Units.Meters.of(1).per(Units.Rotations)) // 1 m per rotation, for testing
-        .setSpeedCurve(new LinearDcMotorSpeedCurve(Units.Volts.zero(), Units.MetersPerSecond.of(1/0.12).per(Units.Volts)))
-        .configurePositionController(new DimensionalPIDFGains<Distance, Voltage>()
-          .setP(Units.Volts.of(0.05).per(Units.Meters))
-          .setF(Units.Volts.of(0).per(Units.Meters))
-          .setD(Units.Volts.zero().per(Units.MetersPerSecond))
-          )
-        .setPosition(ref)
-    ;*/
-    this.m = MotorControllers.drivetrainLeft();
+    WrappedMotorController motor = new WrappedFakeMotor();
+    m = new DimensionalFeedbackMotor<Distance>()
+      .setWrappedMotorController(motor)
+      .setName("testmotor")
+      .setInverted(false)
+      .setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
+      .configureVelocityController(PIDGains.drivetrain.velocity)
+      .setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
+      .setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
+      ;
   }
 
   @Override
   public void onLoop() {
     receiveOptions();
-    ref = Units.MetersPerSecond.of(c.getLeftY());
+    //ref = Units.MetersPerSecond.of(c.getLeftY());
     m.setVelocity(ref);
     m.onLoop();
     submitTelemetry();
@@ -53,6 +55,7 @@ public class LinearMotorControllerTest implements ISubsystem {
       m.getVelocityController().getError().in(Units.MetersPerSecond)
       , m.getLastControlEffort().in(Units.Volts)
     });
+    SmartDashboard.putNumber("reference raw", Util.fuzz() + m.getVelocityController().getReference_unbounded().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("reference", Util.fuzz() + m.getVelocityController().getReference().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("state",     Util.fuzz() + m.getVelocityController().getState().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("error",     Util.fuzz() + m.getVelocityController().getError().in(Units.MetersPerSecond));
@@ -61,5 +64,6 @@ public class LinearMotorControllerTest implements ISubsystem {
 
   @Override
   public void receiveOptions() {
+    ref = Units.MetersPerSecond.of(SmartDashboard.getNumber("r.set", ref.in(Units.MetersPerSecond)));
   }
 }
