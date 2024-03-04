@@ -60,7 +60,7 @@ public class Superduperstructure implements ISubsystem {
         this.operator = ControllerRumble.getInstance(Ports.HID.OPERATOR);
         this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, driver, operator};
 
-        this.handleState(); // initialize subsystem setpoints
+        this.manageState(); // initialize subsystem setpoints
     }
 
     private Superduperstructure() {
@@ -289,147 +289,183 @@ public class Superduperstructure implements ISubsystem {
         }
     }
 
-    public void handleState() {
+    /**
+     * Control the arm, intake, and shooter.
+     */
+    public void manageMechanisms() {
         switch (state) {
-            case MOVING_TO_START:
+            // Order cases in reverse chronological order when grouped.
+            // This way, when everyone in the group shares some basic functions,
+            // but later ones add in a function (like running the intake to shoot),
+            // we can keep them condensed together.
+
+					case START:
+					case MOVING_TO_START:
                 arm.startPosition();
                 intake.off();
                 shooter.off();
+						break;
+
+					case MOVING_TO_NEUTRAL:
+					case MOVING_TO_HOLDING_NOTE:
+                arm.holdingPosition();
+                intake.off();
+                shooter.off();
+						break;
+
+					case NEUTRAL:
+					case HOLDING_NOTE:
+					case FOLLOWING_TRAJECTORY:
+                // don't continue setting motor states: this allows manual control in this state
+						break;
+
+					case INTAKING:
+					case MOVING_TO_INTAKING:
+                arm.floorPosition();
+                intake.intake();
+						break;
+
+					case OUTAKING:
+                intake.outake();
+						break;
+
+					case SCORING_AMP: // add intake action
+                intake.shoot();
+					case READY_TO_SCORE_AMP:
+					case MOVING_TO_AMP:
+                arm.ampPosition();
+                shooter.amp();
+						break;
+
+					case SCORING_SPEAKER:
+                intake.shoot();
+					case READY_TO_SCORE_SPEAKER:
+					case MOVING_TO_SPEAKER:
+                arm.speakerPosition();
+                shooter.speaker();
+						break;
+
+					case PREPARING_FOR_CLIMB:
+                intake.off();
+                shooter.off();
+                arm.climbReadyPosition();
+						break;
+					case CLIMBING:
+					case HUNG:
+                arm.clumbPosition();
+						break;
+
+					case SELF_RIGHTING:
+                //TODO check if we need to push number back
+                arm.selfRightingPosition();
+					case KNOCKED_OVER:
+                intake.off();
+                shooter.off();
+						break;
+					default:
+						break;
+        }
+    }
+
+    public void managePathfinding() {
+        switch (state) {
+            case MOVING_TO_INTAKING:
+                if (tjf == null) tjf = hat.findPathToNote();
+                break;
+            case MOVING_TO_AMP:
+                if (tjf == null) tjf = hat.findPathToAmp();
+                break;
+            case MOVING_TO_SPEAKER:
+                if (tjf == null) tjf = hat.findPathToSpeaker();
+                break;
+        }
+    }
+
+    /**
+     * Manage the flow of the state machine that directs robot activity.
+     */
+    public void manageState() {
+        switch (state) {
+            case MOVING_TO_START:
                 if (arm.reachedSetPoint())
                     state = RobotState.START;
                 break;
             case START:
-                arm.startPosition();
-                intake.off();
-                shooter.off();
                 break;
 
             case MOVING_TO_INTAKING:
-                arm.floorPosition();
-                intake.intake();
-                if (tjf == null){
-                    tjf = hat.findPathToNote();
-                }
-                if (arm.reachedSetPoint()){
+                if (arm.reachedSetPoint())
                     state = RobotState.INTAKING;
-                }
                 break;
             case INTAKING:
-                arm.floorPosition();
-                intake.intake();
-                if (intake.hasNote()){
+                if (intake.hasNote())
                     state = RobotState.MOVING_TO_HOLDING_NOTE;
-                }
                 break;
 
             case OUTAKING:
-                intake.outake();
                 if (automateScoring && !intake.hasNote())
                     state = RobotState.NEUTRAL;
                 break;
 
             case MOVING_TO_HOLDING_NOTE:
-                arm.holdingPosition();
-                intake.off();
-                shooter.off();
                 state = RobotState.HOLDING_NOTE;
                 break;
 
             case HOLDING_NOTE:
-                // don't continue setting motor states: this allows manual control in this state
                 break;
 
             case MOVING_TO_AMP:
-            // TODO consider splitting "mechanism behavior" and "state machine logic" into two separate switches
-                arm.ampPosition();
-                shooter.amp();
-                if (tjf == null){
-                    tjf = hat.findPathToAmp();
-                }
-                if (arm.reachedSetPoint() && shooter.reachedSetPoint()) { 
+                if (arm.reachedSetPoint() && shooter.reachedSetPoint())
                     state = RobotState.READY_TO_SCORE_AMP;
-                }
                 break;
             case READY_TO_SCORE_AMP:
-                arm.ampPosition();
-                shooter.amp();
                 if (isScoringAutomated())
                     state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                arm.ampPosition();
-                shooter.amp();
-                if (shooter.noteScored()){
+                if (shooter.noteScored())
                     state = RobotState.NEUTRAL;
-                }
                 break;
 
             case MOVING_TO_SPEAKER:
-                arm.speakerPosition();
-                shooter.speaker();
-                if (tjf == null)
-                    tjf = hat.findPathToSpeaker();
-                else if (arm.reachedSetPoint() && shooter.reachedSetPoint() && tjf.isDone()) { 
+                if (arm.reachedSetPoint() && shooter.reachedSetPoint() && tjf.isDone())
                     state = RobotState.READY_TO_SCORE_SPEAKER;
-                }
                 break;
             case READY_TO_SCORE_SPEAKER:
-                arm.speakerPosition();
-                shooter.speaker();
                 if (isScoringAutomated())
                     state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                arm.speakerPosition(); // gotta keep calling this until shot is taken
-                shooter.speaker();
-                // TODO we probably need to spin up the shooter and then fire by running the intake briefly
-                // here and in amp
                 if (shooter.noteScored()) {
                     state = RobotState.NEUTRAL;
                 }
                 break;
 
             case PREPARING_FOR_CLIMB:
-                intake.off();
-                shooter.off();
-                arm.climbReadyPosition();
                 if (isScoringAutomated() && arm.reachedSetPoint()) {
                     state = RobotState.CLIMBING;
                 }
                 break;
             case CLIMBING:
-                arm.clumbPosition();
                 if (arm.reachedSetPoint()) {
                     state = RobotState.HUNG;
                 }
                 break;
             case HUNG:
-                arm.clumbPosition();
                 break;
             case MOVING_TO_NEUTRAL:
-                arm.holdingPosition();
-                intake.off();
-                shooter.off();
                 state = RobotState.NEUTRAL;
                 break;
             case NEUTRAL:
-                // don't continue setting motor states: this allows manual control in this state
                break;
             case KNOCKED_OVER:
-                intake.off();
-                shooter.off();
                 state = RobotState.SELF_RIGHTING;
                 break;
             case SELF_RIGHTING:
-                intake.off();
-                shooter.off();
-                arm.selfRightingPosition();
-                //TODO check if we need to push number back
                 break;
             case FOLLOWING_TRAJECTORY:
-                if (tjf.isDone()){
+                if (tjf.isDone())
                     neutralPosition();
-                }
                 break;
             default:
                 break;
@@ -440,7 +476,7 @@ public class Superduperstructure implements ISubsystem {
     public void onLoop() {
         receiveOptions();
         handleInputs();
-        handleState();
+        manageState();
         handleDriving();
 
         // Tell all the subsystems to do their thing for this cycle

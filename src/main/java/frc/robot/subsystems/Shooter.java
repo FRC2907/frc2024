@@ -6,8 +6,9 @@ import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.game_elements.FieldElements;
 
+// TODO after season: can a motor-driven simple subsystem just extend the DimensionalFeedbackMotor itself?
 public class Shooter implements ISubsystem {
-    private DimensionalFeedbackMotor<Distance> motor;
+    public final DimensionalFeedbackMotor<Distance> motor;
 
     private Shooter(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;

@@ -17,6 +17,7 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
   }
 
   protected Supplier<Measure<StateDimension>> referenceSupplier;
+  public Supplier<Measure<StateDimension>> getReferenceSupplier() { return this.referenceSupplier; };
   public Measure<StateDimension> getReference_unbounded() { return this.referenceSupplier.get(); }
   // bam! motion magic
   @SuppressWarnings({ "unchecked" })

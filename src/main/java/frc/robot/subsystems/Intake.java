@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.units.*;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MotorControllers;
 
 public class Intake implements ISubsystem {
-    private DimensionalFeedbackMotor<Distance> motor;
+    public final DimensionalFeedbackMotor<Distance> motor;
 
     private Intake(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;
@@ -24,6 +26,9 @@ public class Intake implements ISubsystem {
     public void setVelocity(Measure<Velocity<Distance>> reference) {
         motor.setVelocity(reference);
     }
+    public void matchVelocity(Supplier<Measure<Velocity<Distance>>> reference) {
+        motor.setVelocity(reference);
+    }
 
     public void intake() {
         setVelocity(GameInteractions.intake.kIntakingSpeed);
@@ -33,6 +38,10 @@ public class Intake implements ISubsystem {
     }
     public void off() {
         setVelocity(GameInteractions.intake.kOff);
+    }
+
+    public void shoot() {
+        matchVelocity(Shooter.getInstance().motor.getVelocityController().getReferenceSupplier());
     }
 
 
@@ -56,5 +65,6 @@ public class Intake implements ISubsystem {
     @Override
     public void receiveOptions() {
     }
+
 
 }

@@ -24,7 +24,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class Drivetrain implements ISubsystem {
 
-    private DimensionalFeedbackMotor<Distance> leftMotor, rightMotor;
+    public final DimensionalFeedbackMotor<Distance> leftMotor, rightMotor;
     private Measure<Velocity<Distance>> leftSpeed, rightSpeed;
     private Field2d sb_field;
     private DriveMode mode;

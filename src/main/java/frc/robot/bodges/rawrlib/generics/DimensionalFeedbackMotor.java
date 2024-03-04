@@ -1,5 +1,7 @@
 package frc.robot.bodges.rawrlib.generics;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
@@ -80,6 +82,11 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
       positionController.setReference(reference);
       return this;
   }
+  public DimensionalFeedbackMotor<D> setPosition(Supplier<Measure<D>> reference_supplier) {
+      this.setTrackingMode(TrackingMode.kPosition);
+      positionController.setReference(reference_supplier);
+      return this;
+  }
 
   protected DimensionalPIDFController<Velocity<D>, Voltage> velocityController = new DimensionalPIDFController<Velocity<D>, Voltage>()
     .setStateSupplier(this::getVelocity);
@@ -101,6 +108,11 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
   public DimensionalFeedbackMotor<D> setVelocity(Measure<Velocity<D>> reference) {
       this.setTrackingMode(TrackingMode.kVelocity);
       velocityController.setReference(reference);
+      return this;
+  }
+  public DimensionalFeedbackMotor<D> setVelocity(Supplier<Measure<Velocity<D>>> reference_supplier) {
+      this.setTrackingMode(TrackingMode.kVelocity);
+      velocityController.setReference(reference_supplier);
       return this;
   }
 
@@ -244,32 +256,34 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
 
     @Override
     public void submitTelemetry() {
-        if (Misc.debug && name != null) {
-          DimensionalPIDFController<?, Voltage> ctlr;
-          switch (getTrackingMode()) {
-            case kPosition:
-              ctlr = positionController;
-              break;
-            case kVelocity:
-              ctlr = velocityController;
-              break;
-            default:
-              ctlr = null;
-              break;
-          }
+      if (Misc.debug && name != null) {
+        DimensionalPIDFController<?, Voltage> ctlr;
+        switch (getTrackingMode()) {
+          case kPosition:
+            ctlr = positionController;
+            break;
+          case kVelocity:
+            ctlr = velocityController;
+            break;
+          default:
+            ctlr = null;
+            break;
+        }
+        if (ctlr != null) {
           double reference = ctlr.getReference().baseUnitMagnitude();
           double state = ctlr.getState().baseUnitMagnitude();
           double error = ctlr.getError().baseUnitMagnitude();
           double input = ctlr.calculate().baseUnitMagnitude();
           double inputPerState = input / state;
-          SmartDashboard.putNumberArray(name + " all", new double[] {reference, state, error, input});
-          SmartDashboard.putNumberArray(name + " rx", new double[] {reference, state});
-          SmartDashboard.putNumberArray(name + " eu", new double[] {error, input});
+          SmartDashboard.putNumberArray(name + " all", new double[] { reference, state, error, input });
+          SmartDashboard.putNumberArray(name + " rx", new double[] { reference, state });
+          SmartDashboard.putNumberArray(name + " eu", new double[] { error, input });
           SmartDashboard.putNumber(name + " r", reference);
           SmartDashboard.putNumber(name + " x", state);
           SmartDashboard.putNumber(name + " e", error);
           SmartDashboard.putNumber(name + " u", input);
           SmartDashboard.putNumber(name + " uPerX", inputPerState);
+        }
         }
     }
 

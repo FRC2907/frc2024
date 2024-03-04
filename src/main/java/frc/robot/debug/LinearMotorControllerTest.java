@@ -4,8 +4,6 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
-//this never used 
-import frc.robot.bodges.rawrlib.motors.WrappedModelMotor;
 import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
@@ -16,7 +14,7 @@ import frc.robot.util.Util;
 
 public class LinearMotorControllerTest implements ISubsystem {
   private DimensionalFeedbackMotor<Distance> m;
-  //The value of the field LinearMotorControllerTest.c is not used Java(570425421)
+  @SuppressWarnings("unused")
   private ControllerRumble c = ControllerRumble.getInstance(0);
   private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
