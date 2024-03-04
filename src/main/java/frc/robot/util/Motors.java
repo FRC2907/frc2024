@@ -21,6 +21,7 @@ public class Motors {
 
         public static WrappedMotorController createGroup(boolean inverted, Integer... ids) {
             CANSparkMax out = Arrays.stream(ids)
+                    //Resource leak: '<unassigned Closeable value>' is never closedJava(536871799)
                     .map(id -> new CANSparkMax(id, MotorType.kBrushless))
                     .reduce((leader, follower) -> {
                         follower.follow(leader);
@@ -81,6 +82,7 @@ public class Motors {
 
         public static WrappedMotorController createGroup(boolean inverted, Integer... ids) {
             TalonFX out = Arrays.stream(ids)
+                    //Resource leak: '<unassigned Closeable value>' is never closedJava(536871799)
                     .map(id -> new TalonFX(id))
                     .reduce((leader, follower) -> {
                         System.out.println("init talonfx id " + follower.getDeviceID() + " following id " + leader.getDeviceID());
