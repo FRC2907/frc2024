@@ -4,6 +4,7 @@ import edu.wpi.first.units.*;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MotorControllers;
+import frc.robot.game_elements.FieldElements;
 
 public class Shooter implements ISubsystem {
     private DimensionalFeedbackMotor<Distance> motor;
@@ -28,10 +29,18 @@ public class Shooter implements ISubsystem {
         setVelocity(GameInteractions.shooter.kAmpSpeed);
     }
     public void speaker() {
-        setVelocity(GameInteractions.shooter.kSpeakerSpeed);
+        // FIXME dynamic?
+        // TODO refactor constants or whatever, and test numbers
+        Measure<Distance> airDistance = Units.Meters.of(FieldElements.getFieldPoints().kSpeakerHole.getDistance(Arm.getInstance().getPivot()));
+        Measure<Time> airTime = Units.Seconds.of(0.3);
+        setVelocity(airDistance.per(airTime));
     }
     public void off() {
         setVelocity(GameInteractions.shooter.kOff);
+    }
+
+    public boolean reachedSetPoint() {
+        return motor.getVelocityController().converged();
     }
 
 

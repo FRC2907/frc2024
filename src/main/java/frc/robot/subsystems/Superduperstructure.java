@@ -318,7 +318,7 @@ public class Superduperstructure implements ISubsystem {
                 arm.floorPosition();
                 intake.intake();
                 if (intake.hasNote()){
-                    state = RobotState.HOLDING_NOTE;
+                    state = RobotState.MOVING_TO_HOLDING_NOTE;
                 }
                 break;
 
@@ -332,6 +332,7 @@ public class Superduperstructure implements ISubsystem {
                 arm.holdingPosition();
                 intake.off();
                 shooter.off();
+                state = RobotState.HOLDING_NOTE;
                 break;
 
             case HOLDING_NOTE:
@@ -339,19 +340,24 @@ public class Superduperstructure implements ISubsystem {
                 break;
 
             case MOVING_TO_AMP:
+            // TODO consider splitting "mechanism behavior" and "state machine logic" into two separate switches
                 arm.ampPosition();
+                shooter.amp();
                 if (tjf == null){
                     tjf = hat.findPathToAmp();
                 }
-                if (arm.reachedSetPoint()) { 
+                if (arm.reachedSetPoint() && shooter.reachedSetPoint()) { 
                     state = RobotState.READY_TO_SCORE_AMP;
                 }
                 break;
             case READY_TO_SCORE_AMP:
+                arm.ampPosition();
+                shooter.amp();
                 if (isScoringAutomated())
                     state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
+                arm.ampPosition();
                 shooter.amp();
                 if (shooter.noteScored()){
                     state = RobotState.NEUTRAL;
@@ -360,18 +366,21 @@ public class Superduperstructure implements ISubsystem {
 
             case MOVING_TO_SPEAKER:
                 arm.speakerPosition();
+                shooter.speaker();
                 if (tjf == null)
                     tjf = hat.findPathToSpeaker();
-                else if (arm.reachedSetPoint() && tjf.isDone()) { 
-                    // TODO do we also want to get the shooter wheels up to speed first? or no?
+                else if (arm.reachedSetPoint() && shooter.reachedSetPoint() && tjf.isDone()) { 
                     state = RobotState.READY_TO_SCORE_SPEAKER;
                 }
                 break;
             case READY_TO_SCORE_SPEAKER:
+                arm.speakerPosition();
+                shooter.speaker();
                 if (isScoringAutomated())
                     state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
+                arm.speakerPosition(); // gotta keep calling this until shot is taken
                 shooter.speaker();
                 // TODO we probably need to spin up the shooter and then fire by running the intake briefly
                 // here and in amp

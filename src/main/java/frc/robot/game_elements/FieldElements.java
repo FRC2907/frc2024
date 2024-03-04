@@ -105,6 +105,10 @@ public class FieldElements {
       }
     }
 
+    public class z {
+      public static final Measure<Distance> kSpeaker = Units.Inches.of(78+10); // 78.13 is lower bound, see p. 120 & 149
+    }
+
   }
 
   public class points {
@@ -116,14 +120,17 @@ public class FieldElements {
       new Translation2d(lengths.x.blue.kSpeakerCenter, lengths.y.blue.kSpeakerCenter),
       new Translation2d(lengths.x.blue.kStageCenter, lengths.y.blue.kStageCenter),
       new Translation2d(lengths.x.red.kAllianceWall, lengths.y.blue.kReferenceWall),
-      lengths.y.blue.kWingNotes.stream().map(y -> new Translation2d(lengths.x.blue.kWingNotes, y)).toList()
+      lengths.y.blue.kWingNotes.stream().map(y -> new Translation2d(lengths.x.blue.kWingNotes, y)).toList(),
+      lengths.z.kSpeaker
+
     );
     public static FieldPoints red = new FieldPoints(
       new Translation2d(lengths.x.red.kAmpCenter, lengths.y.red.kAmpCenter),
       new Translation2d(lengths.x.red.kSpeakerCenter, lengths.y.red.kSpeakerCenter),
       new Translation2d(lengths.x.red.kStageCenter, lengths.y.red.kStageCenter),
       new Translation2d(lengths.x.blue.kAllianceWall, lengths.y.red.kReferenceWall),
-      lengths.y.red.kWingNotes.stream().map(y -> new Translation2d(lengths.x.red.kWingNotes, y)).toList()
+      lengths.y.red.kWingNotes.stream().map(y -> new Translation2d(lengths.x.red.kWingNotes, y)).toList(),
+      lengths.z.kSpeaker
     );
 
   }

@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
 import frc.robot.util.Geometry.FieldOfView;
@@ -23,6 +24,7 @@ public class MechanismDimensions {
         public static final double GEAR_RATIO = 1; /// TODO get from Build
         public static final Measure<Per<Angle, Angle>> ARM_TRAVEL_PER_ENCODER_TRAVEL = Units.Revolutions.of(GEAR_RATIO)
                 .per(Units.Revolutions);
+        public static final Translation3d PIVOT = new Translation3d(-8.458, 0, 10.791);
     }
 
     public static class drivetrain {

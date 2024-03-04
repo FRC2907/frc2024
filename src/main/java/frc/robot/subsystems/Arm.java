@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
+import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
+import frc.robot.game_elements.FieldElements;
 
 public class Arm implements ISubsystem {
     public final DimensionalFeedbackMotor<Angle> motor;
@@ -19,6 +23,11 @@ public class Arm implements ISubsystem {
             instance = new Arm(MotorControllers.arm());
         }
         return instance;
+    }
+
+    public Translation3d getPivot() {
+        Translation2d robotPose = Drivetrain.getInstance().getPose().getTranslation();
+        return MechanismDimensions.arm.PIVOT.plus(new Translation3d(robotPose.getX(), robotPose.getY(), 0));
     }
 
     public void setPosition(Measure<Angle> reference) {
@@ -62,7 +71,10 @@ public class Arm implements ISubsystem {
     }
 
     public void speakerPosition() {
-        setPosition(GameInteractions.arm.kSpeakerPosition);
+        double airDistance = FieldElements.getFieldPoints().kSpeakerHole.getDistance(getPivot());
+        double floorDistance = FieldElements.getFieldPoints().kSpeakerHole.minus(getPivot()).toTranslation2d().getNorm();
+        Measure<Angle> angle = Units.Radians.of(Math.acos(floorDistance / airDistance)); // cosine is adj/hyp
+        setPosition(angle);
     }
 
     public void climbReadyPosition() {
