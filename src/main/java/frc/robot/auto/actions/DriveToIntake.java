@@ -7,10 +7,6 @@ import frc.robot.util.NoteTargetingHelpers;
 
 public class DriveToIntake extends FollowTrajectory {
 
-	private DriveToIntake(TrajectoryFollower path) {
-		super(path);
-	}
-
   public DriveToIntake(Translation2d position) {
     super(new TrajectoryFollower(FieldElements.noteBallpark(position), true), NoteTargetingHelpers::targetLock);
   }

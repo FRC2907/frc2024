@@ -7,9 +7,12 @@ import frc.robot.game_elements.FieldElements;
 public class DriveAcrossTheLine extends Routine {
     public DriveAcrossTheLine() {
         super("DriveAcrossTheLine"
-                //, () -> new DriveToward(new Pose2d(StrategicStructures.acrossTheLineTarget, FieldElements.directions.towardOtherWall()), true)
-                // TODO verify whether this is far enough
-                , () -> new DriveDistanceWithHeading(FieldElements.lengths.x.blue.kStartingArea, null)
+                , () -> new DriveDistanceWithHeading(
+                    // TODO verify if this is far enough
+                    FieldElements.lengths.x.blue.kStartingArea
+                    , FieldElements.directions.towardOtherWall()
+                    , true
+                    )
             );
     }
 }

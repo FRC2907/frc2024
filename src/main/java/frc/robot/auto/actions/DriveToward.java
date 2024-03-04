@@ -6,14 +6,11 @@ import frc.robot.subsystems.TrajectoryFollower;
 
 public class DriveToward extends FollowTrajectory {
 
-    private DriveToward(TrajectoryFollower path) {
-        super(path);
-    }
     public DriveToward(Translation2d position, boolean forward) {
-        this(new TrajectoryFollower(position, forward));
+        super(new TrajectoryFollower(position, forward));
     }
     public DriveToward(Pose2d position, boolean forward){
-        this(new TrajectoryFollower(position, forward));
+        super(new TrajectoryFollower(position, forward));
     }
     
 }
