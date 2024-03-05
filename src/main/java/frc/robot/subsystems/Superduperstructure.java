@@ -378,6 +378,8 @@ public class Superduperstructure implements ISubsystem {
             case MOVING_TO_SPEAKER:
                 if (tjf == null) tjf = hat.findPathToSpeaker();
                 break;
+            default:
+                break;
         }
     }
 

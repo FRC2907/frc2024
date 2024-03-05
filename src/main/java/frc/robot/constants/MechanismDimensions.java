@@ -60,6 +60,8 @@ public class MechanismDimensions {
     public static class camera {
         // TODO anything about the physical position of the camera can go here
         public static final FieldOfView fov = new FieldOfView(null, null, null, null);
+        @Deprecated
+        public static final CalibrationConstants cameraChoice = CalibrationConstants.CameraA;
     }
 
     public static class limelight {

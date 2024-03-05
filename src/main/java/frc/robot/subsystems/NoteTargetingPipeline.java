@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -18,9 +19,11 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.constants.MechanismDimensions;
 
 // https://docs.wpilib.org/en/stable/docs/software/vision-processing/roborio/using-the-cameraserver-on-the-roborio.html
 
+@Deprecated
 public class NoteTargetingPipeline implements Runnable, ISubsystem {
 
     private int w, h;
@@ -33,6 +36,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     private Predicate<MatOfPoint> sizeFilter;
     private Scalar orangeLow, orangeHigh;
     private int targetLockFrameCount = 0;
+    private Mat[] distortion_maps;
 
 
     private double dx, x, y;
@@ -41,7 +45,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
         this.w = MechanismConstraints.camera.kWidth;
         this.h = MechanismConstraints.camera.kHeight;
         CameraServer
-                .startAutomaticCapture()
+                .startAutomaticCapture(4)
                 .setResolution(w, h);
         if (MechanismConstraints.camera.kNoteTrackingEnabled) {
             this.cvSink = CameraServer.getVideo();
@@ -82,7 +86,7 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
             SmartDashboard.putNumber("note/orange_hi:sat.set", orangeHigh.val[1]);
             SmartDashboard.putNumber("note/orange_hi:val.set", orangeHigh.val[2]);
 
-            //Calib3d.fisheye_initUndistortRectifyMap();
+            this.distortion_maps = MechanismDimensions.camera.cameraChoice.getUndistortMaps(w, h);
         }
     }
 
@@ -102,11 +106,14 @@ public class NoteTargetingPipeline implements Runnable, ISubsystem {
     }
 
     private void runNoteTracking() {
-        if (cvSink.grabFrame(i_color) == 0) {
+        if (cvSink.grabFrame(m_tmp) == 0) {
             outputStream.notifyError(cvSink.getError());
             return;
         }
 
+        if (MechanismConstraints.camera.kEnableUndistort)
+            //Imgproc.remap(i_color, i_color, distortion_maps[0], distortion_maps[1], Imgproc.INTER_LINEAR);
+            Calib3d.undistort(m_tmp, i_color, MechanismDimensions.camera.cameraChoice.cameraMatrix, MechanismDimensions.camera.cameraChoice.distCoeffs);
         Imgproc.cvtColor(i_color, m_tmp, Imgproc.COLOR_BGR2HSV);
         Core.inRange(m_tmp, orangeLow, orangeHigh, i_mask);
         if (MechanismConstraints.camera.kBlackoutNoteFeed) {

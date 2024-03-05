@@ -64,6 +64,7 @@ public class MechanismConstraints {
         public static final boolean kEnabled = false;
         public static final boolean kNoteTrackingEnabled = true;
         public static final boolean kBlackoutNoteFeed = false;
+        public static final boolean kEnableUndistort = true;
         public static final int kTargetLockFrameCountThreshold = 5;
     }
 
