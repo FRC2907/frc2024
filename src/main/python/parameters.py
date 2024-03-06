@@ -6,6 +6,7 @@ def rgb2bgr(r, g, b):
 
 kWidth = 320
 kHeight = 240
+kFPS = 30
 kOrangeLow  = hsv2cv(0, 1/2, 1/4)
 kOrangeHigh = hsv2cv(36, 1, 1)
 kOranceLch = (68.86, 79.46, 1.11)

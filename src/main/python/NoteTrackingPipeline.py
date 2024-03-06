@@ -2,13 +2,14 @@
 
 import cv2 as cv
 import numpy as np
+import cscore as csc
+import wpilib as w
+import ntcore as nt
 
 from parameters import *
 
-"""
--c camera id
--f filename of distortion parameters
-"""
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 
 def lerp(a, t, b):
@@ -25,14 +26,28 @@ def lerp2d(A, B, C, D, x, y):
 
 def publishImage(frame):
     # TODO stream as mjpeg
-    cv.imshow("frame", frame)
+    #csc.CameraServer.putVideo("cv-out", kWidth, kHeight)
+    #cv.imshow("frame", frame)
     pass
 
 
+nt_inst = nt.NetworkTableInstance.getDefault()
+nt_inst.startClient4("note-cv")
+nt_inst.setServer("localhost")
+#nt_inst.setServerTeam(2907)
+sd = nt_inst.getTable("SmartDashboard").getSubTable("note")
+targetLock_p = sd.getBooleanTopic("targetLock").publish()
+x_p = sd.getDoubleTopic("x").publish()
+y_p = sd.getDoubleTopic("y").publish()
+
 def publishData(point, targetLock):
     # TODO publish note tracking info to NT
+    targetLock_p.set(targetLock)
     if targetLock:
-        print(point)
+        x, y = point
+        x_p.set(x)
+        y_p.set(y)
+        #print(point)
     pass
 
 
