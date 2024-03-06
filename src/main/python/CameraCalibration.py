@@ -103,32 +103,6 @@ def main():
     np.savez(filename, K=camera_matrix, D=dist_coefs)
     print(f"saved to file: {filename}")
 
-    ## undistort the image with the calibration
-    # TODO move this to a test file
-    #print("")
-
-    #while True:
-    #    ret, img = cap.read()
-    #    if not ret:
-    #        print("Failed to recv img, dying")
-    #        cap.release()
-    #        return
-    #    if cv.waitKey(1) == ord("q"):
-    #        break
-    #    h, w = img.shape[:2]
-    #    newcameramtx, roi = cv.getOptimalNewCameraMatrix(
-    #        camera_matrix, dist_coefs, (w, h), 1, (w, h)
-    #    )
-
-    #    dst = cv.undistort(img, camera_matrix, dist_coefs, None, newcameramtx)
-
-    #    # crop and save the image
-    #    x, y, w, h = roi
-    #    dst = dst[y : y + h, x : x + w]
-    #    cv.imshow("undistorted", dst)
-
-    #    # print('Undistorted image written to: %s' % outfile)
-    #    # cv.imwrite(outfile, dst)
 
     cap.release()
     print("Done")

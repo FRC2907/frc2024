@@ -89,6 +89,7 @@ public class Geometry {
 
   }
 
+  @Deprecated
   public static class FieldOfView {
     //  Y+
     //   \

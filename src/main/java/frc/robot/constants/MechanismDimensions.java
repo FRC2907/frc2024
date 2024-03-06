@@ -57,10 +57,10 @@ public class MechanismDimensions {
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
     }
 
+        @Deprecated
     public static class camera {
         // TODO anything about the physical position of the camera can go here
         public static final FieldOfView fov = new FieldOfView(null, null, null, null);
-        @Deprecated
         public static final CalibrationConstants cameraChoice = CalibrationConstants.CameraA;
     }
 
