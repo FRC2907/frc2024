@@ -228,6 +228,7 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
 
     private void track() {
       Measure<Voltage> input = Units.Volts.zero();
+      if (getTrackingMode() != null)
       switch (getTrackingMode()) {
         case kPosition:
           input = positionController.calculate();
@@ -257,7 +258,8 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
     @Override
     public void submitTelemetry() {
       if (Misc.debug && name != null) {
-        DimensionalPIDFController<?, Voltage> ctlr;
+        DimensionalPIDFController<?, Voltage> ctlr = null;
+        if (getTrackingMode() != null)
         switch (getTrackingMode()) {
           case kPosition:
             ctlr = positionController;

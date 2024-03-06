@@ -31,6 +31,7 @@ public class MotorControllers {
 					.setMinPosition(MechanismConstraints.arm.kMinPosition)
 					.setMaxPosition(MechanismConstraints.arm.kMaxPosition)
 					.setSymmetricalVelocity(MechanismConstraints.arm.kMaxVelocity)
+					.setPosition(GameInteractions.arm.kStartPosition)
 					.getPositionController().setHysteresis(MechanismConstraints.arm.kPositionHysteresis)
 					;
 		}
@@ -59,6 +60,7 @@ public class MotorControllers {
 					.configureVelocityController(PIDGains.drivetrain.velocity)
 					.setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
 					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
+					.setVelocity(Units.MetersPerSecond.zero())
 					;
 		}
 		return _drivetrainLeft;
@@ -86,6 +88,7 @@ public class MotorControllers {
 					.configureVelocityController(PIDGains.drivetrain.velocity)
 					.setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
 					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
+					.setVelocity(Units.MetersPerSecond.zero())
 					;
 		}
 		return _drivetrainRight;
@@ -108,7 +111,9 @@ public class MotorControllers {
 					.setName("intake")
 					.setInverted(false)
 					.setFactor(MechanismDimensions.intake.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
-					.configureVelocityController(PIDGains.intake.velocity);
+					.configureVelocityController(PIDGains.intake.velocity)
+					.setVelocity(Units.MetersPerSecond.zero())
+					;
 		}
 		return _intake;
 	}
@@ -131,6 +136,7 @@ public class MotorControllers {
 					.setInverted(false)
 					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
 					.configureVelocityController(PIDGains.shooter.velocity)
+					.setVelocity(Units.MetersPerSecond.zero())
 					.getVelocityController().setHysteresis(MechanismConstraints.shooter.kVelocityHysteresis)
 					;
 		}
