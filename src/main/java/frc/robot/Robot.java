@@ -10,11 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.debug.LinearMotorControllerTest;
 import frc.robot.subsystems.ISubsystem;
-import frc.robot.subsystems.NoteTargetingPipeline;
-//never used
-// oh don't worry it will be
 import frc.robot.subsystems.Superduperstructure;
 
 public class Robot extends TimedRobot {
@@ -30,17 +26,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
-    if (MechanismConstraints.camera.kEnabled) {
-      Thread noteTargetingThread = new Thread(new NoteTargetingPipeline());
-      noteTargetingThread.setDaemon(true);
-      noteTargetingThread.start();
-    }
-
-    this.everything = 
-        //Superduperstructure.getInstance()
-        new LinearMotorControllerTest()
-    ;
+    this.everything = Superduperstructure.getInstance();
 
     autoChooser = new SendableChooser<>();
     for (Class<? extends Routine> routineClass : Routine.getRoutines())

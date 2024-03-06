@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.Ports;
 import frc.robot.game_elements.FieldElements;
-import frc.robot.io.ControllerRumble;
+import frc.robot.io.GameController;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import frc.robot.util.Util;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,7 +16,7 @@ public class Superduperstructure implements ISubsystem {
     private Intake intake;
     private Shooter shooter;
     private Hat hat;
-    private ControllerRumble driver, operator;
+    private GameController driver, operator;
     private ISubsystem[] subsystems;
 
 
@@ -56,8 +56,8 @@ public class Superduperstructure implements ISubsystem {
         this.intake = Intake.getInstance();
         this.shooter = Shooter.getInstance();
         this.hat = Hat.getInstance();
-        this.driver = ControllerRumble.getInstance(Ports.HID.DRIVER);
-        this.operator = ControllerRumble.getInstance(Ports.HID.OPERATOR);
+        this.driver = GameController.getInstance(Ports.HID.DRIVER);
+        this.operator = GameController.getInstance(Ports.HID.OPERATOR);
         this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, driver, operator};
 
         this.manageState(); // initialize subsystem setpoints

@@ -3,7 +3,6 @@ package frc.robot.constants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.*;
-import frc.robot.util.Geometry.FieldOfView;
 
 /**
  * Style guidance:
@@ -57,13 +56,6 @@ public class MechanismDimensions {
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
     }
 
-        @Deprecated
-    public static class camera {
-        // TODO anything about the physical position of the camera can go here
-        public static final FieldOfView fov = new FieldOfView(null, null, null, null);
-        public static final CalibrationConstants cameraChoice = CalibrationConstants.CameraA;
-    }
-
     public static class limelight {
         // TODO anything about the physical position of the limelight can go here
     }
@@ -74,5 +66,7 @@ public class MechanismDimensions {
         public static final Measure<Distance> BUMPER_THICKNESS = Units.Inches.of(0.75 + 2.5);
         public static final Measure<Distance> OUTER_WIDTH = INNER_WIDTH.plus(BUMPER_THICKNESS.times(2));
         public static final Measure<Distance> OUTER_LENGTH = INNER_LENGTH.plus(BUMPER_THICKNESS.times(2));
+        public static final Measure<Distance> HALF_LENGTH = OUTER_LENGTH.divide(2);
+        public static final Measure<Distance> HALF_WIDTH = OUTER_WIDTH.divide(2);
     }
 }

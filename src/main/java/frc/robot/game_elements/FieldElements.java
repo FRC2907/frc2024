@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.constants.MechanismDimensions;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Util;
 import frc.robot.util.Geometry.ScoringRegion;
@@ -138,16 +139,20 @@ public class FieldElements {
   public static class scoring_regions {
     public static ScoringRegions blue = new ScoringRegions(
         ScoringRegion.of(
-            new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90)), Units.Inches.of(0),
-            Units.Inches.of(2), Rotation2d.fromDegrees(20)),
+            new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(0)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(2)),
+            Rotation2d.fromDegrees(20)),
         ScoringRegion.of(
             new Pose2d(points.blue.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60),
             Units.Inches.of(120), Rotation2d.fromDegrees(100)));
 
     public static ScoringRegions red = new ScoringRegions(
         ScoringRegion.of(
-            new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90)), Units.Inches.of(0),
-            Units.Inches.of(2), Rotation2d.fromDegrees(20)),
+            new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(0)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(2)),
+            Rotation2d.fromDegrees(20)),
         ScoringRegion.of(
             new Pose2d(points.red.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60),
             Units.Inches.of(120), Rotation2d.fromDegrees(100)));

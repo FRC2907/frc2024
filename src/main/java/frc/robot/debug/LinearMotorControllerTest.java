@@ -8,14 +8,14 @@ import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.PIDGains;
-import frc.robot.io.ControllerRumble;
+import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
 public class LinearMotorControllerTest implements ISubsystem {
   private DimensionalFeedbackMotor<Distance> m;
   @SuppressWarnings("unused")
-  private ControllerRumble c = ControllerRumble.getInstance(0);
+  private GameController c = GameController.getInstance(0);
   private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
 

@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ISubsystem;
 
-public class ControllerRumble extends PS4Controller implements ISubsystem {
+public class GameController extends PS4Controller implements ISubsystem {
     private Timer rumbleTimer;
     private double rumbleDuration;
 
-    private ControllerRumble(int port) {
+    private GameController(int port) {
         super(port);
         this.rumbleTimer = new Timer();
         this.rumbleDuration = 0;
     }
 
-    private static Map<Integer, ControllerRumble> instances
-        = new HashMap<Integer, ControllerRumble>();
-    public static ControllerRumble getInstance(int id) {
+    private static Map<Integer, GameController> instances
+        = new HashMap<Integer, GameController>();
+    public static GameController getInstance(int id) {
         if (!instances.containsKey(id))
-            instances.put(id, new ControllerRumble(id));
+            instances.put(id, new GameController(id));
         return instances.get(id);
     }
 
