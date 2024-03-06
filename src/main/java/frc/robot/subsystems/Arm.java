@@ -15,6 +15,7 @@ public class Arm implements ISubsystem {
 
     private Arm(DimensionalFeedbackMotor<Angle> motor) {
         this.motor = motor;
+        setPosition(GameInteractions.arm.kStartPosition);
     }
 
     private static Arm instance;

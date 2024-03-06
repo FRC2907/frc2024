@@ -12,6 +12,7 @@ public class Shooter implements ISubsystem {
 
     private Shooter(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;
+        setVelocity(Units.MetersPerSecond.zero());
     }
 
     private static Shooter instance;

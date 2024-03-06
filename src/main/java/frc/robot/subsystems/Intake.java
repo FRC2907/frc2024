@@ -12,6 +12,7 @@ public class Intake implements ISubsystem {
 
     private Intake(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;
+        setVelocity(Units.MetersPerSecond.zero());
     }
 
     private static Intake instance;
