@@ -30,7 +30,6 @@ public class Shooter implements ISubsystem {
         setVelocity(GameInteractions.shooter.kAmpSpeed);
     }
     public void speaker() {
-        // FIXME dynamic?
         // TODO refactor constants or whatever, and test numbers
         Measure<Distance> airDistance = Units.Meters.of(FieldElements.getFieldPoints().kSpeakerHole.getDistance(Arm.getInstance().getPivot()));
         Measure<Time> airTime = Units.Seconds.of(0.3);

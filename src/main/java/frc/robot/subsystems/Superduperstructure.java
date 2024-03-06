@@ -225,7 +225,6 @@ public class Superduperstructure implements ISubsystem {
                 drivetrain.setDriveMode(DriveMode.AUTO);
                 // NOTE so if we reach the end of the trajectory, but we haven't moved on to the next state...
                 // then what? should we have a timeout that auto-cancels if that happens? FIXME consider that
-                // FIXME also consider what happens when an auto action uses an alternative drive mode...?
                 if (tjf == null) {
                     driver.rumble(2);
                     operator.rumble(2);
@@ -255,7 +254,7 @@ public class Superduperstructure implements ISubsystem {
             neutralPosition();
         }
         if (operator.getR2ButtonPressed()) {
-            shooter.speaker(); // TODO gavin rawr
+            shooter.speaker();
         }
         if (operator.getR1ButtonPressed()) {
             outakeNote();

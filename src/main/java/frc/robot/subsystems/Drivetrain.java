@@ -244,7 +244,6 @@ public class Drivetrain implements ISubsystem {
         SmartDashboard.putNumber("dt.heading",   getHeading().getDegrees());
         SmartDashboard.putNumber("dt.angVel",    getAngularVelocity().in(Units.DegreesPerSecond));
 
-        // TODO verify
         sb_field.setRobotPose(getPose());
     }
 

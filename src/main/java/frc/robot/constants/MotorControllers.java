@@ -112,7 +112,7 @@ public class MotorControllers {
 					.setInverted(false)
 					.setFactor(MechanismDimensions.intake.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
 					.configureVelocityController(PIDGains.intake.velocity)
-					.setVelocity(Units.MetersPerSecond.zero())
+					.setVelocity(GameInteractions.intake.kOff)
 					;
 		}
 		return _intake;
@@ -136,7 +136,7 @@ public class MotorControllers {
 					.setInverted(false)
 					.setFactor(MechanismDimensions.shooter.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
 					.configureVelocityController(PIDGains.shooter.velocity)
-					.setVelocity(Units.MetersPerSecond.zero())
+					.setVelocity(GameInteractions.shooter.kOff)
 					.getVelocityController().setHysteresis(MechanismConstraints.shooter.kVelocityHysteresis)
 					;
 		}

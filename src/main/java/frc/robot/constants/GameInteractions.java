@@ -7,7 +7,6 @@ public class GameInteractions {
         public static final Measure<Angle> kStartPosition = Units.Degrees.of(90); /// TODO empirical
         public static final Measure<Angle> kFloorPosition = Units.Degrees.of(0); /// TODO empirical
         public static final Measure<Angle> kAmpPosition = Units.Degrees.of(100); /// TODO empirical
-        public static final Measure<Angle> kSpeakerPosition = Units.Degrees.of(30); /// TODO empirical
         public static final Measure<Angle> kHoldingPosition = Units.Degrees.of(20); /// TODO empirical
         public static final Measure<Angle> kClimbReadyPosition = Units.Degrees.of(90); /// TODO empirical
         public static final Measure<Angle> kClimbClumbPosition = Units.Degrees.of(30); /// TODO empirical
@@ -19,12 +18,11 @@ public class GameInteractions {
     public class intake {
         public static final Measure<Velocity<Distance>> kIntakingSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
         public static final Measure<Velocity<Distance>> kOutakingSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
-        public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.of(0); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.zero(); /// TODO empirical
     }
 
     public class shooter {
         public static final Measure<Velocity<Distance>> kAmpSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
-        public static final Measure<Velocity<Distance>> kSpeakerSpeed = Units.MetersPerSecond.of(0); /// TODO empirical
-        public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.of(0); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.zero(); /// TODO empirical
     }
 }
