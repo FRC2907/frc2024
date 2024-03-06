@@ -116,7 +116,7 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
       return this;
   }
 
-  // TODO use this for something, like...automating/overriding velocity ff?
+  // TODO[lib,later] use this for something, like...automating/overriding velocity ff?
   protected DimensionalDcMotorSpeedCurve<D> speedCurve;
   public DimensionalFeedbackMotor<D> setSpeedCurve(DimensionalDcMotorSpeedCurve<D> speedCurve) {
       this.speedCurve = speedCurve;
@@ -130,7 +130,7 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
       return this;
     }
 
-    // TODO reimplement
+    // TODO[lib,later] reimplement
     //public Measure<Angle> mechanismToEncoder(Measure<D> mechanism) { return mechanism.divide(factor); }
     @SuppressWarnings({"unchecked"})
     public Measure<D> encoderToMechanism(Measure<Angle> encoder) { return (Measure<D>)encoder.times(factor); }

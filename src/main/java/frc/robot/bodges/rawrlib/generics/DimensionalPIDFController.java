@@ -213,7 +213,7 @@ public class DimensionalPIDFController<StateDimension extends Unit<StateDimensio
     return getFeedforwards();
   }
 
-  // FIXME support derivative test
+  // TODO[lib,later] support derivative test
   public boolean converged() {
     return Util.checkHysteresis(getError(), getHysteresis());
   }

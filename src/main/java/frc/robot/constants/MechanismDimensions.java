@@ -20,7 +20,7 @@ public class MechanismDimensions {
     }
 
     public static class arm {
-        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final double GEAR_RATIO = 1; /// TODO[empirical]
         public static final Measure<Per<Angle, Angle>> ARM_TRAVEL_PER_ENCODER_TRAVEL = Units.Revolutions.of(GEAR_RATIO)
                 .per(Units.Revolutions);
         public static final Translation3d PIVOT = new Translation3d(-8.458, 0, 10.791);
@@ -35,7 +35,7 @@ public class MechanismDimensions {
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
 
         /** Extra Number for padding track width to compensate for wheel scrub. */
-        public static final Measure<Distance> kTrackWidthFudge = Units.Meters.of(0); // TODO
+        public static final Measure<Distance> kTrackWidthFudge = Units.Meters.of(0); // TODO[empirical]
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
                 TRACK_WIDTH.plus(kTrackWidthFudge));
 
@@ -43,7 +43,7 @@ public class MechanismDimensions {
 
     public static class intake {
         public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2);
-        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final double GEAR_RATIO = 1; /// TODO[empirical]
         public static final Measure<Per<Distance, Angle>> LINEAR_TRAVEL_PER_ENCODER_TRAVEL = WHEEL_DIAMETER
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
 
@@ -51,7 +51,7 @@ public class MechanismDimensions {
 
     public static class shooter {
         public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(4);
-        public static final double GEAR_RATIO = 1; /// TODO get from Build
+        public static final double GEAR_RATIO = 1; /// TODO[empirical]
         public static final Measure<Per<Distance, Angle>> LINEAR_TRAVEL_PER_ENCODER_TRAVEL = WHEEL_DIAMETER
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
     }

@@ -137,7 +137,7 @@ public class Superduperstructure implements ISubsystem {
         return automateScoring;
     }
     public BestTarget chooseBestTarget() {
-        //TODO implement limelight sensor stuff
+        // TODO implement limelight sensor stuff
         return BestTarget.NONE;
     }
 
@@ -222,19 +222,21 @@ public class Superduperstructure implements ISubsystem {
                 break;
             default:
             // in all other states, we follow a trajectory
-                drivetrain.setDriveMode(DriveMode.AUTO);
-                // NOTE so if we reach the end of the trajectory, but we haven't moved on to the next state...
-                // then what? should we have a timeout that auto-cancels if that happens? FIXME consider that
+            // FIXME don't know if this is right
+                if (tjf.isDone())
+                    neutralPosition();
                 if (tjf == null) {
                     driver.rumble(2);
                     operator.rumble(2);
-            if (Misc.debug) {
-                    System.err.println("[EE] Tried to self-drive without a trajectory to follow");
-                    new Exception().printStackTrace();
-            }
+                    if (Misc.debug) {
+                        System.err.println("[EE] Tried to self-drive without a trajectory to follow");
+                        new Exception().printStackTrace();
+                    }
                     cancelAction();
-                } else
-                drivetrain.setAutoDriveInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
+                } else {
+                    drivetrain.setDriveMode(DriveMode.AUTO);
+                    drivetrain.setAutoDriveInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
+                }
         }
     }
 
@@ -355,7 +357,7 @@ public class Superduperstructure implements ISubsystem {
 						break;
 
 					case SELF_RIGHTING:
-                //TODO check if we need to push number back
+                // TODO check if we need to push number back
                 arm.selfRightingPosition();
 					case KNOCKED_OVER:
                 intake.off();

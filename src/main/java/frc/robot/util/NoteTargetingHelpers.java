@@ -24,6 +24,6 @@ public class NoteTargetingHelpers {
   }
 
   public static boolean targetLock() {
-    return SmartDashboard.getBoolean("targetLock", false);
+    return SmartDashboard.getBoolean("note/targetLock", false);
   }
 }

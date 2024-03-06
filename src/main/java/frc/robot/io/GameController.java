@@ -55,7 +55,7 @@ public class GameController extends PS4Controller implements ISubsystem {
         return Math.sqrt(Math.pow(getRightX(), 2) + Math.pow(getRightY(), 2));
     } 
 
-    /// TODO implement get<name>ButtonHeld(double duration) that returns true as long
+    /// TODO[lib,later] implement get<name>ButtonHeld(double duration) that returns true as long
     /// as the button has been held down at least that long
 
     @Override

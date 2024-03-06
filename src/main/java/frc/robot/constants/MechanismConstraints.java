@@ -13,17 +13,17 @@ public class MechanismConstraints {
     }
 
     public class arm {
-        public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0); /// TODO empirical
-        public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120); /// TODO empirical
-        public static final Measure<Velocity<Angle>> kMaxVelocity = Units.DegreesPerSecond.of(60); /// TODO empirical
+        public static final Measure<Angle> kMinPosition        = Units.Degrees.of(  0); /// TODO[empirical]
+        public static final Measure<Angle> kMaxPosition        = Units.Degrees.of(120); /// TODO[empirical]
+        public static final Measure<Velocity<Angle>> kMaxVelocity = Units.DegreesPerSecond.of(60); /// TODO[empirical]
         public static final Measure<Angle> kPositionHysteresis = Units.Degrees.of(2);
     }
 
     public class drivetrain {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(1); /// TODO empirical
-        public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1); /// TODO empirical
-        public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO empirical
-        public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(1); /// TODO[empirical]
+        public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1); /// TODO[empirical]
+        public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO[empirical]
+        public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO[empirical]
         public final static TrajectoryConfig forward_config = 
         new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 
                          MechanismConstraints.drivetrain.kMaxAcceleration)
@@ -35,23 +35,23 @@ public class MechanismConstraints {
         public static final TrajectoryConfig intaking_config = forward_config;
         public static final TrajectoryConfig scoring_config = reverse_config;
 
-        public static final Measure<Distance> kIntakingDistanceInner = MechanismDimensions.frame.OUTER_LENGTH.plus(Units.Inches.of(3)); // TODO empirical/measure
-        public static final Measure<Distance> kIntakingDistanceOuter = kIntakingDistanceInner.plus(Units.Inches.of(2)); // TODO empirical/measure
-        public static final Measure<Distance> kIntakingBallparkInner = kIntakingDistanceOuter.plus(Units.Feet.of(2)); // TODO empirical/measure
-        public static final Measure<Distance> kIntakingBallparkOuter = kIntakingBallparkInner.plus(Units.Feet.of(3)); // TODO empirical/measure
+        public static final Measure<Distance> kIntakingDistanceInner = MechanismDimensions.frame.OUTER_LENGTH.plus(Units.Inches.of(3)); // TODO[empirical]
+        public static final Measure<Distance> kIntakingDistanceOuter = kIntakingDistanceInner.plus(Units.Inches.of(2)); // TODO[empirical]
+        public static final Measure<Distance> kIntakingBallparkInner = kIntakingDistanceOuter.plus(Units.Feet.of(2)); // TODO[empirical]
+        public static final Measure<Distance> kIntakingBallparkOuter = kIntakingBallparkInner.plus(Units.Feet.of(3)); // TODO[empirical]
 
         public static final double kDriverDeadband = 0.1;
         public static final boolean kSquareInputs = false;
 
-        public static final Measure<Velocity<Distance>> kSlowVelocity = Units.MetersPerSecond.of(0.5); // TODO empirical
+        public static final Measure<Velocity<Distance>> kSlowVelocity = Units.MetersPerSecond.of(0.5); // TODO[empirical]
     }
 
     public class intake {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO[empirical]
     }
 
     public class shooter {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO empirical
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO[empirical]
         public static final Measure<Velocity<Distance>> kVelocityHysteresis = Units.MetersPerSecond.of(0.1);
     }
 

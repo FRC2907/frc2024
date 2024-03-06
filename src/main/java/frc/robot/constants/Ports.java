@@ -1,23 +1,24 @@
 package frc.robot.constants;
 
-// FIXME all motor IDs are placeholders for simulation and need to be updated to fit the robot
+// TODO configure motor controllers to reflect these IDs. They should ideally also line up with PDP port numbers.
+// TODO[lib,later] rewrite this in a multi-robot-friendly way
 public class Ports {
     public static class can {
         public static class arm {
-            public static final Integer[] MOTORS = {  };
+            public static final Integer[] MOTORS = { 1, 14 };
         }
 
         public static class drivetrain {
-            public static final Integer[] LEFTS = { 1, 2 };
-            public static final Integer[] RIGHTS = { 3, 4 };
+            public static final Integer[] LEFTS = { 12, 13 };
+            public static final Integer[] RIGHTS = { 2, 3 };
         }
 
         public static class shooter {
-            public static final Integer[] MOTORS = {  };
+            public static final Integer[] MOTORS = { 0, 15 };
         }
 
         public static class intake {
-            public static final Integer[] MOTORS = {  };
+            public static final Integer[] MOTORS = { 4 };
         }
     }
 

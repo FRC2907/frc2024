@@ -66,7 +66,7 @@ public class Geometry {
      * @return
      */
     public Pose2d[] getPoints(int rd, int td) {
-      // TODO handle the case of 1 for either
+      // TODO[lib,later] handle the case of 1 for either
       rd = Math.max(2, rd);
       td = Math.max(2, td);
       Pose2d[] out = new Pose2d[rd*td];

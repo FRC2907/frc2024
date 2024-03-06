@@ -32,7 +32,7 @@ public class FieldElements {
       public static final Measure<Distance> kField = Units.Inches.of(651.223);
       public static final Measure<Distance> kMidline = kField.divide(2.0);
 
-      // FIXME there must be a better way to do this
+      // TODO[lib,later] there must be a better way to do this
       // yeah you could define a FieldLines class and then pass in reference walls and directions i guess
       public class blue {
         private static final Measure<Distance> kReferenceWall = Units.Inches.of(0);
