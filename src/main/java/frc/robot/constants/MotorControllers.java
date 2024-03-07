@@ -14,8 +14,8 @@ public class MotorControllers {
 		_arm = new DimensionalFeedbackMotor<Angle>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_arm.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
-					break;
+					//_arm.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
+					//break;
 				case FLAT:
 				case DEBUG:
 				default:
@@ -99,8 +99,8 @@ public class MotorControllers {
 			_intake = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_intake.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
-					break;
+					//_intake.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
+					//break;
 				case FLAT:
 				case DEBUG:
 				default:
@@ -123,8 +123,8 @@ public class MotorControllers {
 			_shooter = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_shooter.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
-					break;
+					//_shooter.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
+					//break;
 				case FLAT:
 				case DEBUG:
 				default:

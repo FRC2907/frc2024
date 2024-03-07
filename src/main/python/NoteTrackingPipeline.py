@@ -27,7 +27,7 @@ def lerp2d(A, B, C, D, x, y):
 def publishImage(frame):
     # TODO stream as mjpeg
     #csc.CameraServer.putVideo("cv-out", kWidth, kHeight)
-    #cv.imshow("frame", frame)
+    cv.imshow("frame", frame)
     pass
 
 
