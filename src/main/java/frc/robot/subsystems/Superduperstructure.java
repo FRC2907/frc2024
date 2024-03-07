@@ -223,9 +223,7 @@ public class Superduperstructure implements ISubsystem {
             default:
             // in all other states, we follow a trajectory
             // FIXME don't know if this is right
-                if (tjf.isDone())
-                    neutralPosition();
-                if (tjf == null) {
+                if (tjf == null || tjf.isDone()) {
                     driver.rumble(2);
                     operator.rumble(2);
                     if (Misc.debug) {
@@ -493,6 +491,10 @@ public class Superduperstructure implements ISubsystem {
     public void submitTelemetry() {
         SmartDashboard.putString("sup/state", getState().toString());
         SmartDashboard.putString("sup/drivemode", drivetrain.getDriveMode().toString());
+        SmartDashboard.putNumber("driver_LY", Util.fuzz() + driver.getLeftY());
+        SmartDashboard.putNumber("driver_LX", Util.fuzz() + driver.getLeftX());
+        SmartDashboard.putNumber("driver_RY", Util.fuzz() + driver.getRightY());
+        SmartDashboard.putNumber("driver_RX", Util.fuzz() + driver.getRightX());
 
         for (ISubsystem s : subsystems)
             s.submitTelemetry();

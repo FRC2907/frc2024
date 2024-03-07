@@ -272,11 +272,11 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
             break;
         }
         if (ctlr != null) {
-          double reference = ctlr.getReference().baseUnitMagnitude();
-          double state = ctlr.getState().baseUnitMagnitude();
-          double error = ctlr.getError().baseUnitMagnitude();
-          double input = ctlr.calculate().baseUnitMagnitude();
-          double inputPerState = input / state;
+          double reference     = Util.fuzz() + ctlr.getReference().baseUnitMagnitude();
+          double state         = Util.fuzz() + ctlr.getState().baseUnitMagnitude();
+          double error         = Util.fuzz() + ctlr.getError().baseUnitMagnitude();
+          double input         = Util.fuzz() + ctlr.calculate().baseUnitMagnitude();
+          double inputPerState = Util.fuzz() + (input / state);
           SmartDashboard.putNumberArray(name + " all", new double[] { reference, state, error, input });
           SmartDashboard.putNumberArray(name + " rx", new double[] { reference, state });
           SmartDashboard.putNumberArray(name + " eu", new double[] { error, input });

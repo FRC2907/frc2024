@@ -41,7 +41,7 @@ public class MechanismConstraints {
         public static final Measure<Distance> kIntakingBallparkOuter = kIntakingBallparkInner.plus(Units.Feet.of(3)); // TODO[empirical]
 
         public static final double kDriverDeadband = 0.1;
-        public static final boolean kSquareInputs = false;
+        public static final boolean kSquareInputs = true;
 
         public static final Measure<Velocity<Distance>> kSlowVelocity = Units.MetersPerSecond.of(0.5); // TODO[empirical]
     }
