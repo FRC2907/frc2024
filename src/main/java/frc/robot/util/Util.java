@@ -235,7 +235,7 @@ public class Util {
 				MechanismConstraints.drivetrain.kSquareInputs ? signedSquare(value) : value);
 	}
 	public static boolean checkDriverDeadband(double value) {
-		return value > MechanismConstraints.drivetrain.kDriverDeadband;
+		return Math.abs(value) > MechanismConstraints.drivetrain.kDriverDeadband;
 	}
 
 	public static Pose2d pointToPose(Pose2d start, Translation2d end) {

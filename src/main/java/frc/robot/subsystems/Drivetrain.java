@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.bodges.rawrlib.generics.DimensionalPIDFController;
-import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.constants.PIDGains;
@@ -152,11 +151,6 @@ public class Drivetrain implements ISubsystem {
      * we assign to the motors in onLoop().
      */
 
-    public void sealClip(){
-        if (this.getVelocity().in(Units.MetersPerSecond) > 0.2){
-            sendMotorInputs(Units.MetersPerSecond.of(1), Units.MetersPerSecond.of(0));
-        }
-    }
 
 
     @Override
