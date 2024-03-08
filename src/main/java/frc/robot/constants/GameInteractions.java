@@ -16,13 +16,14 @@ public class GameInteractions {
     }
 
     public class intake {
-        public static final Measure<Velocity<Distance>> kIntakingSpeed = Units.MetersPerSecond.of(0); /// TODO[empirical]
-        public static final Measure<Velocity<Distance>> kOutakingSpeed = Units.MetersPerSecond.of(0); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kIntakingSpeed = Units.MetersPerSecond.of(0.5); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kManualIntakingSpeed = Units.MetersPerSecond.of(0.25); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kOutakingSpeed = Units.MetersPerSecond.of(-0.3); /// TODO[empirical]
         public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.zero(); /// TODO[empirical]
     }
 
     public class shooter {
-        public static final Measure<Velocity<Distance>> kAmpSpeed = Units.MetersPerSecond.of(0); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kAmpSpeed = Units.MetersPerSecond.of(1); /// TODO[empirical]
         public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.zero(); /// TODO[empirical]
     }
 }
