@@ -19,6 +19,7 @@ import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.constants.PIDGains;
 import frc.robot.util.LimelightHelpers;
+import frc.robot.util.Util;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -178,8 +179,8 @@ public class Drivetrain implements ISubsystem {
 
     private void updatePoseFromSensors() {
         poseEstimator.update(
-            gyro.getRotation2d(), 
-            leftMotor.getPosition().in(Units.Meters), 
+            Util.normalize180(gyro.getRotation2d()),
+            leftMotor.getPosition().in(Units.Meters),
             rightMotor.getPosition().in(Units.Meters)
         );
         

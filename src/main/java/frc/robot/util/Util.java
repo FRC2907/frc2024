@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -248,8 +249,18 @@ public class Util {
 
 	public static Measure<Angle> getBestHeading(Measure<Angle> currentHeading, Measure<Angle> desiredHeading){
 		Measure<Angle> diff = currentHeading.minus(desiredHeading);
-		return min(abs(diff.minus(Units.Rotations.of(1)))
-				,  abs(diff)
-				,  abs(diff.plus(Units.Rotations.of(1))));
+		List<Measure<Angle>> bonuses = List.of(
+			Units.Rotations.of(-1)
+			, Units.Rotations.zero()
+			, Units.Rotations.of(1)
+		);
+		return bonuses
+			.stream()
+			.map(b -> Pair.of(abs(diff.plus(b)), b))
+			.sorted((a, b) -> a.getFirst().lte(b.getFirst()) ? -1 : 1)
+			.toList()
+			.get(0)
+			.getSecond()
+			.plus(desiredHeading);
 	}
 }

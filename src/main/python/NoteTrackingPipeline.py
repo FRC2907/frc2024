@@ -133,13 +133,12 @@ def main():
     #    print("Cannot open camera")
     #    return
 
-    frame = np.ndarray([kHeight, kWidth, 3], np.uint8)
     while True:
         if cv.waitKey(1) == ord("q"):
             break
 
         #ret, frame = cap.read()
-        ret, frame = cap.grabFrame(frame)
+        ret, frame = cap.grabFrame(np.ndarray([kHeight, kWidth, 3], np.uint8))
         if not ret:
             print("Failed to receive frame")
 
