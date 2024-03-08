@@ -244,4 +244,12 @@ public class Util {
 		Rotation2d difference = headingToPoint.minus(startHeading);
 		return new Pose2d(end, headingToPoint.plus(difference));
 	}
+
+
+	public static Measure<Angle> getBestHeading(Measure<Angle> currentHeading, Measure<Angle> desiredHeading){
+		Measure<Angle> diff = currentHeading.minus(desiredHeading);
+		return min(abs(diff.minus(Units.Rotations.of(1)))
+				,  abs(diff)
+				,  abs(diff.plus(Units.Rotations.of(1))));
+	}
 }
