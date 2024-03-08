@@ -33,6 +33,9 @@ public class Intake implements ISubsystem {
     public void intake() {
         setVelocity(GameInteractions.intake.kIntakingSpeed);
     }
+    public void intakeManual() {
+        setVelocity(GameInteractions.intake.kIntakingManualSpeed);
+    }
     public void outake() {
         setVelocity(GameInteractions.intake.kOutakingSpeed);
     }
