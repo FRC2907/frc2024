@@ -5,6 +5,7 @@ import frc.robot.constants.Ports;
 import frc.robot.game_elements.FieldElements;
 import frc.robot.io.GameController;
 import frc.robot.subsystems.Drivetrain.DriveMode;
+import frc.robot.subsystems.controls.IControls;
 import frc.robot.util.Util;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,7 @@ public class Superduperstructure implements ISubsystem {
     private Shooter shooter;
     private Hat hat;
     private GameController driver, operator;
+    private IControls controls;
     private ISubsystem[] subsystems;
 
 
@@ -58,7 +60,8 @@ public class Superduperstructure implements ISubsystem {
         this.hat = Hat.getInstance();
         this.driver = GameController.getInstance(Ports.HID.DRIVER);
         this.operator = GameController.getInstance(Ports.HID.OPERATOR);
-        this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, driver, operator};
+        this.controls = Misc.controllerSetup.apply(operator, driver);
+        this.subsystems = new ISubsystem[]{drivetrain, arm, intake, shooter, hat, controls, driver, operator};
 
         this.manageState(); // initialize subsystem setpoints
     }
@@ -69,8 +72,10 @@ public class Superduperstructure implements ISubsystem {
 
     private static Superduperstructure instance;
     public static Superduperstructure getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new Superduperstructure();
+            instance.controls.init();
+        }
         return instance;
     }
 
@@ -223,6 +228,7 @@ public class Superduperstructure implements ISubsystem {
             default:
             // in all other states, we follow a trajectory
             // FIXME don't know if this is right
+            // FIXME concerned that this will prohibit manual intaking...
                 if (tjf == null || tjf.isDone()) {
                     driver.rumble(2);
                     operator.rumble(2);
@@ -230,7 +236,8 @@ public class Superduperstructure implements ISubsystem {
                         System.err.println("[EE] Tried to self-drive without a trajectory to follow");
                         new Exception().printStackTrace();
                     }
-                    cancelAction();
+                    if (isScoringAutomated())
+                        cancelAction();
                 } else {
                     drivetrain.setDriveMode(DriveMode.AUTO);
                     drivetrain.setAutoDriveInputs(tjf.getWheelSpeeds(drivetrain.getPose()));
@@ -238,55 +245,6 @@ public class Superduperstructure implements ISubsystem {
         }
     }
 
-    public void handleInputs() {
-        if (operator.getCircleButtonPressed() || driver.getCircleButtonPressed()) {
-            cancelAction();
-        }
-
-
-        if (operator.getCrossButtonPressed()) {
-            moveToIntaking();
-        }
-        if (operator.getSquareButtonPressed()) {
-            autoScore();
-        }
-        if (operator.getTriangleButtonPressed()) {
-            neutralPosition();
-        }
-        if (operator.getR2ButtonPressed()) {
-            shooter.speaker();
-        }
-        if (operator.getR1ButtonPressed()) {
-            outakeNote();
-        }
-        if (operator.getL1ButtonPressed()) {
-            shooter.amp();
-        }
-        if (operator.getL2ButtonPressed()) { 
-            arm.floorPosition();
-            intake.intake();
-            if (operator.getR2ButtonReleased()){
-                neutralPosition();
-            }
-        }
-
-
-        if (driver.getR2Button()) {
-            moveToSpeaker();
-        }
-        if (driver.getR1Button()) {
-            moveToAmp();
-        }
-        if (driver.getCrossButtonPressed()) {
-            prepareForClimb();
-        }
-        if (driver.getR3ButtonPressed()) {
-            drivetrain.reverse();
-        }
-        if (driver.getL3ButtonPressed()) {
-            drivetrain.localFieldSwitch();
-        }
-    }
 
     /**
      * Control the arm, intake, and shooter.
@@ -424,7 +382,7 @@ public class Superduperstructure implements ISubsystem {
                     state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                if (shooter.noteScored())
+                if (shooter.noteGone())
                     state = RobotState.NEUTRAL;
                 break;
 
@@ -437,7 +395,7 @@ public class Superduperstructure implements ISubsystem {
                     state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                if (shooter.noteScored()) {
+                if (shooter.noteGone()) {
                     state = RobotState.NEUTRAL;
                 }
                 break;
@@ -476,7 +434,7 @@ public class Superduperstructure implements ISubsystem {
     @Override
     public void onLoop() {
         receiveOptions();
-        handleInputs();
+        controls.onLoop();
         manageState();
         handleDriving();
 

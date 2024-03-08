@@ -3,33 +3,13 @@
 import cv2 as cv
 import numpy as np
 import cscore as csc
-import wpilib as w
 import ntcore as nt
 
 from parameters import *
+from lerp import *
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
-
-
-def lerp(a, t, b):
-    return (a * (1 - t)) + (b * t)
-
-
-def lerpp(a1, a2, t, b1, b2):
-    return lerp(a1, t, b1), lerp(a2, t, b2)
-
-
-def lerp2d(A, B, C, D, x, y):
-    return lerpp(*lerpp(*A, x, *B), y, *lerpp(*C, x, *D))
-
-
-def publishImage(frame):
-    # TODO stream as mjpeg
-    #csc.CameraServer.putVideo("cv-out", kWidth, kHeight)
-    cv.imshow("frame", frame)
-    pass
-
 
 nt_inst = nt.NetworkTableInstance.getDefault()
 nt_inst.startClient4("note-cv")
@@ -39,6 +19,15 @@ sd = nt_inst.getTable("SmartDashboard").getSubTable("note")
 targetLock_p = sd.getBooleanTopic("targetLock").publish()
 x_p = sd.getDoubleTopic("x").publish()
 y_p = sd.getDoubleTopic("y").publish()
+
+
+
+def publishImage(frame):
+    # TODO stream as mjpeg
+    csc.CameraServer.putVideo("cv-out", kWidth, kHeight)
+		#cv.imshow("frame", frame)
+    pass
+
 
 def publishData(point, targetLock):
     # TODO publish note tracking info to NT
@@ -132,21 +121,24 @@ def main():
         K = mats["K"]
         D = mats["D"]
 
-    cap = cv.VideoCapture(camera_id)
-    if not cap.isOpened():
-        print("Cannot open camera")
-        return
-
     newK = None
     map1, map2 = None, None
     targetLockFrameCount = 0
     robotSpacePoint = (0, 0)
 
+    csc.CameraServer.startAutomaticCapture(camera_id)
+    cap = csc.CameraServer.getVideo()
+    #cap = cv.VideoCapture(camera_id)
+    #if not cap.isOpened():
+    #    print("Cannot open camera")
+    #    return
+
     while True:
         if cv.waitKey(1) == ord("q"):
             break
 
-        ret, frame = cap.read()
+        #ret, frame = cap.read()
+        ret, frame = cap.grabFrame(np.ndarray([kHeight, kWidth, 3], np.uint8))
         if not ret:
             print("Failed to receive frame")
 

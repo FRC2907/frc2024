@@ -43,10 +43,10 @@ public class MotorControllers {
 			_drivetrainLeft = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainLeft.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.LEFTS));
+					_drivetrainLeft.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.LEFTS));
 					break;
 				case FLAT:
-					_drivetrainLeft.setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS));
+					_drivetrainLeft.setWrappedMotorController(Motors.talonfx.createGroup(Ports.CAN.drivetrain.LEFTS));
 					break;
 				case DEBUG:
 				default:
@@ -71,10 +71,10 @@ public class MotorControllers {
 			_drivetrainRight = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainRight.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.drivetrain.RIGHTS));
+					_drivetrainRight.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.RIGHTS));
 					break;
 				case FLAT:
-					_drivetrainRight.setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.RIGHTS));
+					_drivetrainRight.setWrappedMotorController(Motors.talonfx.createGroup(Ports.CAN.drivetrain.RIGHTS));
 					break;
 				case DEBUG:
 				default:

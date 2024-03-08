@@ -48,6 +48,7 @@ public class MechanismConstraints {
 
     public class intake {
         public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO[empirical]
+        public static final int kPresenceSensorTriggerProximity = 1800; // TODO[empirical]
     }
 
     public class shooter {

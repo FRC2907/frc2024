@@ -21,7 +21,7 @@ public class AngularMotorControllerTest implements ISubsystem {
     //this.c = ControllerRumble.getInstance(0);
     this.m = new DimensionalFeedbackMotor<Angle>()
         .setName("testmotor")
-        .setWrappedMotorController(Motors.talonfx.createGroup(Ports.can.drivetrain.LEFTS))
+        .setWrappedMotorController(Motors.talonfx.createGroup(Ports.CAN.drivetrain.LEFTS))
         //.setWrappedMotorController(new WrappedTalonFX(1))
         //.setWrappedMotorController(new WrappedFakeMotor())
         .setFactor(Units.Rotations.of(1).per(Units.Rotations)) // 1 m per rotation, for testing
