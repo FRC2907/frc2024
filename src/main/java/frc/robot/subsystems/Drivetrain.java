@@ -19,6 +19,7 @@ import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.constants.PIDGains;
 import frc.robot.util.LimelightHelpers;
+import frc.robot.util.Util;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -125,7 +126,9 @@ public class Drivetrain implements ISubsystem {
         setCurvatureInputs(speed, turn);
     }
     public void setFieldDriveInputs(Measure<Velocity<Distance>> speed, Rotation2d direction) {
-        headingController.setReference(Units.Degrees.of(direction.getDegrees()));
+        headingController.setReference(Util.getBestHeading(
+                                         Units.Degrees.of(getHeading().getDegrees()) 
+                                       , Units.Degrees.of(direction.getDegrees())));
         setCurvatureInputs(speed, headingController.calculate());
         //setCurvatureInputs(speed, Units.Rotations.of(direction.minus(getHeading()).getRotations()).per(Units.Second));
     }
