@@ -2,16 +2,22 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.units.*;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MotorControllers;
+import frc.robot.constants.Ports;
 
 public class Intake implements ISubsystem {
     public final DimensionalFeedbackMotor<Distance> motor;
+    public final ColorSensorV3 presenceSensor;
 
     private Intake(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;
+        this.presenceSensor = new ColorSensorV3(Ports.I2C.kIntakeSensor);
     }
 
     private static Intake instance;
@@ -50,8 +56,7 @@ public class Intake implements ISubsystem {
 
     /** Return whether the intake has a Note in it. */
     public boolean hasNote() {
-        // TODO read sensor to determine whether there's a Note in the intake
-        return false;
+        return presenceSensor.getProximity() > MechanismConstraints.intake.kPresenceSensorTriggerProximity;
     }
 
 

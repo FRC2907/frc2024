@@ -382,7 +382,7 @@ public class Superduperstructure implements ISubsystem {
                     state = RobotState.SCORING_AMP;
                 break;
             case SCORING_AMP:
-                if (shooter.noteScored())
+                if (shooter.noteGone())
                     state = RobotState.NEUTRAL;
                 break;
 
@@ -395,7 +395,7 @@ public class Superduperstructure implements ISubsystem {
                     state = RobotState.SCORING_SPEAKER;
                 break;
             case SCORING_SPEAKER:
-                if (shooter.noteScored()) {
+                if (shooter.noteGone()) {
                     state = RobotState.NEUTRAL;
                 }
                 break;

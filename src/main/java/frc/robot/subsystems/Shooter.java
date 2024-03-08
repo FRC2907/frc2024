@@ -44,10 +44,8 @@ public class Shooter implements ISubsystem {
     }
 
 
-    public boolean noteScored() {
-        return false;
-        // TODO add code to see if note has scored
-        // probably look for a falling edge on Intake::hasNote while in a scoring state
+    public boolean noteGone() {
+        return !Intake.getInstance().hasNote();
     }
 
 
