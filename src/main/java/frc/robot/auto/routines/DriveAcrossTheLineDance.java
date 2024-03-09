@@ -9,10 +9,10 @@ public class DriveAcrossTheLineDance extends Routine {
         super("DriveAcrossTheLineDance"
                 , () -> new JustSomewhere(Units.MetersPerSecond.of(0.5),
                                           Units.MetersPerSecond.of(0.5), 
-                                          Units.Seconds.of(8))
+                                          Units.Seconds.of(11))
                 , () -> new JustSomewhere(Units.MetersPerSecond.of(0.8), 
                                           Units.MetersPerSecond.of(0),
-                                          Units.Seconds.of(7))
+                                          Units.Seconds.of(4))
             );
     }
 }
