@@ -199,16 +199,16 @@ public class Superduperstructure implements ISubsystem {
                             drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
-                        if (Util.checkDriverDeadband(driver.getLeftY()) || Util.checkDriverDeadband(driver.getRightX()))
-                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getLeftY()),
-                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate());
+                        if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
+                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()),
+                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
                         else
                             drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
-                        if (Util.checkDriverDeadband(driver.getLeftY()) || Util.checkDriverDeadband(driver.getRightX()))
-                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getLeftY()).negate(),
-                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getRightX()).negate());
+                        if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
+                            drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()).negate(),
+                                    MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
                         else
                             drivetrain.stop();
                         break;

@@ -20,9 +20,9 @@ public class MechanismConstraints {
     }
 
     public class drivetrain {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(0.7); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(2); /// TODO[empirical]
         public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1); /// TODO[empirical]
-        public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.125); /// TODO[empirical]
+        public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO[empirical]
         public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO[empirical]
         public final static TrajectoryConfig forward_config = 
         new TrajectoryConfig(MechanismConstraints.drivetrain.kMaxVelocity, 

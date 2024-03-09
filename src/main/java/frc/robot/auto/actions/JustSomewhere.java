@@ -25,12 +25,15 @@ public void onStart() {
 
 @Override
 public void whileRunning() {
-	if (time.in(Units.Seconds) > timer.get()){
-		Drivetrain.getInstance().setAutoDriveInputs(Units.MetersPerSecond.zero(), Units.MetersPerSecond.zero());
+	if (time.in(Units.Seconds) < timer.get()){
+		this.running = false;
+		this.finished = true;
 	}
 }
 
 @Override
-public void onCleanup() {}
+public void onCleanup() {
+	Drivetrain.getInstance().setAutoDriveInputs(Units.MetersPerSecond.zero(), Units.MetersPerSecond.zero());
+}
 
 }
