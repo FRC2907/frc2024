@@ -264,6 +264,7 @@ public class Superduperstructure implements ISubsystem {
         }
         if (operator.getR2ButtonPressed()) {
             //shooter.speaker();  TODO add back later
+            intake.shoot();
             shooter.manualShoot();
         }
         if (operator.getR1ButtonPressed()) {
