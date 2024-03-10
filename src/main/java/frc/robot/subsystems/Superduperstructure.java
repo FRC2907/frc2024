@@ -171,13 +171,6 @@ public class Superduperstructure implements ISubsystem {
             case START:
             case MOVING_TO_NEUTRAL:
             case NEUTRAL:
-                if (Util.checkDriverDeadband(operator.getRightY())){
-                    arm.setVelocity(Util.scaleArmInput(operator.getRightY()));
-                }
-                if (operator.getCrossButtonPressed()){
-                    intake.intake();
-                    arm.floorPosition();
-                }
             case MOVING_TO_HOLDING_NOTE:
             case HOLDING_NOTE:
             case OUTAKING:
@@ -254,6 +247,10 @@ public class Superduperstructure implements ISubsystem {
         /*if (operator.getCrossButtonPressed()) {
             moveToIntaking();
         }*/ //TODO add back later
+        if (operator.getCrossButtonPressed()){
+                intake.intake();
+                arm.floorPosition();
+            }
         if (operator.getSquareButtonPressed()) {
             //autoScore();     TODO add this back later too
             intake.shoot();
@@ -263,15 +260,20 @@ public class Superduperstructure implements ISubsystem {
             neutralPosition();
         }
         if (operator.getR2ButtonPressed()) {
-            //shooter.speaker();  TODO add back later
-            intake.shoot();
+            //shooter.speaker();  TODO add back later too too
             shooter.manualShoot();
         }
         if (operator.getR1ButtonPressed()) {
             outakeNote();
         }
         if (operator.getL1ButtonPressed()) {
-            shooter.amp();
+            //shooter.amp();   TODO add this back later too too too
+            if (intake.shooting == true){
+                intake.off();
+                intake.shooting = false;
+            } else {
+                intake.shoot();
+            }
         }
         if (operator.getL2ButtonPressed()) { 
             arm.floorPosition();
@@ -325,6 +327,9 @@ public class Superduperstructure implements ISubsystem {
 
 					case NEUTRAL:
 					case HOLDING_NOTE:
+                        if (Util.checkDriverDeadband(operator.getRightY())){
+                            arm.setVelocity(Util.scaleArmInput(operator.getRightY()));
+                        }
 					case FOLLOWING_TRAJECTORY:
                 // don't continue setting motor states: this allows manual control in this state
 						break;

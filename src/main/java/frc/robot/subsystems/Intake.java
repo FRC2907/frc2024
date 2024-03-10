@@ -14,6 +14,7 @@ import frc.robot.constants.Ports;
 public class Intake implements ISubsystem {
     public final DimensionalFeedbackMotor<Distance> motor;
     public final ColorSensorV3 presenceSensor;
+    public boolean shooting;
 
     private Intake(DimensionalFeedbackMotor<Distance> motor) {
         this.motor = motor;
@@ -48,6 +49,7 @@ public class Intake implements ISubsystem {
 
     public void shoot() {
         matchVelocity(Shooter.getInstance().motor.getVelocityController().getReferenceSupplier());
+        shooting = true;
     }
 
 
