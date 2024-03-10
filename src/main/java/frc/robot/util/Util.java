@@ -235,6 +235,10 @@ public class Util {
 		return MechanismConstraints.drivetrain.kMaxVelocity.times(
 				MechanismConstraints.drivetrain.kSquareInputs ? signedSquare(value) : value);
 	}
+	public static Measure<Velocity<Angle>> scaleArmInput(double value) {
+		return MechanismConstraints.arm.kMaxVelocity.times(
+				MechanismConstraints.arm.kSquareInputs ? signedSquare(value) : value);
+	}
 	public static boolean checkDriverDeadband(double value) {
 		return Math.abs(value) > MechanismConstraints.drivetrain.kDriverDeadband;
 	}

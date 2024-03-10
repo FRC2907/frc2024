@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.units.*;
 import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
 import frc.robot.constants.GameInteractions;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MotorControllers;
 import frc.robot.game_elements.FieldElements;
 
@@ -34,6 +35,9 @@ public class Shooter implements ISubsystem {
         Measure<Distance> airDistance = Units.Meters.of(FieldElements.getFieldPoints().kSpeakerHole.getDistance(Arm.getInstance().getPivot()));
         Measure<Time> airTime = Units.Seconds.of(0.3);
         setVelocity(airDistance.per(airTime));
+    }
+    public void manualShoot() {
+        setVelocity(MechanismConstraints.shooter.kMaxVelocity);
     }
     public void off() {
         setVelocity(GameInteractions.shooter.kOff);
