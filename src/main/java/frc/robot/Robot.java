@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.MechanismConstraints;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.DriveMode;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.Superduperstructure;
 
@@ -56,5 +58,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if (auto != null)
       auto.onLoop();
+  }
+
+  @Override
+  public void teleopInit(){
+    Drivetrain.getInstance().setDriveMode(DriveMode.LOCAL_FORWARD);
   }
 }

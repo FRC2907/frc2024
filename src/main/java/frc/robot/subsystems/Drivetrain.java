@@ -108,11 +108,13 @@ public class Drivetrain implements ISubsystem {
 
     public void stop(){
         setTankInputs(Units.MetersPerSecond.zero(), Units.MetersPerSecond.zero());
+        System.out.println("not setting speeds");
     }
 
     private void setTankInputs(Measure<Velocity<Distance>> left, Measure<Velocity<Distance>> right) {
         leftSpeed  = left ;
         rightSpeed = right;
+        System.out.println("setting speeds " + leftSpeed + " " + rightSpeed);
     }
     
 
@@ -162,6 +164,7 @@ public class Drivetrain implements ISubsystem {
         sendMotorInputs(leftSpeed, rightSpeed);
         leftMotor.onLoop();
         rightMotor.onLoop();
+        System.out.println("sending outputs " + leftSpeed + " " + rightSpeed);
     }
 
     

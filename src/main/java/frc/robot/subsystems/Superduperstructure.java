@@ -175,20 +175,20 @@ public class Superduperstructure implements ISubsystem {
             case HOLDING_NOTE:
             case OUTAKING:
             // in these states, we drive manually
-                tjf = null;
+                /*tjf = null;
                 if (drivetrain.getDriveMode() == DriveMode.AUTO)
                     drivetrain.setDriveMode(
                         intake.hasNote()
                         ? Misc.kDefaultDriveModeWithNote
                         : Misc.kDefaultDriveModeWithoutNote
-                    );
+                    );*/
                 switch (drivetrain.getDriveMode()) {
                     case FIELD_FORWARD:
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
                         else
-                            drivetrain.stop();
+                            //drivetrain.stop();
                         break;
                     case FIELD_REVERSED:
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
@@ -196,27 +196,27 @@ public class Superduperstructure implements ISubsystem {
                                     driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
                                             .rotateBy(FieldElements.directions.towardOtherWall()));
                         else
-                            drivetrain.stop();
+                            //drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
                         else
-                            drivetrain.stop();
+                            //drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()).negate(),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
                         else
-                            drivetrain.stop();
+                            //drivetrain.stop();
                         break;
                     default:
-                        if (Misc.debug) {
+                        /*if (Misc.debug) {
                             System.err.println("[EE] Auto driving in non-auto robot state");
                             new Exception().printStackTrace();
-                        }
+                        }*/
                         break;
                 }
                 break;
