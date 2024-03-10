@@ -21,8 +21,7 @@ public class LinearMotorControllerTest implements ISubsystem {
 
   public LinearMotorControllerTest() {
     WrappedMotorController motor = new WrappedFakeMotor();
-    m = new DimensionalFeedbackMotor<Distance>()
-      .setWrappedMotorController(motor)
+    m = new DimensionalFeedbackMotor<Distance>(motor)
       .setName("testmotor")
       .setInverted(false)
       .setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)

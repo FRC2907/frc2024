@@ -2,6 +2,8 @@ package frc.robot.bodges.rawrlib.generics;
 
 import java.util.function.Supplier;
 
+import javax.annotation.processing.SupportedSourceVersion;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
@@ -19,6 +21,9 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
     public DimensionalFeedbackMotor<D> setWrappedMotorController(WrappedMotorController m) {
       this.m = m;
       return this;
+    }
+    public DimensionalFeedbackMotor(WrappedMotorController m) {
+      setWrappedMotorController(m);
     }
 
     public enum TrackingMode { kPosition, kVelocity }
@@ -61,19 +66,22 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
     }
 
   protected DimensionalPIDFController<D, Voltage> positionController = new DimensionalPIDFController<D, Voltage>()
-    .setStateSupplier(this::getPosition);
+    .setStateSupplier(this::getPosition).setReference(this::getPosition);
   public DimensionalPIDFController<D, Voltage> getPositionController() { return positionController; }
   public DimensionalFeedbackMotor<D> setPositionController(DimensionalPIDFController<D, Voltage> ctlr) {
     this.positionController = ctlr;
     getPositionController().setStateSupplier(this::getPosition);
+    getPositionController().setReference(this::getPosition);
     return this;
   }
   public DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains) {
     getPositionController().setGains(gains);
+    getPositionController().setReference(this::getPosition);
     return this;
   }
   public DimensionalFeedbackMotor<D> configurePositionController(DimensionalPIDFGains<D, Voltage> gains, Measure<D> izone) {
     getPositionController().setGains(gains);
+    getPositionController().setReference(this::getPosition);
     getPositionController().getErrorTracker().setIZone(izone);
     return this;
   }
@@ -88,20 +96,27 @@ public class DimensionalFeedbackMotor<D extends Unit<D>> implements ISubsystem {
       return this;
   }
 
+  @SuppressWarnings("unchecked")
   protected DimensionalPIDFController<Velocity<D>, Voltage> velocityController = new DimensionalPIDFController<Velocity<D>, Voltage>()
-    .setStateSupplier(this::getVelocity);
+    .setStateSupplier(this::getVelocity).setReference((Measure<Velocity<D>>) Util.anyZero());
+  @SuppressWarnings("unchecked")
   public DimensionalFeedbackMotor<D> setVelocityController(DimensionalPIDFController<Velocity<D>, Voltage> ctlr) {
     this.velocityController = ctlr;
     getVelocityController().setStateSupplier(this::getVelocity);
+    getVelocityController().setReference((Measure<Velocity<D>>) Util.anyZero());
     return this;
   }
   public DimensionalPIDFController<Velocity<D>, Voltage> getVelocityController() { return velocityController; }
+  @SuppressWarnings("unchecked")
   public DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains) {
     getVelocityController().setGains(gains);
+    getVelocityController().setReference((Measure<Velocity<D>>) Util.anyZero());
     return this;
   }
+  @SuppressWarnings("unchecked")
   public DimensionalFeedbackMotor<D> configureVelocityController(DimensionalPIDFGains<Velocity<D>, Voltage> gains, Measure<Velocity<D>> izone) {
     getVelocityController().setGains(gains);
+    getVelocityController().setReference((Measure<Velocity<D>>) Util.anyZero());
     getVelocityController().getErrorTracker().setIZone(izone);
     return this;
   }

@@ -187,7 +187,7 @@ public class Superduperstructure implements ISubsystem {
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
-                        else
+                        //else
                             //drivetrain.stop();
                         break;
                     case FIELD_REVERSED:
@@ -195,21 +195,21 @@ public class Superduperstructure implements ISubsystem {
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
                                             .rotateBy(FieldElements.directions.towardOtherWall()));
-                        else
+                        //else
                             //drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        else
+                        //else
                             //drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()).negate(),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        else
+                        //else
                             //drivetrain.stop();
                         break;
                     default:
@@ -244,61 +244,59 @@ public class Superduperstructure implements ISubsystem {
         }
 
 
-        /*if (operator.getCrossButtonPressed()) {
-            moveToIntaking();
-        }*/ //TODO add back later
-        if (operator.getCrossButtonPressed()){
-                intake.intake();
-                arm.floorPosition();
-            }
+
         if (operator.getSquareButtonPressed()) {
-            //autoScore();     TODO add this back later too
-            intake.shoot();
             shooter.speaker();
+            intake.shoot();
+            //TODO speed up shooter wheels first
         }
         if (operator.getTriangleButtonPressed()) {
             neutralPosition();
         }
-        if (operator.getR2ButtonPressed()) {
-            //shooter.speaker();  TODO add back later too too
+        if (operator.getR2Button()) {
             shooter.manualShoot();
+        }
+        if (operator.getR2ButtonReleased()){
+            intake.shoot();
         }
         if (operator.getR1ButtonPressed()) {
             outakeNote();
         }
         if (operator.getL1ButtonPressed()) {
-            //shooter.amp();   TODO add this back later too too too
-            if (intake.shooting == true){
-                intake.off();
-                intake.shooting = false;
-            } else {
-                intake.shoot();
-            }
+            intake.off();
+            
         }
-        if (operator.getL2ButtonPressed()) { 
+        if (operator.getL2Button()) { 
             arm.floorPosition();
             intake.intake();
-            if (operator.getR2ButtonReleased()){
-                neutralPosition();
-            }
+        }
+        if (operator.getL2ButtonReleased()){
+            intake.off();
         }
 
 
-        if (driver.getR2Button()) {
+
+        if (driver.getR2ButtonPressed()) {
             moveToSpeaker();
         }
-        if (driver.getR1Button()) {
+        if (driver.getL2ButtonPressed()) {
             moveToAmp();
+        }
+        if (driver.getR1ButtonPressed()) {
+            drivetrain.reverse();
+        }
+        if (driver.getL1ButtonPressed()) {
+            drivetrain.localFieldSwitch();
         }
         if (driver.getCrossButtonPressed()) {
             prepareForClimb();
         }
-        if (driver.getR3ButtonPressed()) {
-            drivetrain.reverse();
+        if (driver.getSquareButtonPressed()) {
+            autoScore();
         }
-        if (driver.getL3ButtonPressed()) {
-            drivetrain.localFieldSwitch();
-        }
+        if (driver.getTriangleButtonPressed()) {
+            moveToIntaking();
+        } 
     }
 
     /**

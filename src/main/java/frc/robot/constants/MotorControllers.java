@@ -11,15 +11,14 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Angle> arm() {
 		if (_arm == null) {
-		_arm = new DimensionalFeedbackMotor<Angle>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					//_arm.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
+					//_arm = new DimensionalFeedbackMotor<Distance>(Motors.sparkmax.createOpposedPair(Ports.can.arm.MOTORS));
 					//break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_arm.setWrappedMotorController(new WrappedFakeMotor());
+					_arm = new DimensionalFeedbackMotor<Angle>(new WrappedFakeMotor());
 					break;
 			}
 			_arm
@@ -40,17 +39,16 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> drivetrainLeft() {
 		if (_drivetrainLeft == null) {
-			_drivetrainLeft = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainLeft.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.LEFTS));
+					_drivetrainLeft = new DimensionalFeedbackMotor<Distance>(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.LEFTS));
 					break;
 				case FLAT:
-					_drivetrainLeft.setWrappedMotorController(Motors.talonfx.createGroup(Ports.CAN.drivetrain.LEFTS));
+					_drivetrainLeft = new DimensionalFeedbackMotor<Distance>(Motors.talonfx.createGroup(Ports.CAN.drivetrain.LEFTS));
 					break;
 				case DEBUG:
 				default:
-					_drivetrainLeft.setWrappedMotorController(new WrappedModelMotor());
+					_drivetrainLeft = new DimensionalFeedbackMotor<Distance>(new WrappedModelMotor());
 					break;
 			}
 			_drivetrainLeft
@@ -68,17 +66,16 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> drivetrainRight() {
 		if (_drivetrainRight == null) {
-			_drivetrainRight = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_drivetrainRight.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.RIGHTS));
+					_drivetrainRight = new DimensionalFeedbackMotor<Distance>(Motors.sparkmax.createGroup(Ports.CAN.drivetrain.RIGHTS));
 					break;
 				case FLAT:
-					_drivetrainRight.setWrappedMotorController(Motors.talonfx.createGroup(Ports.CAN.drivetrain.RIGHTS));
+					_drivetrainRight = new DimensionalFeedbackMotor<Distance>(Motors.talonfx.createGroup(Ports.CAN.drivetrain.RIGHTS));
 					break;
 				case DEBUG:
 				default:
-					_drivetrainRight.setWrappedMotorController(new WrappedFakeMotor());
+					_drivetrainRight = new DimensionalFeedbackMotor<Distance>(new WrappedFakeMotor());
 					break;
 			}
 			_drivetrainRight
@@ -96,15 +93,14 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> intake() {
 		if (_intake == null) {
-			_intake = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					//_intake.setWrappedMotorController(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
+					//_intake = new DimensionalFeedbackMotor<Distance>(Motors.sparkmax.createGroup(Ports.can.intake.MOTORS));
 					//break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_intake.setWrappedMotorController(new WrappedFakeMotor());
+					_intake = new DimensionalFeedbackMotor<Distance>(new WrappedFakeMotor());
 					break;
 			}
 			_intake
@@ -120,15 +116,14 @@ public class MotorControllers {
 
 	public static final DimensionalFeedbackMotor<Distance> shooter() {
 		if (_shooter == null) {
-			_shooter = new DimensionalFeedbackMotor<Distance>();
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					//_shooter.setWrappedMotorController(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
+					//_shooter = new DimensionalFeedbackMotor<Distance>(Motors.sparkmax.createOpposedPair(Ports.can.shooter.MOTORS));
 					//break;
 				case FLAT:
 				case DEBUG:
 				default:
-					_shooter.setWrappedMotorController(new WrappedFakeMotor());
+					_shooter = new DimensionalFeedbackMotor<Distance>(new WrappedFakeMotor());
 					break;
 			}
 			_shooter
