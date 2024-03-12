@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.I2C.Port;
 public class Ports {
     public static class CAN {
         public static class arm {
-            public static final Integer[] MOTORS = { 3, 14 };
+            public static final Integer LEFT = 3;
+            public static final Integer RIGHT = 14;
         }
 
         public static class drivetrain {

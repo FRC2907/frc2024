@@ -48,9 +48,10 @@ public class Util {
 	}
 
 	public static <U extends Unit<U>> Measure<U> clamp(Measure<U> min, Measure<U> value, Measure<U> max) {
-		if (max.lt(min)) return clamp(max, value, min);
-		if (value.lt(min)) return min;
-		if (max.lt(value)) return max;
+		if (value == null) return value;
+		if (max != null && min != null && max.lt(min)) return clamp(max, value, min);
+		if (min != null && value.lt(min)) return min;
+		if (max != null && max.lt(value)) return max;
 		return value;
 	}
 
@@ -165,6 +166,7 @@ public class Util {
 	}
 
 	public static Measure<?> anyZero() { return Units.Value.zero().times(Units.Value.zero()); }
+	public static Measure<?> anyInf() { return Units.Value.of(Double.POSITIVE_INFINITY); }
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Unit<T>> boolean isNegative(Measure<T> value) {

@@ -4,20 +4,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.game_elements.FieldElements;
 
 public class Arm implements ISubsystem {
-    public final DimensionalFeedbackMotor<Angle> motor;
+    public final AWheeMotor<Angle> motor;
 
-    private Arm(DimensionalFeedbackMotor<Angle> motor) {
+    private Arm(AWheeMotor<Angle> motor) {
         this.motor = motor;
     }
 
     private static Arm instance;
+
     public static Arm getInstance() {
         if (instance == null) {
             instance = new Arm(MotorControllers.arm());
@@ -30,81 +31,69 @@ public class Arm implements ISubsystem {
         return MechanismDimensions.arm.PIVOT.plus(new Translation3d(robotPose.getX(), robotPose.getY(), 0));
     }
 
-    public void setPosition(Measure<Angle> reference) {
-        motor.setPosition(reference);
-    }
-
-    public void setVelocity(Measure<Velocity<Angle>> reference) {
-        motor.setVelocity(reference);
-    }
-
     public boolean reachedSetPoint() {
-        return motor.getPositionController().converged();
+        return motor.checkHysteresis();
     }
 
     public void up() {
-        setVelocity(GameInteractions.arm.kManualControlSpeed);
+        motor.setVelocity(GameInteractions.arm.kManualControlSpeed);
     }
 
     public void down() {
-        setVelocity(GameInteractions.arm.kManualControlSpeed.negate());
+        motor.setVelocity(GameInteractions.arm.kManualControlSpeed.negate());
     }
 
     public void hold() {
-        setVelocity(Units.DegreesPerSecond.of(0));
+        motor.setVelocity(Units.DegreesPerSecond.of(0));
     }
 
     public void startPosition() {
-        setPosition(GameInteractions.arm.kStartPosition);
+        motor.setPosition(GameInteractions.arm.kStartPosition);
     }
 
-    public void floorPosition() {
-        setPosition(GameInteractions.arm.kFloorPosition);
+    public void floor() {
+        motor.setPosition(GameInteractions.arm.kFloorPosition);
     }
 
-    public void holdingPosition() {
-        setPosition(GameInteractions.arm.kHoldingPosition);
+    public void holding() {
+        motor.setPosition(GameInteractions.arm.kHoldingPosition);
     }
 
-    public void ampPosition() {
-        setPosition(GameInteractions.arm.kAmpPosition);
+    public void amp() {
+        motor.setPosition(GameInteractions.arm.kAmpPosition);
     }
 
-    public void speakerPosition() {
+    public void speaker() {
         double airDistance = FieldElements.getFieldPoints().kSpeakerHole.getDistance(getPivot());
-        double floorDistance = FieldElements.getFieldPoints().kSpeakerHole.minus(getPivot()).toTranslation2d().getNorm();
+        double floorDistance = FieldElements.getFieldPoints().kSpeakerHole.minus(getPivot()).toTranslation2d()
+                .getNorm();
         Measure<Angle> angle = Units.Radians.of(Math.acos(floorDistance / airDistance)); // cosine is adj/hyp
-        setPosition(angle);
+        motor.setPosition(angle);
     }
 
-    public void climbReadyPosition() {
-        setPosition(GameInteractions.arm.kClimbReadyPosition);
+    public void climbReady() {
+        motor.setPosition(GameInteractions.arm.kClimbReadyPosition);
     }
 
-    public void clumbPosition() {
-        setPosition(GameInteractions.arm.kClimbClumbPosition);
+    public void clumb() {
+        motor.setPosition(GameInteractions.arm.kClimbClumbPosition);
     }
 
-    public void selfRightingPosition() {
-        setPosition(GameInteractions.arm.kSelfRightingPosition);
-    }
-
-    @Override
-    public void onLoop() {
-        motor.onLoop();
+    public void selfRighting() {
+        motor.setPosition(GameInteractions.arm.kSelfRightingPosition);
     }
 
     @Override
     public void submitTelemetry() {
-        SmartDashboard.putBoolean("arm.up", false);
-        SmartDashboard.putBoolean("arm.down", false);
+        SmartDashboard.putBoolean("arm/up", false);
+        SmartDashboard.putBoolean("arm/down", false);
     }
 
     @Override
     public void receiveOptions() {
-        if (SmartDashboard.getBoolean("arm.up", false))
-            setPosition(motor.getPosition().plus(Units.Degrees.of(2)));
-        if (SmartDashboard.getBoolean("arm.down", false))
-            setPosition(motor.getPosition().minus(Units.Degrees.of(2)));
+        if (SmartDashboard.getBoolean("arm/up", false))
+            motor.setPosition(motor.getPosition().plus(Units.Degrees.of(2)));
+        if (SmartDashboard.getBoolean("arm/down", false))
+            motor.setPosition(motor.getPosition().minus(Units.Degrees.of(2)));
     }
 }

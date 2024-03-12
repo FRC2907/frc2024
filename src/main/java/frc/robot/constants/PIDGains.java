@@ -1,42 +1,40 @@
 package frc.robot.constants;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.generics.DimensionalPIDFGains;
+import frc.robot.bodges.rawrlib.stuff.GainContainer;
 
 public class PIDGains {
     public class arm {
-        public static DimensionalPIDFGains<Angle, Voltage> position = new DimensionalPIDFGains<Angle, Voltage>()
+        public static GainContainer<Angle, Voltage> position = new GainContainer<Angle, Voltage>()
             .setP(Units.Volts.of(0.001).per(Units.Rotations))
             .setD(Units.Volts.of(1).per(Units.RotationsPerSecond))
             ;
-        public static DimensionalPIDFGains<Velocity<Angle>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Angle>, Voltage>()
+        public static GainContainer<Velocity<Angle>, Voltage> velocity = new GainContainer<Velocity<Angle>, Voltage>()
             .setP(Units.Volts.of(0.001).per(Units.RotationsPerSecond))
             .setD(Units.Volts.of(1).per(Units.RotationsPerSecond.per(Units.Second)))
             ;
     }
 
     public class drivetrain {
-        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+        public static GainContainer<Velocity<Distance>, Voltage> velocity = new GainContainer<Velocity<Distance>, Voltage>()
             .setF(Units.Volts.of(2).per(Units.MetersPerSecond))
             .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
             ;
 
-        public static DimensionalPIDFGains<Angle, Velocity<Angle>> heading = new DimensionalPIDFGains<Angle, Velocity<Angle>>()
+        public static GainContainer<Angle, Velocity<Angle>> heading = new GainContainer<Angle, Velocity<Angle>>()
             .setP(Units.DegreesPerSecond.of(2).per(Units.Degrees))
-            .setMaxVel(MechanismConstraints.drivetrain.kMaxAngularVelocity)
-            .setMaxAccel(MechanismConstraints.drivetrain.kMaxAngularAcceleration)
             ;
     }
 
     public class intake {
-        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+        public static GainContainer<Velocity<Distance>, Voltage> velocity = new GainContainer<Velocity<Distance>, Voltage>()
             .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
             .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
             ;
     }
 
     public class shooter {
-        public static DimensionalPIDFGains<Velocity<Distance>, Voltage> velocity = new DimensionalPIDFGains<Velocity<Distance>, Voltage>()
+        public static GainContainer<Velocity<Distance>, Voltage> velocity = new GainContainer<Velocity<Distance>, Voltage>()
             .setF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
             .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
             ;
