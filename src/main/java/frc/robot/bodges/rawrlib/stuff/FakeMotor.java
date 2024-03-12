@@ -2,7 +2,6 @@ package frc.robot.bodges.rawrlib.stuff;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.bodges.rawrlib.junk.AWheeMotor;
 import frc.robot.util.Util;
 
 public class FakeMotor<D extends Unit<D>> extends AWheeMotor<D> {

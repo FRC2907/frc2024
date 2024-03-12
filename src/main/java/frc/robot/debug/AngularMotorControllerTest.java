@@ -2,7 +2,7 @@ package frc.robot.debug;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.rawrlib.junk.AWheeMotor;
+import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.bodges.rawrlib.stuff.TalonFX;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.ISubsystem;

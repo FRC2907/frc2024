@@ -6,7 +6,6 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.junk.AWheeMotor;
 
 public class TalonFX<D extends Unit<D>> extends AWheeMotor<D> {
 

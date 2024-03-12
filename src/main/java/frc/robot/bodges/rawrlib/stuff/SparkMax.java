@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.junk.AWheeMotor;
 
 public class SparkMax<D extends Unit<D>> extends AWheeMotor<D> {
 
