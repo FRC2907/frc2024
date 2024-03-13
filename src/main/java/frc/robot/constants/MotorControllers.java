@@ -58,6 +58,7 @@ public class MotorControllers {
 					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
 					.setVelocityP(PIDGains.drivetrain.velocity.getP())
 					.setVelocityD(PIDGains.drivetrain.velocity.getD())
+					.setVelocityF(PIDGains.drivetrain.velocity.getF())
 					.setVelocity(Units.MetersPerSecond.zero())
 					.zero()
 					;
@@ -86,6 +87,7 @@ public class MotorControllers {
 					.setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
 					.setVelocityP(PIDGains.drivetrain.velocity.getP())
 					.setVelocityD(PIDGains.drivetrain.velocity.getD())
+					.setVelocityF(PIDGains.drivetrain.velocity.getF())
 					.setVelocity(Units.MetersPerSecond.zero())
 					.zero()
 					;

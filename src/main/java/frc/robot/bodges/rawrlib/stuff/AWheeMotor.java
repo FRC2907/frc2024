@@ -122,11 +122,15 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 
 	public AWheeMotor<D> setVoltage(Measure<Voltage> voltage) {
 		voltage = Util.clamp(minV, voltage, maxV);
+		this.lastDirectVoltage = voltage;
 		setVoltage_downstream(invertIfNeeded(voltage));
 		for (var follower : followers)
 			follower.setVoltage(voltage);
 		return this;
 	}
+
+	protected Measure<Voltage> lastDirectVoltage = Units.Volts.zero();
+	public Measure<Voltage> getLastDirectVoltage() { return lastDirectVoltage; }
 
 	@SuppressWarnings("unchecked")
 	private Measure<D> maxPos = (Measure<D>) Util.anyInf();
