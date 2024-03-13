@@ -1067,7 +1067,7 @@
         "tiles": {
           "5,2": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
@@ -1087,6 +1087,19 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/sup/drivemode",
               "_title": "SmartDashboard/sup/drivemode",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/sup/state",
+              "_title": "/SmartDashboard/sup/state",
               "_glyph": 148,
               "_showGlyph": false
             }

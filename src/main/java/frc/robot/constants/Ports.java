@@ -21,7 +21,7 @@ public class Ports {
         }
 
         public static class intake {
-            public static final Integer[] MOTORS = { 5 };
+            public static final Integer[] MOTORS = { 12 };
         }
     }
 
