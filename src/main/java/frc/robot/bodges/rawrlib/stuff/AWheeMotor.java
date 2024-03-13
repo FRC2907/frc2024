@@ -84,7 +84,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<D> positionReference;
+	@SuppressWarnings("unchecked")
+	protected Measure<D> positionReference = (Measure<D>) Util.anyZero();
 
 	@SuppressWarnings("unchecked")
 	public AWheeMotor<D> setPosition(Measure<D> reference) {
@@ -100,7 +101,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Velocity<D>> velocityReference;
+	@SuppressWarnings("unchecked")
+	protected Measure<Velocity<D>> velocityReference = (Measure<Velocity<D>>) Util.anyZero();
 
 	public AWheeMotor<D> setVelocity(Measure<Velocity<D>> reference) {
 		reference = Util.clamp(minVel, reference, maxVel);
@@ -120,11 +122,15 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 
 	public AWheeMotor<D> setVoltage(Measure<Voltage> voltage) {
 		voltage = Util.clamp(minV, voltage, maxV);
+		this.lastDirectVoltage = voltage;
 		setVoltage_downstream(invertIfNeeded(voltage));
 		for (var follower : followers)
 			follower.setVoltage(voltage);
 		return this;
 	}
+
+	protected Measure<Voltage> lastDirectVoltage = Units.Volts.zero();
+	public Measure<Voltage> getLastDirectVoltage() { return lastDirectVoltage; }
 
 	@SuppressWarnings("unchecked")
 	private Measure<D> maxPos = (Measure<D>) Util.anyInf();
@@ -228,7 +234,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Per<Voltage, D>> pP;
+	@SuppressWarnings("unchecked")
+	protected Measure<Per<Voltage, D>> pP = (Measure<Per<Voltage, D>>) Util.anyZero();
 
 	public AWheeMotor<D> setPositionP(Measure<Per<Voltage, D>> pP) {
 		this.pP = pP;
@@ -237,7 +244,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Per<Voltage, Velocity<D>>> pD;
+	@SuppressWarnings("unchecked")
+	protected Measure<Per<Voltage, Velocity<D>>> pD = (Measure<Per<Voltage, Velocity<D>>>) Util.anyZero();
 
 	public AWheeMotor<D> setPositionD(Measure<Per<Voltage, Velocity<D>>> pD) {
 		this.pD = pD;
@@ -256,7 +264,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Per<Voltage, Velocity<D>>> vP;
+	@SuppressWarnings("unchecked")
+	protected Measure<Per<Voltage, Velocity<D>>> vP = (Measure<Per<Voltage, Velocity<D>>>) Util.anyZero();
 
 	public AWheeMotor<D> setVelocityP(Measure<Per<Voltage, Velocity<D>>> vP) {
 		this.vP = vP;
@@ -265,7 +274,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Per<Voltage, Velocity<Velocity<D>>>> vD;
+	@SuppressWarnings("unchecked")
+	protected Measure<Per<Voltage, Velocity<Velocity<D>>>> vD = (Measure<Per<Voltage, Velocity<Velocity<D>>>>) Util.anyZero();
 
 	public AWheeMotor<D> setVelocityD(Measure<Per<Voltage, Velocity<Velocity<D>>>> vD) {
 		this.vD = vD;
@@ -274,7 +284,8 @@ public abstract class AWheeMotor<D extends Unit<D>> {
 		return this;
 	}
 
-	protected Measure<Per<Voltage, Velocity<D>>> vF;
+	@SuppressWarnings("unchecked")
+	protected Measure<Per<Voltage, Velocity<D>>> vF = (Measure<Per<Voltage, Velocity<D>>>) Util.anyZero();
 
 	public AWheeMotor<D> setVelocityF(Measure<Per<Voltage, Velocity<D>>> vF) {
 		this.vF = vF;

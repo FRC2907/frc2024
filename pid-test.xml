@@ -1,105 +1,130 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="arm.down" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="393"/>
-	</widget>
-	<widget field="arm.up" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="373"/>
-	</widget>
-	<widget field="dt.angVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="353"/>
-	</widget>
-	<widget field="dt.heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="333"/>
-	</widget>
-	<widget field="dt.velocityR" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="313"/>
-	</widget>
-	<widget field="dt.velocityL" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="293"/>
-	</widget>
-	<widget field="dt.velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="273"/>
-	</widget>
-	<widget field="dt.positionY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="253"/>
-	</widget>
-	<widget field="dt.positionX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="233"/>
-	</widget>
-	<widget field="superduperstructure.state" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="193"/>
-	</widget>
-	<widget field="feedforward" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="1269" y="386"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-12"/>
-		<property name="Maximum Y Value" value="12"/>
-	</widget>
-	<widget field="d_contrib" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="1269" y="76"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-100"/>
-		<property name="Maximum Y Value" value="100"/>
-	</widget>
-	<widget field="d_contrib_actual" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="213"/>
-	</widget>
-	<widget field="input" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="842" y="382"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-2"/>
-		<property name="Maximum Y Value" value="2"/>
-	</widget>
-	<widget field="error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="437" y="382"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-12"/>
-		<property name="Maximum Y Value" value="12"/>
-	</widget>
-	<widget field="state" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="841" y="77"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-12"/>
-		<property name="Maximum Y Value" value="12"/>
-	</widget>
-	<widget field="reference" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="437" y="77"/>
-		<property name="Buffer Size (samples)" value="500"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Minimum Y Value" value="-12"/>
-		<property name="Maximum Y Value" value="12"/>
-	</widget>
-	<widget field="d.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="757" y="789"/>
-	</widget>
-	<widget field="p.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="757" y="761"/>
-	</widget>
-	<widget field="r.set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="759" y="731"/>
-	</widget>
-	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="0" y="80"/>
-	</widget>
-	<widget field="Auto Selector" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="60"/>
-	</widget>
-	<widget field="limelight_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="40"/>
-	</widget>
-	<widget field="limelight_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+	<widget field="driver_RY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="20"/>
 	</widget>
-	<widget field="limelight_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+	<widget field="driver_LX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="0"/>
+	</widget>
+	<widget field="driver_RX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="895" y="565"/>
+	</widget>
+	<widget field="driver_LY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="485" y="564"/>
+	</widget>
+	<widget field="dt_L e" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="1300" y="255"/>
+	</widget>
+	<widget field="dt_L x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="894" y="255"/>
+	</widget>
+	<widget field="dt_L r" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="486" y="256"/>
+	</widget>
+	<widget field="arm.down" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="720"/>
+	</widget>
+	<widget field="arm.up" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="700"/>
+	</widget>
+	<widget field="dt.angVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="680"/>
+	</widget>
+	<widget field="dt.heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="660"/>
+	</widget>
+	<widget field="dt.velocityR" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="640"/>
+	</widget>
+	<widget field="dt.velocityL" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="620"/>
+	</widget>
+	<widget field="dt.velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="600"/>
+	</widget>
+	<widget field="dt.positionY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="580"/>
+	</widget>
+	<widget field="dt.positionX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="560"/>
+	</widget>
+	<widget field="shooter uPerX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="540"/>
+	</widget>
+	<widget field="shooter u" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="520"/>
+	</widget>
+	<widget field="shooter e" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="500"/>
+	</widget>
+	<widget field="shooter x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="480"/>
+	</widget>
+	<widget field="shooter r" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="460"/>
+	</widget>
+	<widget field="intake uPerX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="440"/>
+	</widget>
+	<widget field="intake u" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="420"/>
+	</widget>
+	<widget field="intake e" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="400"/>
+	</widget>
+	<widget field="intake x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="380"/>
+	</widget>
+	<widget field="intake r" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="360"/>
+	</widget>
+	<widget field="arm uPerX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="340"/>
+	</widget>
+	<widget field="arm u" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="320"/>
+	</widget>
+	<widget field="arm e" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="300"/>
+	</widget>
+	<widget field="arm x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="280"/>
+	</widget>
+	<widget field="arm r" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="260"/>
+	</widget>
+	<widget field="fake getVelocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="240"/>
+	</widget>
+	<widget field="fake getPosition" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="220"/>
+	</widget>
+	<widget field="fake position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="200"/>
+	</widget>
+	<widget field="dt_R uPerX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="180"/>
+	</widget>
+	<widget field="dt_R u" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="160"/>
+	</widget>
+	<widget field="dt_R e" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="140"/>
+	</widget>
+	<widget field="dt_R x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="120"/>
+	</widget>
+	<widget field="dt_R r" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="100"/>
+	</widget>
+	<widget field="dt_L uPerX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="80"/>
+	</widget>
+	<widget field="dt_L u" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="60"/>
 	</widget>
 </dashboard>
 <live-window>
 </live-window>
+	<hidden field="Field"/>
 </xml>

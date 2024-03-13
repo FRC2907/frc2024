@@ -5,16 +5,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.bodges.rawrlib.stuff.TalonFX;
 import frc.robot.constants.Ports;
+import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.util.Util;
 
 public class AngularMotorControllerTest implements ISubsystem {
   private AWheeMotor<Angle> m;
+  private GameController c;
 
   private Measure<Velocity<Angle>> ref = Units.RotationsPerSecond.zero();
 
   public AngularMotorControllerTest() {
-    // this.c = ControllerRumble.getInstance(0);
+    this.c = GameController.getInstance(0);
     this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
     m.setFactor(Units.Rotations.of(1).per(Units.Rotations))
         .setPositionP(Units.Volts.of(0.05).per(Units.Rotations))
@@ -28,6 +30,7 @@ public class AngularMotorControllerTest implements ISubsystem {
   @Override
   public void onLoop() {
     receiveOptions();
+    ref = Units.RotationsPerSecond.of(10).times(c.getLeftY());
     m.setVelocity(ref);
     submitTelemetry();
   }
