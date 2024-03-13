@@ -17,24 +17,20 @@ public class JustSomewhere extends Action{
   this.rightSpeed = rightSpeed;
   this.time = time;
   this.timer = new Timer();
-  System.out.println("another something");
 }
 
 @Override
 public void onStart() {
-	System.out.println("another other something");
 	Superduperstructure.getInstance().neutralPosition();
 	Drivetrain.getInstance().setDriveMode(DriveMode.AUTO);
 	Drivetrain.getInstance().setAutoDriveInputs(leftSpeed, rightSpeed);
 	timer.restart();
-	System.out.println("another other other something");
 	this.started = true;
 	this.running = true;
 }
 
 @Override
 public void whileRunning() {
-	System.out.println("Something" + timer.get());
 	if (time.in(Units.Seconds) < timer.get()){
 		this.running = false;
 		this.finished = true;

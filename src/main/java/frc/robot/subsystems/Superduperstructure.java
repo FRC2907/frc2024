@@ -187,30 +187,30 @@ public class Superduperstructure implements ISubsystem {
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case FIELD_REVERSED:
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
                                             .rotateBy(FieldElements.directions.towardOtherWall()));
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()).negate(),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     default:
                         /*if (Misc.debug) {
