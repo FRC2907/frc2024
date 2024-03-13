@@ -12,8 +12,6 @@ public class LinearMotorControllerTest implements ISubsystem {
   private AWheeMotor<Distance> m;
   private GameController c;
 
-  private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
-
   public LinearMotorControllerTest() {
     this.c = GameController.getInstance(0);
     //this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
@@ -30,7 +28,6 @@ public class LinearMotorControllerTest implements ISubsystem {
   @Override
   public void onLoop() {
     receiveOptions();
-    //m.setVelocity(ref);
     m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(c.getLeftY()));
     submitTelemetry();
   }

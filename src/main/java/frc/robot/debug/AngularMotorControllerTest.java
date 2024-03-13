@@ -1,16 +1,10 @@
 package frc.robot.debug;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
-import frc.robot.bodges.rawrlib.stuff.SparkMax;
-import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.constants.MechanismDimensions;
-import frc.robot.constants.PIDGains;
-import frc.robot.constants.Ports;
+import frc.robot.constants.MotorControllers;
 import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
 
@@ -18,20 +12,21 @@ public class AngularMotorControllerTest implements ISubsystem {
   private AWheeMotor<Angle> m;
   private GameController c;
 
-
   public AngularMotorControllerTest() {
     this.c = GameController.getInstance(0);
-    this.m = SparkMax.of(MotorType.kBrushless, Ports.CAN.arm.LEFT);
-		this.m.setInverted(false)
-					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
-					.setMinPosition(MechanismConstraints.arm.kMinPosition)
-					.setMaxPosition(MechanismConstraints.arm.kMaxPosition)
-					.setSymmetricalVelocity(MechanismConstraints.arm.kMaxVelocity)
-					.setPositionP(PIDGains.arm.position.getP())
-					.setPositionD(PIDGains.arm.position.getD())
-					.setVelocityP(PIDGains.arm.velocity.getP())
-					.setVelocityD(PIDGains.arm.velocity.getD())
-					.setPosition(GameInteractions.arm.kStartPosition)
+    //this.m = SparkMax.of(MotorType.kBrushless, Ports.CAN.arm.LEFT);
+    this.m = MotorControllers.arm();
+		this.m.setInverted(false) // change this to true if arm goes backwardsies
+                                     // if the arm starts getting twisty, give up quick!
+					//.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
+					//.setMinPosition(MechanismConstraints.arm.kMinPosition)
+					//.setMaxPosition(MechanismConstraints.arm.kMaxPosition)
+					//.setSymmetricalVelocity(MechanismConstraints.arm.kMaxVelocity)
+					//.setPositionP(PIDGains.arm.position.getP())
+					//.setPositionD(PIDGains.arm.position.getD())
+					//.setVelocityP(PIDGains.arm.velocity.getP())
+					//.setVelocityD(PIDGains.arm.velocity.getD())
+					//.setPosition(GameInteractions.arm.kStartPosition)
 					;
     //this.m = SparkMax.opposedPairOf(MotorType.kBrushless, Ports.CAN.arm.LEFT, Ports.CAN.arm.RIGHT);
     //this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
