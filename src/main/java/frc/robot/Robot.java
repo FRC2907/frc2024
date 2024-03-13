@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.debug.AngularMotorControllerTest;
-import frc.robot.debug.LinearMotorControllerTest;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import frc.robot.subsystems.ISubsystem;
