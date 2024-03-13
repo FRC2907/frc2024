@@ -2,66 +2,47 @@ package frc.robot.debug;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
-import frc.robot.bodges.rawrlib.motors.WrappedFakeMotor;
-import frc.robot.bodges.rawrlib.motors.WrappedMotorController;
+import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.constants.MechanismConstraints;
-import frc.robot.constants.MechanismDimensions;
-import frc.robot.constants.PIDGains;
+import frc.robot.constants.MotorControllers;
 import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
-import frc.robot.util.Util;
 
 public class LinearMotorControllerTest implements ISubsystem {
-  private DimensionalFeedbackMotor<Distance> m;
-  @SuppressWarnings("unused")
-  private GameController c = GameController.getInstance(0);
+  private AWheeMotor<Distance> m;
+  private GameController c;
+
   private Measure<Velocity<Distance>> ref = Units.MetersPerSecond.zero();
 
-
   public LinearMotorControllerTest() {
-    WrappedMotorController motor = new WrappedFakeMotor();
-    m = new DimensionalFeedbackMotor<Distance>(motor)
-      .setName("testmotor")
-      .setInverted(false)
-      .setFactor(MechanismDimensions.drivetrain.LINEAR_TRAVEL_PER_ENCODER_TRAVEL)
-      .configureVelocityController(PIDGains.drivetrain.velocity)
-      .setSymmetricalVelocity(MechanismConstraints.drivetrain.kMaxVelocity)
-      .setSymmetricalAcceleration(MechanismConstraints.drivetrain.kMaxAcceleration)
-      ;
+    this.c = GameController.getInstance(0);
+    //this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
+    //m.setFactor(Units.Centimeters.of(3).per(Units.Rotations))
+    //    .setPositionP(Units.Volts.of(0.05).per(Units.Meters))
+    //    .setPositionD(Units.Volts.zero().per(Units.MetersPerSecond))
+    //    .setVelocityF(Units.Volts.of(0.115).per(Units.MetersPerSecond))
+    //    .setVelocityP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
+    //    .setVelocityD(Units.Volts.zero().per(Units.MetersPerSecond.per(Units.Second)))
+    //    .setVelocity(ref);
+    this.m = MotorControllers.drivetrainLeft();
   }
 
   @Override
   public void onLoop() {
     receiveOptions();
-    //ref = Units.MetersPerSecond.of(c.getLeftY());
-    m.setVelocity(ref);
-    m.onLoop();
+    //m.setVelocity(ref);
+    m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(c.getLeftY()));
     submitTelemetry();
   }
 
   @Override
   public void submitTelemetry() {
-    SmartDashboard.putNumber("r.set", ref.in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("p.set", m.getVelocityController().getGains().getP().in(Units.Volts.per(Units.MetersPerSecond)));
-    SmartDashboard.putNumber("d.set", m.getVelocityController().getGains().getD().in(Units.Volts.per(Units.MetersPerSecondPerSecond)));
-    SmartDashboard.putNumberArray("refstate", new double[] {
-      m.getVelocityController().getReference().in(Units.MetersPerSecond)
-      , m.getVelocityController().getState().in(Units.MetersPerSecond)
-    });
-    SmartDashboard.putNumberArray("errinput", new double[] {
-      m.getVelocityController().getError().in(Units.MetersPerSecond)
-      , m.getLastControlEffort().in(Units.Volts)
-    });
-    SmartDashboard.putNumber("reference raw", Util.fuzz() + m.getVelocityController().getReference_unbounded().in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("reference", Util.fuzz() + m.getVelocityController().getReference().in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("state",     Util.fuzz() + m.getVelocityController().getState().in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("error",     Util.fuzz() + m.getVelocityController().getError().in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("input",     Util.fuzz() + m.getLastControlEffort().in(Units.Volts));
+    SmartDashboard.putNumber("test/UperX", m.getLastDirectVoltage().in(Units.Volts) / m.getVelocity().in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("test/u", m.getLastDirectVoltage().in(Units.Volts));
+    SmartDashboard.putNumber("test/x", m.getVelocity().in(Units.MetersPerSecond));
   }
 
   @Override
   public void receiveOptions() {
-    ref = Units.MetersPerSecond.of(SmartDashboard.getNumber("r.set", ref.in(Units.MetersPerSecond)));
   }
 }

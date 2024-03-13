@@ -25,5 +25,6 @@ public class GameInteractions {
     public class shooter {
         public static final Measure<Velocity<Distance>> kAmpSpeed = Units.MetersPerSecond.of(1); /// TODO[empirical]
         public static final Measure<Velocity<Distance>> kOff = Units.MetersPerSecond.zero(); /// TODO[empirical]
+        public static final Measure<Time> kNoteGoneThresholdTime = Units.Seconds.of(0.5);
     }
 }

@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     this.everything = Superduperstructure.getInstance();
+    //this.everything = new AngularMotorControllerTest();
+    //this.everything = new LinearMotorControllerTest();
 
     autoChooser = new SendableChooser<>();
     for (Class<? extends Routine> routineClass : Routine.getRoutines())

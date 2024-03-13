@@ -1,21 +1,24 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.units.*;
-import frc.robot.bodges.rawrlib.generics.DimensionalFeedbackMotor;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.constants.GameInteractions;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MotorControllers;
 import frc.robot.game_elements.FieldElements;
 
-// TODO[lib,later] can a motor-driven simple subsystem just extend the DimensionalFeedbackMotor itself?
 public class Shooter implements ISubsystem {
-    public final DimensionalFeedbackMotor<Distance> motor;
+    public final AWheeMotor<Distance> motor;
+    protected final Timer noteGoneTimer = new Timer();
 
-    private Shooter(DimensionalFeedbackMotor<Distance> motor) {
+    private Shooter(AWheeMotor<Distance> motor) {
         this.motor = motor;
     }
 
     private static Shooter instance;
+
     public static Shooter getInstance() {
         if (instance == null) {
             instance = new Shooter(MotorControllers.shooter());
@@ -23,48 +26,44 @@ public class Shooter implements ISubsystem {
         return instance;
     }
 
-
-    public void setVelocity(Measure<Velocity<Distance>> reference) {
-        motor.setVelocity(reference);
-    }
     public void amp() {
-        setVelocity(GameInteractions.shooter.kAmpSpeed);
+        motor.setVelocity(GameInteractions.shooter.kAmpSpeed);
     }
+
     public void speaker() {
         // TODO refactor constants or whatever, and test numbers
-        Measure<Distance> airDistance = Units.Meters.of(FieldElements.getFieldPoints().kSpeakerHole.getDistance(Arm.getInstance().getPivot()));
+        Measure<Distance> airDistance = Units.Meters
+                .of(FieldElements.getFieldPoints().kSpeakerHole.getDistance(Arm.getInstance().getPivot()));
         Measure<Time> airTime = Units.Seconds.of(0.3);
-        setVelocity(airDistance.per(airTime));
+        motor.setVelocity(airDistance.per(airTime));
     }
+
     public void manualShoot() {
-        setVelocity(MechanismConstraints.shooter.kMaxVelocity);
+        motor.setVelocity(MechanismConstraints.shooter.kMaxVelocity);
     }
+
     public void off() {
-        setVelocity(GameInteractions.shooter.kOff);
+        motor.setVelocity(GameInteractions.shooter.kOff);
     }
 
     public boolean reachedSetPoint() {
-        return motor.getVelocityController().converged();
+        return motor.checkHysteresis();
     }
-
 
     public boolean noteGone() {
-        return !Intake.getInstance().hasNote();
+        return noteGoneTimer.get() >= GameInteractions.shooter.kNoteGoneThresholdTime.in(Units.Seconds);
     }
 
-
-    /** Update motor speed every cycle. */
     @Override
     public void onLoop() {
-        motor.onLoop();
+        receiveOptions();
+        if (Intake.getInstance().hasNote()) noteGoneTimer.restart();
+        submitTelemetry();
     }
 
     @Override
     public void submitTelemetry() {
-    }
-
-    @Override
-    public void receiveOptions() {
+        SmartDashboard.putBoolean("shooter/noteGone", noteGone());
     }
 
 }

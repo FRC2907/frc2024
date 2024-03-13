@@ -187,30 +187,30 @@ public class Superduperstructure implements ISubsystem {
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(FieldElements.directions.towardOtherWall()));
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case FIELD_REVERSED:
                         if (Util.checkDriverDeadband(driver.getLeftMagnitude()))
                             drivetrain.setFieldDriveInputs(Util.scaleDriverInput(driver.getLeftMagnitude()),
                                     driver.getLeftAngle().rotateBy(Rotation2d.fromDegrees(180))
                                             .rotateBy(FieldElements.directions.towardOtherWall()));
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_FORWARD:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     case LOCAL_REVERSED:
                         if (Util.checkDriverDeadband(driver.getRightY()) || Util.checkDriverDeadband(driver.getLeftX()))
                             drivetrain.setLocalDriveInputs(Util.scaleDriverInput(driver.getRightY()).negate(),
                                     MechanismConstraints.drivetrain.kMaxAngularVelocity.times(driver.getLeftX()).negate());
-                        //else
-                            //drivetrain.stop();
+                        else
+                            drivetrain.stop();
                         break;
                     default:
                         /*if (Misc.debug) {
@@ -245,10 +245,11 @@ public class Superduperstructure implements ISubsystem {
 
 
 
-        if (operator.getSquareButtonPressed()) {
+        if (operator.getSquareButton()) {
             shooter.speaker();
-            intake.shoot();
-            //TODO speed up shooter wheels first
+            if (shooter.reachedSetPoint()){
+                intake.shoot();
+            }
         }
         if (operator.getTriangleButtonPressed()) {
             neutralPosition();
@@ -267,7 +268,7 @@ public class Superduperstructure implements ISubsystem {
             
         }
         if (operator.getL2Button()) { 
-            arm.floorPosition();
+            arm.floor();
             intake.intake();
         }
         if (operator.getL2ButtonReleased()){
@@ -318,7 +319,7 @@ public class Superduperstructure implements ISubsystem {
 
 					case MOVING_TO_NEUTRAL:
 					case MOVING_TO_HOLDING_NOTE:
-                arm.holdingPosition();
+                arm.holding();
                 intake.off();
                 shooter.off();
 						break;
@@ -326,7 +327,7 @@ public class Superduperstructure implements ISubsystem {
 					case NEUTRAL:
 					case HOLDING_NOTE:
                         if (Util.checkDriverDeadband(operator.getRightY())){
-                            arm.setVelocity(Util.scaleArmInput(operator.getRightY()));
+                            arm.motor.setVelocity(Util.scaleArmInput(operator.getRightY()));
                         }
 					case FOLLOWING_TRAJECTORY:
                 // don't continue setting motor states: this allows manual control in this state
@@ -334,7 +335,7 @@ public class Superduperstructure implements ISubsystem {
 
 					case INTAKING:
 					case MOVING_TO_INTAKING:
-                arm.floorPosition();
+                arm.floor();
                 intake.intake();
 						break;
 
@@ -346,7 +347,7 @@ public class Superduperstructure implements ISubsystem {
                 intake.shoot();
 					case READY_TO_SCORE_AMP:
 					case MOVING_TO_AMP:
-                arm.ampPosition();
+                arm.amp();
                 shooter.amp();
 						break;
 
@@ -354,23 +355,23 @@ public class Superduperstructure implements ISubsystem {
                 intake.shoot();
 					case READY_TO_SCORE_SPEAKER:
 					case MOVING_TO_SPEAKER:
-                arm.speakerPosition();
+                arm.speaker();
                 shooter.speaker();
 						break;
 
 					case PREPARING_FOR_CLIMB:
                 intake.off();
                 shooter.off();
-                arm.climbReadyPosition();
+                arm.climbReady();
 						break;
 					case CLIMBING:
 					case HUNG:
-                arm.clumbPosition();
+                arm.clumb();
 						break;
 
 					case SELF_RIGHTING:
                 // TODO check if we need to push number back
-                arm.selfRightingPosition();
+                arm.selfRighting();
 					case KNOCKED_OVER:
                 intake.off();
                 shooter.off();
@@ -490,6 +491,7 @@ public class Superduperstructure implements ISubsystem {
     @Override
     public void onLoop() {
         receiveOptions();
+
         handleInputs();
         manageState();
         handleDriving();
@@ -505,18 +507,5 @@ public class Superduperstructure implements ISubsystem {
     public void submitTelemetry() {
         SmartDashboard.putString("sup/state", getState().toString());
         SmartDashboard.putString("sup/drivemode", drivetrain.getDriveMode().toString());
-        SmartDashboard.putNumber("driver_LY", Util.fuzz() + driver.getLeftY());
-        SmartDashboard.putNumber("driver_LX", Util.fuzz() + driver.getLeftX());
-        SmartDashboard.putNumber("driver_RY", Util.fuzz() + driver.getRightY());
-        SmartDashboard.putNumber("driver_RX", Util.fuzz() + driver.getRightX());
-
-        for (ISubsystem s : subsystems)
-            s.submitTelemetry();
-    }
-
-    @Override
-    public void receiveOptions() {
-        for (ISubsystem s : subsystems)
-            s.receiveOptions();
     }
 }
