@@ -1,54 +1,66 @@
 package frc.robot.debug;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
-import frc.robot.bodges.rawrlib.stuff.TalonFX;
+import frc.robot.bodges.rawrlib.stuff.SparkMax;
+import frc.robot.constants.GameInteractions;
+import frc.robot.constants.MechanismConstraints;
+import frc.robot.constants.MechanismDimensions;
+import frc.robot.constants.PIDGains;
 import frc.robot.constants.Ports;
 import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
-import frc.robot.util.Util;
 
 public class AngularMotorControllerTest implements ISubsystem {
   private AWheeMotor<Angle> m;
   private GameController c;
 
-  private Measure<Velocity<Angle>> ref = Units.RotationsPerSecond.zero();
 
   public AngularMotorControllerTest() {
     this.c = GameController.getInstance(0);
-    this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
-    m.setFactor(Units.Rotations.of(1).per(Units.Rotations))
-        .setPositionP(Units.Volts.of(0.05).per(Units.Rotations))
-        .setPositionD(Units.Volts.zero().per(Units.RotationsPerSecond))
-        .setVelocityF(Units.Volts.of(0.115).per(Units.RotationsPerSecond))
-        .setVelocityP(Units.Volts.of(0.05).per(Units.RotationsPerSecond))
-        .setVelocityD(Units.Volts.zero().per(Units.RotationsPerSecond.per(Units.Second)))
-        .setVelocity(ref);
+    this.m = SparkMax.of(MotorType.kBrushless, Ports.CAN.arm.LEFT);
+		this.m.setInverted(false)
+					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
+					.setMinPosition(MechanismConstraints.arm.kMinPosition)
+					.setMaxPosition(MechanismConstraints.arm.kMaxPosition)
+					.setSymmetricalVelocity(MechanismConstraints.arm.kMaxVelocity)
+					.setPositionP(PIDGains.arm.position.getP())
+					.setPositionD(PIDGains.arm.position.getD())
+					.setVelocityP(PIDGains.arm.velocity.getP())
+					.setVelocityD(PIDGains.arm.velocity.getD())
+					.setPosition(GameInteractions.arm.kStartPosition)
+					;
+    //this.m = SparkMax.opposedPairOf(MotorType.kBrushless, Ports.CAN.arm.LEFT, Ports.CAN.arm.RIGHT);
+    //this.m = TalonFX.of(Ports.CAN.drivetrain.LEFTS);
+    //m.setFactor(Units.Rotations.of(1).per(Units.Rotations))
+    //    .setPositionP(Units.Volts.of(0.05).per(Units.Rotations))
+    //    .setPositionD(Units.Volts.zero().per(Units.RotationsPerSecond))
+    //    .setVelocityF(Units.Volts.of(0.115).per(Units.RotationsPerSecond))
+    //    .setVelocityP(Units.Volts.of(0.05).per(Units.RotationsPerSecond))
+    //    .setVelocityD(Units.Volts.zero().per(Units.RotationsPerSecond.per(Units.Second)))
+    //    .setVelocity(ref);
   }
 
   @Override
   public void onLoop() {
     receiveOptions();
-    ref = Units.RotationsPerSecond.of(10).times(c.getLeftY());
-    m.setVelocity(ref);
+    //m.setVelocity(ref);
+    m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(0.1).times(c.getLeftY()));
     submitTelemetry();
   }
 
   @Override
   public void submitTelemetry() {
-    SmartDashboard.putNumber("r.set", ref.in(Units.RotationsPerSecond));
-    SmartDashboard.putNumberArray("refstate", new double[] {
-        Util.fuzz() + m.getVelocityReference().in(Units.RotationsPerSecond),
-        Util.fuzz() + m.getVelocity().in(Units.RotationsPerSecond)
-    });
-    SmartDashboard.putNumber("reference", Util.fuzz() + m.getVelocityReference().in(Units.RotationsPerSecond));
-    SmartDashboard.putNumber("state", Util.fuzz() + m.getVelocity().in(Units.RotationsPerSecond));
-    SmartDashboard.putNumber("error", Util.fuzz() + m.getVelocityError().in(Units.RotationsPerSecond));
+    SmartDashboard.putNumber("test/UperX'", m.getLastDirectVoltage().in(Units.Volts) / m.getVelocity().in(Units.DegreesPerSecond));
+    SmartDashboard.putNumber("test/u", m.getLastDirectVoltage().in(Units.Volts));
+    SmartDashboard.putNumber("test/x", m.getPosition().in(Units.Degrees));
+    SmartDashboard.putNumber("test/x'", m.getVelocity().in(Units.DegreesPerSecond));
   }
 
   @Override
   public void receiveOptions() {
-    ref = Units.RotationsPerSecond.of(SmartDashboard.getNumber("r.set", ref.in(Units.RotationsPerSecond)));
   }
 }
