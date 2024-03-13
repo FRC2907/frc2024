@@ -37,14 +37,6 @@ public class LinearMotorControllerTest implements ISubsystem {
 
   @Override
   public void submitTelemetry() {
-    //SmartDashboard.putNumber("r.set", Util.fuzz() + ref.in(Units.MetersPerSecond));
-    //SmartDashboard.putNumberArray("refstate", new double[] {
-    //    Util.fuzz() + m.getVelocityReference().in(Units.MetersPerSecond),
-    //    Util.fuzz() + m.getVelocity().in(Units.MetersPerSecond)
-    //});
-    //SmartDashboard.putNumber("reference", Util.fuzz() + m.getVelocityReference().in(Units.MetersPerSecond));
-    //SmartDashboard.putNumber("state", Util.fuzz() + m.getVelocity().in(Units.MetersPerSecond));
-    //SmartDashboard.putNumber("error", Util.fuzz() + m.getVelocityError().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("test/UperX", m.getLastDirectVoltage().in(Units.Volts) / m.getVelocity().in(Units.MetersPerSecond));
     SmartDashboard.putNumber("test/u", m.getLastDirectVoltage().in(Units.Volts));
     SmartDashboard.putNumber("test/x", m.getVelocity().in(Units.MetersPerSecond));
@@ -52,6 +44,5 @@ public class LinearMotorControllerTest implements ISubsystem {
 
   @Override
   public void receiveOptions() {
-    ref = Units.MetersPerSecond.of(SmartDashboard.getNumber("r.set", ref.in(Units.MetersPerSecond)));
   }
 }
