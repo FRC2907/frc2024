@@ -245,10 +245,11 @@ public class Superduperstructure implements ISubsystem {
 
 
 
-        if (operator.getSquareButtonPressed()) {
+        if (operator.getSquareButton()) {
             shooter.speaker();
-            intake.shoot();
-            //TODO speed up shooter wheels first
+            if (shooter.reachedSetPoint()){
+                intake.shoot();
+            }
         }
         if (operator.getTriangleButtonPressed()) {
             neutralPosition();
