@@ -6,6 +6,7 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.bodges.rawrlib.stuff.AWheeMotor;
 import frc.robot.constants.GameInteractions;
+import frc.robot.constants.MechanismConstraints;
 import frc.robot.constants.MechanismDimensions;
 import frc.robot.constants.MotorControllers;
 import frc.robot.game_elements.FieldElements;
@@ -81,6 +82,10 @@ public class Arm implements ISubsystem {
 
     public void selfRighting() {
         motor.setPosition(GameInteractions.arm.kSelfRightingPosition);
+    }
+
+    public void off() {
+        motor.setVelocity(MechanismConstraints.arm.kOff);
     }
 
     @Override

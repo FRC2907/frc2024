@@ -22,7 +22,7 @@ public class MotorControllers {
 					break;
 			}
 			_arm
-					.setInverted(false)
+					.setInverted(true)
 					.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL)
 					.setMinPosition(MechanismConstraints.arm.kMinPosition)
 					.setMaxPosition(MechanismConstraints.arm.kMaxPosition)

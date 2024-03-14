@@ -312,7 +312,8 @@ public class Superduperstructure implements ISubsystem {
 
 					case START:
 					case MOVING_TO_START:
-                arm.startPosition();
+                //arm.startPosition(); TODO add back if necessary
+                arm.off();
                 intake.off();
                 shooter.off();
 						break;
@@ -327,7 +328,7 @@ public class Superduperstructure implements ISubsystem {
 					case NEUTRAL:
 					case HOLDING_NOTE:
                         if (Util.checkDriverDeadband(operator.getRightY())){
-                            arm.motor.setVelocity(Util.scaleArmInput(operator.getRightY()));
+                            arm.motor.setVelocity(Util.scaleArmInput((operator.getRightY()) / 8));
                         }
 					case FOLLOWING_TRAJECTORY:
                 // don't continue setting motor states: this allows manual control in this state

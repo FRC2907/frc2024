@@ -4,7 +4,7 @@ import edu.wpi.first.units.*;
 
 public class GameInteractions {
     public class arm {
-        public static final Measure<Angle> kStartPosition = Units.Degrees.of(90); /// TODO[empirical]
+        public static final Measure<Angle> kStartPosition = Units.Degrees.of(0); /// TODO[empirical]
         public static final Measure<Angle> kFloorPosition = Units.Degrees.of(0); /// TODO[empirical]
         public static final Measure<Angle> kAmpPosition = Units.Degrees.of(100); /// TODO[empirical]
         public static final Measure<Angle> kHoldingPosition = Units.Degrees.of(20); /// TODO[empirical]
