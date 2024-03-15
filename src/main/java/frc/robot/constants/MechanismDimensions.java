@@ -24,6 +24,7 @@ public class MechanismDimensions {
         public static final Measure<Per<Angle, Angle>> ARM_TRAVEL_PER_ENCODER_TRAVEL = Units.Revolutions.of(GEAR_RATIO)
                 .per(Units.Revolutions);
         public static final Translation3d PIVOT = new Translation3d(-8.458, 0, 10.791);
+        public static final Measure<Angle> offset = Units.Degrees.of(0); //TODO find offset
     }
 
     public static class drivetrain {

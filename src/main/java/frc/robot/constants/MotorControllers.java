@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.units.*;
@@ -13,7 +14,13 @@ public class MotorControllers {
 		if (_arm == null) {
 			switch (Misc.kActiveRobot) {
 				case COMP:
-					_arm = SparkMax.opposedPairOf(MotorType.kBrushless, Ports.CAN.arm.LEFT, Ports.CAN.arm.RIGHT);
+					//_arm = SparkMax.opposedPairOf(MotorType.kBrushless, Ports.CAN.arm.LEFT, Ports.CAN.arm.RIGHT);
+					CANSparkMax left = new CANSparkMax(Ports.CAN.arm.LEFT, MotorType.kBrushless);
+					CANSparkMax right = new CANSparkMax(Ports.CAN.arm.RIGHT, MotorType.kBrushless);
+					_arm = SparkMax.opposedPairOf(left, right);
+					_arm.setInverted(true);
+					_arm.setFactor(MechanismDimensions.arm.ARM_TRAVEL_PER_ENCODER_TRAVEL);
+					_arm.setPositionOffset(Units.Rotations.of(left.getAbsoluteEncoder().getPosition()).plus(MechanismDimensions.arm.offset));
 					break;
 				case FLAT:
 				case DEBUG:
@@ -31,7 +38,8 @@ public class MotorControllers {
 					.setPositionD(PIDGains.arm.position.getD())
 					.setVelocityP(PIDGains.arm.velocity.getP())
 					.setVelocityD(PIDGains.arm.velocity.getD())
-					.setPosition(GameInteractions.arm.kStartPosition)
+					//.setPosition(GameInteractions.arm.kStartPosition)
+					.setVelocity(Units.DegreesPerSecond.zero())
 					;
 		}
 		return _arm;
