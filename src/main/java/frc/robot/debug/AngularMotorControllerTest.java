@@ -43,7 +43,7 @@ public class AngularMotorControllerTest implements ISubsystem {
   public void onLoop() {
     receiveOptions();
     //m.setVelocity(ref);
-    m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(0.5).times(c.getLeftY()));
+    m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(0.25).times(c.getLeftY()));
     submitTelemetry();
   }
 
