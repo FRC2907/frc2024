@@ -9,7 +9,7 @@ import frc.robot.io.GameController;
 import frc.robot.subsystems.ISubsystem;
 
 public class LinearMotorControllerTest implements ISubsystem {
-  private AWheeMotor<Distance> m;
+  private AWheeMotor<Distance> l, r;
   private GameController c;
 
   public LinearMotorControllerTest() {
@@ -22,21 +22,27 @@ public class LinearMotorControllerTest implements ISubsystem {
     //    .setVelocityP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
     //    .setVelocityD(Units.Volts.zero().per(Units.MetersPerSecond.per(Units.Second)))
     //    .setVelocity(ref);
-    this.m = MotorControllers.drivetrainLeft();
+    this.l = MotorControllers.drivetrainLeft();
+    this.r = MotorControllers.drivetrainRight();
   }
 
   @Override
   public void onLoop() {
     receiveOptions();
-    m.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times(c.getLeftY()));
+    double velocity = c.getRightY();
+    double rotation = c.getLeftX();
+    double left = (velocity + rotation) / 0.3;
+    double right = (velocity - rotation) / 0.3;
+    l.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((left) / 2));
+    r.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((right) / 2));
     submitTelemetry();
   }
 
   @Override
   public void submitTelemetry() {
-    SmartDashboard.putNumber("test/UperX", m.getLastDirectVoltage().in(Units.Volts) / m.getVelocity().in(Units.MetersPerSecond));
-    SmartDashboard.putNumber("test/u", m.getLastDirectVoltage().in(Units.Volts));
-    SmartDashboard.putNumber("test/x", m.getVelocity().in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("test/UperX", l.getLastDirectVoltage().in(Units.Volts) / l.getVelocity().in(Units.MetersPerSecond));
+    SmartDashboard.putNumber("test/u", l.getLastDirectVoltage().in(Units.Volts));
+    SmartDashboard.putNumber("test/x", l.getVelocity().in(Units.MetersPerSecond));
   }
 
   @Override

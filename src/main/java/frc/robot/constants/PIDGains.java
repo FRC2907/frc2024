@@ -18,7 +18,7 @@ public class PIDGains {
     public class drivetrain {
         public static GainContainer<Velocity<Distance>, Voltage> velocity = new GainContainer<Velocity<Distance>, Voltage>()
             .setF(Units.Volts.of(2).per(Units.MetersPerSecond))
-            .setP(Units.Volts.of(0.05).per(Units.MetersPerSecond))
+            .setP(Units.Volts.of(0.01).per(Units.MetersPerSecond))
             ;
 
         public static GainContainer<Angle, Velocity<Angle>> heading = new GainContainer<Angle, Velocity<Angle>>()

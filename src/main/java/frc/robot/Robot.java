@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.routines.templates.Routine;
 import frc.robot.constants.MechanismConstraints;
 import frc.robot.debug.AngularMotorControllerTest;
+import frc.robot.debug.LinearMotorControllerTest;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Drivetrain.DriveMode;
 import frc.robot.subsystems.ISubsystem;
@@ -30,8 +31,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //this.everything = Superduperstructure.getInstance();
-    this.everything = new AngularMotorControllerTest();
-    //this.everything = new LinearMotorControllerTest();
+    //this.everything = new AngularMotorControllerTest();
+    this.everything = new LinearMotorControllerTest();
 
     autoChooser = new SendableChooser<>();
     for (Class<? extends Routine> routineClass : Routine.getRoutines())
