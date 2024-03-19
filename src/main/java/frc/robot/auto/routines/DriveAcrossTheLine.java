@@ -8,7 +8,6 @@ public class DriveAcrossTheLine extends Routine {
     public DriveAcrossTheLine() {
         super("DriveAcrossTheLine"
                 , () -> new DriveDistanceWithHeading(
-                    // TODO[verify] is this far enough?
                     FieldElements.lengths.x.blue.kStartingArea
                     , FieldElements.directions.towardOtherWall()
                     , true

@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 
-// TODO configure motor controllers to reflect these IDs. They should ideally also line up with PDP port numbers + 1 (0 may be bcast).
 // TODO[lib,later] rewrite this in a multi-robot-friendly way
 public class Ports {
     public static class CAN {
