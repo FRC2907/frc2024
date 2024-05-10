@@ -22,7 +22,7 @@ public class MechanismConstraints {
     }
 
     public class drivetrain {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(3); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(3.0); /// TODO[empirical]
         public static final Measure<Velocity<Velocity<Distance>>> kMaxAcceleration = Units.MetersPerSecondPerSecond.of(1.75); /// TODO[empirical]
         public static final Measure<Velocity<Angle>> kMaxAngularVelocity = Units.RotationsPerSecond.of(0.5); /// TODO[empirical]
         public static final Measure<Velocity<Velocity<Angle>>> kMaxAngularAcceleration = Units.RotationsPerSecond.per(Units.Second).of(0.5); /// TODO[empirical]
@@ -49,12 +49,12 @@ public class MechanismConstraints {
     }
 
     public class intake {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20.0); /// TODO[empirical]
         public static final int kPresenceSensorTriggerProximity = 1800; // TODO[empirical]
     }
 
     public class shooter {
-        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20); /// TODO[empirical]
+        public static final Measure<Velocity<Distance>> kMaxVelocity = Units.MetersPerSecond.of(20.0); /// TODO[empirical]
         public static final Measure<Velocity<Distance>> kVelocityHysteresis = Units.MetersPerSecond.of(0.1);
     }
 
@@ -71,5 +71,5 @@ public class MechanismConstraints {
         public static final int kTargetLockFrameCountThreshold = 5;
     }
 
-    public static final Measure<Time> kPeriod = Units.Milliseconds.of(20);
+    public static final Measure<Time> kPeriod = Units.Milliseconds.of(20.0);
 }

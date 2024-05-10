@@ -45,7 +45,7 @@ public class Arm implements ISubsystem {
     }
 
     public void hold() {
-        motor.setVelocity(Units.DegreesPerSecond.of(0));
+        motor.setVelocity(Units.DegreesPerSecond.of(0.0));
     }
 
     public void startPosition() {
@@ -97,8 +97,8 @@ public class Arm implements ISubsystem {
     @Override
     public void receiveOptions() {
         if (SmartDashboard.getBoolean("arm/up", false))
-            motor.setPosition(motor.getPosition().plus(Units.Degrees.of(2)));
+            motor.setPosition(motor.getPosition().plus(Units.Degrees.of(2.0)));
         if (SmartDashboard.getBoolean("arm/down", false))
-            motor.setPosition(motor.getPosition().minus(Units.Degrees.of(2)));
+            motor.setPosition(motor.getPosition().minus(Units.Degrees.of(2.0)));
     }
 }

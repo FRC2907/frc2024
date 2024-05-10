@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "vscjava.vscode-java-pack",
-        "aaron-bond.better-comments"
+        "aaron-bond.better-comments",
+        "eamodio.gitlens"
     ]
 }

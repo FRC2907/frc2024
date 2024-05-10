@@ -22,7 +22,6 @@ public class ScoreSpeaker extends Action {
     }
 
     @Override
-    public void onCleanup() {
-    }
+    public void onCleanup() {}
     
 }

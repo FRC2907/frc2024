@@ -11,18 +11,18 @@ public class PIDGains {
             ;
         public static GainContainer<Velocity<Angle>, Voltage> velocity = new GainContainer<Velocity<Angle>, Voltage>()
             .setP(Units.Volts.of(0.001).per(Units.RotationsPerSecond))
-            .setD(Units.Volts.of(1).per(Units.RotationsPerSecond.per(Units.Second)))
+            .setD(Units.Volts.of(1.0).per(Units.RotationsPerSecond.per(Units.Second)))
             ;
     }
 
     public class drivetrain {
         public static GainContainer<Velocity<Distance>, Voltage> velocity = new GainContainer<Velocity<Distance>, Voltage>()
-            .setF(Units.Volts.of(2).per(Units.MetersPerSecond))
+            .setF(Units.Volts.of(2.0).per(Units.MetersPerSecond))
             .setP(Units.Volts.of(0.01).per(Units.MetersPerSecond))
             ;
 
         public static GainContainer<Angle, Velocity<Angle>> heading = new GainContainer<Angle, Velocity<Angle>>()
-            .setP(Units.DegreesPerSecond.of(2).per(Units.Degrees))
+            .setP(Units.DegreesPerSecond.of(2.0).per(Units.Degrees))
             ;
     }
 

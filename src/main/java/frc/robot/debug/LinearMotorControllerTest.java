@@ -33,8 +33,8 @@ public class LinearMotorControllerTest implements ISubsystem {
     double rotation = c.getLeftX();
     double left = (velocity + rotation) / 0.3;
     double right = (velocity - rotation) / 0.3;
-    l.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((left) / 2));
-    r.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((right) / 2));
+    l.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((left) / 2.0));
+    r.setVoltage(MechanismConstraints.electrical.kMaxVoltage.times((right) / 2.0));
     submitTelemetry();
   }
 

@@ -8,7 +8,7 @@ import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.units.*;
 
 public class TalonFX<D extends Unit<D>> extends AWheeMotor<D> {
-
+  
   protected com.ctre.phoenix6.hardware.TalonFX m;
 
   public TalonFX(com.ctre.phoenix6.hardware.TalonFX downstream) {

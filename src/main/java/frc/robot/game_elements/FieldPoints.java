@@ -13,7 +13,13 @@ public class FieldPoints {
       public final List<Translation2d> kWingNotes;
       public final Translation3d kSpeakerHole;
 
-      public FieldPoints(Translation2d kAmp, Translation2d kSpeaker, Translation2d kStage, Translation2d kSource, List<Translation2d> kWingNotes, Measure<Distance> kSpeakerZ) {
+      public FieldPoints(Translation2d kAmp,
+                         Translation2d kSpeaker,
+                         Translation2d kStage,
+                         Translation2d kSource, 
+                         List<Translation2d> kWingNotes, 
+                         Measure<Distance> kSpeakerZ
+      ) {
         this.kAmp = kAmp;
         this.kSpeaker = kSpeaker;
         this.kStage = kStage;
@@ -22,7 +28,13 @@ public class FieldPoints {
         this.kSpeakerHole = new Translation3d(Units.Meters.of(kSpeaker.getX()), Units.Meters.of(kSpeaker.getY()), kSpeakerZ);
       }
 
-      public FieldPoints(Translation2d kAmp, Translation2d kSpeaker, Translation2d kStage, Translation2d kSource, Translation2d[] kWingNotes, Measure<Distance> kSpeakerZ) {
+      public FieldPoints(Translation2d kAmp,
+                         Translation2d kSpeaker,
+                         Translation2d kStage,
+                         Translation2d kSource,
+                         Translation2d[] kWingNotes,
+                         Measure<Distance> kSpeakerZ
+      ) {
         this(kAmp, kSpeaker, kStage, kSource, List.of(kWingNotes), kSpeakerZ);
       }
 
