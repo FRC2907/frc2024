@@ -150,7 +150,7 @@ public class Superduperstructure implements ISubsystem {
                 moveToSpeaker();
                 break;
             case NONE:
-                operator.rumble(1.0);
+                operator.rumble(1);
                 break;
             case TIED:
                 operator.rumble(0.5);

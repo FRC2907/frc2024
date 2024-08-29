@@ -88,13 +88,13 @@ public class FieldElements {
         public static final Measure<Distance> kStageCenter = kReferenceWall
             .plus(kField.divide(2.0).times(kOffsetDirection));
         public static final List<Measure<Distance>> kWingNotes = List.of(
-            kMidfield, kMidfield.minus(Units.Inches.of(57.0 * 1.0).times(kOffsetDirection)),
-            kMidfield.minus(Units.Inches.of(57.0 * 2.0).times(kOffsetDirection)));
+            kMidfield, kMidfield.minus(Units.Inches.of(57 * 1).times(kOffsetDirection)),
+            kMidfield.minus(Units.Inches.of(57 * 2).times(kOffsetDirection)));
       }
 
       public class red {
-        public static final Measure<Distance> kReferenceWall = Units.Inches.of(0.0);
-        public static final double kOffsetDirection = Rotation2d.fromDegrees(90.0).getSin();
+        public static final Measure<Distance> kReferenceWall = Units.Inches.of(0);
+        public static final double kOffsetDirection = Rotation2d.fromDegrees(90).getSin();
 
         public static final Measure<Distance> kSpeakerCenter = kReferenceWall
             .plus(Units.Inches.of(218.416).times(kOffsetDirection));
@@ -102,13 +102,13 @@ public class FieldElements {
         public static final Measure<Distance> kStageCenter = kReferenceWall
             .plus(kField.divide(2.0).times(kOffsetDirection));
         public static final List<Measure<Distance>> kWingNotes = List.of(
-            kMidfield, kMidfield.minus(Units.Inches.of(57.0 * 1.0).times(kOffsetDirection)),
-            kMidfield.minus(Units.Inches.of(57.0 * 2.0).times(kOffsetDirection)));
+            kMidfield, kMidfield.minus(Units.Inches.of(57 * 1).times(kOffsetDirection)),
+            kMidfield.minus(Units.Inches.of(57 * 2).times(kOffsetDirection)));
       }
     }
 
     public class z {
-      public static final Measure<Distance> kSpeaker = Units.Inches.of(78+10); // 78.13 is lower bound, see p. 120 & 149 ?
+      public static final Measure<Distance> kSpeaker = Units.Inches.of(78+10); // 78.13 is lower bound, see p. 120 & 149
     }
 
   }
@@ -143,20 +143,20 @@ public class FieldElements {
             new Pose2d(points.blue.kAmp, Rotation2d.fromDegrees(90)),
             MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(0)),
             MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(2)),
-            Rotation2d.fromDegrees(20.0)),
+            Rotation2d.fromDegrees(20)),
         ScoringRegion.of(
-            new Pose2d(points.blue.kSpeaker, Rotation2d.fromDegrees(0.0)), Units.Inches.of(60.0),
-            Units.Inches.of(120.0), Rotation2d.fromDegrees(100.0)));
+            new Pose2d(points.blue.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60),
+            Units.Inches.of(120), Rotation2d.fromDegrees(100)));
 
     public static ScoringRegions red = new ScoringRegions(
         ScoringRegion.of(
-            new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90.0)),
-            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(0.0)),
-            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(2.0)),
+            new Pose2d(points.red.kAmp, Rotation2d.fromDegrees(90)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(0)),
+            MechanismDimensions.frame.HALF_LENGTH.plus(Units.Inches.of(2)),
             Rotation2d.fromDegrees(20)),
         ScoringRegion.of(
-            new Pose2d(points.red.kSpeaker, Rotation2d.fromDegrees(0.0)), Units.Inches.of(60.0),
-            Units.Inches.of(120), Rotation2d.fromDegrees(100.0)));
+            new Pose2d(points.red.kSpeaker, Rotation2d.fromDegrees(0)), Units.Inches.of(60),
+            Units.Inches.of(120), Rotation2d.fromDegrees(100)));
   }
 
   public static FieldPoints getFieldPoints() {
@@ -208,16 +208,16 @@ public class FieldElements {
   
   public class directions{
     public static Rotation2d towardOtherWall(){
-      return Util.isBlue() ? Rotation2d.fromDegrees(0.0) : Rotation2d.fromDegrees(180);
+      return Util.isBlue() ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180);
     }
     public static Rotation2d towardAllianceWall(){
-      return Util.isBlue() ? Rotation2d.fromDegrees(180.0) : Rotation2d.fromDegrees(0.0);
+      return Util.isBlue() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0);
     }
     public static Rotation2d left(){
-      return Util.isBlue() ? Rotation2d.fromDegrees(90.0) : Rotation2d.fromDegrees(-90.0);
+      return Util.isBlue() ? Rotation2d.fromDegrees(90) : Rotation2d.fromDegrees(-90);
     }
     public static Rotation2d right(){
-      return Util.isBlue() ? Rotation2d.fromDegrees(-90.0) : Rotation2d.fromDegrees(90.0);
+      return Util.isBlue() ? Rotation2d.fromDegrees(-90) : Rotation2d.fromDegrees(90);
     }
     public static Rotation2d towardStage(){
       return getFieldPoints().kStage.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
@@ -226,16 +226,16 @@ public class FieldElements {
       return getFieldPoints().kSource.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();
     }
     public static Rotation2d towardTable(){
-      return Rotation2d.fromDegrees(-90.0);
+      return Rotation2d.fromDegrees(-90);
     }
     public static Rotation2d towardAudience(){
-      return Rotation2d.fromDegrees(90.0);
+      return Rotation2d.fromDegrees(90);
     }
     public static Rotation2d towardBlue(){
-      return Rotation2d.fromDegrees(180.0);
+      return Rotation2d.fromDegrees(180);
     }
     public static Rotation2d towardRed(){
-      return Rotation2d.fromDegrees(0.0);
+      return Rotation2d.fromDegrees(0);
     }
     public static Rotation2d towardAmp(){
       return getFieldPoints().kAmp.minus(Drivetrain.getInstance().getPose().getTranslation()).getAngle();

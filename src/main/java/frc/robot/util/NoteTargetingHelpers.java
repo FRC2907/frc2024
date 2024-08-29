@@ -11,8 +11,8 @@ public class NoteTargetingHelpers {
   public static Optional<Translation2d> getFieldPoint() {
     Translation2d out = null;
     if (targetLock()) {
-      double x = SmartDashboard.getNumber("note/x", 0.0);
-      double y = SmartDashboard.getNumber("note/y", 0.0);
+      double x = SmartDashboard.getNumber("note/x", 0);
+      double y = SmartDashboard.getNumber("note/y", 0);
       out = robotSpaceToFieldSpace(new Translation2d(x, y));
     }
     return Optional.of(out);

@@ -71,14 +71,14 @@ public class Util {
 	public static Measure<Angle> normalize360(Measure<Angle> value) {
 		Measure<Angle> out = value;//.plus(Units.Degrees.of(180));
 		while (out.in(Units.Degrees) >= 360)
-			out = out.minus(Units.Degrees.of(360.0));
+			out = out.minus(Units.Degrees.of(360));
 		while (out.in(Units.Degrees) < 0)
-			out = out.plus(Units.Degrees.of(360.0));
+			out = out.plus(Units.Degrees.of(360));
 		return out;
 	}
 
 	public static Measure<Angle> normalize180(Measure<Angle> value) {
-		return normalize360(value.plus(Units.Degrees.of(180.0))).minus(Units.Degrees.of(180.0));
+		return normalize360(value.plus(Units.Degrees.of(180))).minus(Units.Degrees.of(180));
 	}
 
 	public static Rotation2d normalize360(Rotation2d value) {

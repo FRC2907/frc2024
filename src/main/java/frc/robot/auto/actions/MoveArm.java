@@ -22,6 +22,7 @@ public class MoveArm extends Action {
     }
 
     @Override
-    public void onCleanup() {}
+    public void onCleanup() {
+    }
     
 }

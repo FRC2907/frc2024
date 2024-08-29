@@ -15,7 +15,7 @@ public class GameController extends PS4Controller implements ISubsystem {
     private GameController(int port) {
         super(port);
         this.rumbleTimer = new Timer();
-        this.rumbleDuration = 0.0;
+        this.rumbleDuration = 0;
     }
 
     private static Map<Integer, GameController> instances
@@ -46,13 +46,13 @@ public class GameController extends PS4Controller implements ISubsystem {
         return Rotation2d.fromRadians(Math.atan2(getLeftY(), getLeftX()));
     } 
     public double getLeftMagnitude() {
-        return Math.sqrt(Math.pow(getLeftX(), 2.0) + Math.pow(getLeftY(), 2.0));
+        return Math.sqrt(Math.pow(getLeftX(), 2) + Math.pow(getLeftY(), 2));
     } 
     public Rotation2d getRightAngle() {
         return Rotation2d.fromRadians(Math.atan2(getRightY(), getRightX()));
     } 
     public double getRightMagnitude() {
-        return Math.sqrt(Math.pow(getRightX(), 2.0) + Math.pow(getRightY(), 2.0));
+        return Math.sqrt(Math.pow(getRightX(), 2) + Math.pow(getRightY(), 2));
     } 
 
     /// TODO[lib,later] implement get<name>ButtonHeld(double duration) that returns true as long

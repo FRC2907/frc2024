@@ -21,6 +21,7 @@ public class GetNote extends Action {
     }
 
     @Override
-    public void onCleanup() {}
+    public void onCleanup() {
+    }
     
 }

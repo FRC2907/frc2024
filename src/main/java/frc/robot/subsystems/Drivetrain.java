@@ -56,8 +56,8 @@ public class Drivetrain implements ISubsystem {
                 leftMotor.getPosition().in(Units.Meters),
                 rightMotor.getPosition().in(Units.Meters),
                 new Pose2d(),
-                VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5.0).in(Units.Radians)),
-                VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30.0).in(Units.Radians)));
+                VecBuilder.fill(0.05, 0.05, Units.Degrees.of(5).in(Units.Radians)),
+                VecBuilder.fill(0.5, 0.5, Units.Degrees.of(30).in(Units.Radians)));
 
         this.headingController.setP(PIDGains.drivetrain.heading.getP().in(Units.DegreesPerSecond.per(Units.Degrees)));
     }

@@ -1,13 +1,5 @@
 #!/usr/bin/python
 
-# 17 instruction
-#def lerp_fast(a,t,b):
-#    t_complement = 1 - t
-#    a_ = (b*t)
-#    return (a * t_complement) + a_
-
-
-#12 instruction
 def lerp(a, t, b):
     return (a * (1 - t)) + (b * t)
 

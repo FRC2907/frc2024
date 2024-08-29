@@ -43,7 +43,7 @@ public class MechanismDimensions {
     }
 
     public static class intake {
-        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2.0);
+        public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(2);
         public static final double GEAR_RATIO = 1 / 5; /// TODO[empirical]
         public static final Measure<Per<Distance, Angle>> LINEAR_TRAVEL_PER_ENCODER_TRAVEL = WHEEL_DIAMETER
                 .times(Math.PI).times(GEAR_RATIO).per(Units.Rotations);
